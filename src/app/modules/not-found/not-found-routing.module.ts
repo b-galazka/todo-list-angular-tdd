@@ -3,14 +3,14 @@ import { Routes, RouterModule } from '@angular/router';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 import {
-  NotFoundLayoutComponent
-} from 'src/app/shared/layouts/not-found-layout/not-found-layout.component';
+  ContentLayoutComponent
+} from 'src/app/shared/layouts/content-layout/content-layout.component';
 
-const routes: Routes = [
+export const routes: Routes = [
 
   {
     path: '**',
-    component: NotFoundLayoutComponent,
+    component: ContentLayoutComponent,
     children: [
       { path: '', component: NotFoundComponent }
     ]

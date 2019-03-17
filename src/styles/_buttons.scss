@@ -1,0 +1,27 @@
+@import 'variables';
+
+.button {
+  display: inline-block;
+  text-decoration: none;
+  color: $white;
+  border: 1px solid $white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  background-color: transparent;
+  transition: 250ms;
+  transition-property: color, border-color;
+
+  &:not(:disabled) {
+    cursor: pointer;
+
+    &:hover {
+      color: $dark-blue;
+      border-color: $dark-blue;
+    }
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
