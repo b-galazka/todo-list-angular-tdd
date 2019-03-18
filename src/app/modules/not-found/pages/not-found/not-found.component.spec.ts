@@ -4,11 +4,7 @@ import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { Location } from '@angular/common';
 import { RouterTestingModule } from '@angular/router/testing';
-import { routes } from '../../not-found-routing.module';
-
-import {
-  ContentLayoutComponent
-} from 'src/app/shared/layouts/content-layout/content-layout.component';
+import { Routes } from '@angular/router';
 
 describe('NotFoundComponent', () => {
   let component: NotFoundComponent;
@@ -17,8 +13,13 @@ describe('NotFoundComponent', () => {
   let location: Location;
 
   beforeEach(async(() => {
+
+    const routes: Routes = [
+      { path: '**', component: NotFoundComponent }
+    ];
+
     TestBed.configureTestingModule({
-      declarations: [NotFoundComponent, ContentLayoutComponent],
+      declarations: [NotFoundComponent],
       imports: [RouterTestingModule.withRoutes(routes)]
     })
     .compileComponents();

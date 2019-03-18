@@ -6,7 +6,7 @@ import {
   ContentLayoutComponent
 } from 'src/app/shared/layouts/content-layout/content-layout.component';
 
-export const routes: Routes = [
+const routes: Routes = [
 
   {
     path: '**',
