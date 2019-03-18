@@ -6,6 +6,10 @@ import {
   ContentLayoutComponent
 } from 'src/app/shared/layouts/content-layout/content-layout.component';
 
+import { EditTaskComponent } from './pages/edit-task/edit-task.component';
+import { NewTaskComponent } from './pages/new-task/new-task.component';
+import { TaskDetailsComponent } from './pages/task-details/task-details.component';
+
 const routes: Routes = [
 
   {
@@ -13,6 +17,9 @@ const routes: Routes = [
     component: ContentLayoutComponent,
     children: [
       { path: '', pathMatch: 'full', redirectTo: '/tasks/1' },
+      { path: 'edit/:taskId', component: EditTaskComponent },
+      { path: 'details/:taskId', component: TaskDetailsComponent },
+      { path: 'new', component: NewTaskComponent },
       { path: ':page', component: TasksListComponent }
     ]
   }
