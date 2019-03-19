@@ -8,7 +8,6 @@ import { IServerResponse } from '../models/server-response.model';
 import { ITask } from '../models/task.model';
 import { RequestStatus } from '../models/server-request.model';
 import { HttpErrorResponse } from '@angular/common/http';
-import { doesNotThrow } from 'assert';
 
 describe('TasksService', () => {
 
