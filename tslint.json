@@ -139,6 +139,7 @@
       true,
       "call-signature",
       "parameter"
-    ]
+    ],
+    "variable-name": false
   }
 }
