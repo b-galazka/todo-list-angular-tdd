@@ -1,6 +1,6 @@
 import { ITask, TaskStatus } from 'src/app/core/models/task.model';
 
-export const task: ITask = {
+export const taskMock: ITask = {
   name: 'task name',
   description: 'task description',
   id: 1,

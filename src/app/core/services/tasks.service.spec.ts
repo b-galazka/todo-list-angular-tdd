@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TasksService } from './tasks.service';
 import { Observable } from 'rxjs';
-import { task } from 'src/mocks/task.mock';
+import { taskMock } from 'src/mocks/task.mock';
 import { environment } from 'src/environments/environment';
 import { IServerResponse } from '../models/server-response.model';
 import { ITask } from '../models/task.model';
@@ -33,8 +33,8 @@ describe('TasksService', () => {
     beforeEach(() => {
 
       res = {
-        data: new Array(15).fill(task),
-          pagination: { }
+        data: new Array(15).fill(taskMock),
+        pagination: { }
       };
     });
 

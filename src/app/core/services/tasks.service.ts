@@ -13,9 +13,9 @@ export class TasksService {
 
   private static readonly RECORDS_PER_PAGE = 15;
 
-  public constructor(private httpClient: HttpClient) {}
+  public constructor(private readonly httpClient: HttpClient) {}
 
-  private static mapServerReponseToData = <T>(response: IServerResponse<T>): T => {
+  private static readonly mapServerReponseToData = <T>(response: IServerResponse<T>): T => {
     return response.data;
   }
 
