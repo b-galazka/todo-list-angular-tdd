@@ -6,9 +6,10 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { NewTaskComponent } from './pages/new-task/new-task.component';
 import { TaskDetailsComponent } from './pages/task-details/task-details.component';
 import { EditTaskComponent } from './pages/edit-task/edit-task.component';
+import { TaskComponent } from './components/task/task.component';
 
 @NgModule({
-  declarations: [TasksListComponent, NewTaskComponent, TaskDetailsComponent, EditTaskComponent],
+  declarations: [TasksListComponent, NewTaskComponent, TaskDetailsComponent, EditTaskComponent, TaskComponent],
   imports: [
     CommonModule,
     TasksRoutingModule,

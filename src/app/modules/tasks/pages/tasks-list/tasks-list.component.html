@@ -1,3 +1,3 @@
-<p>
-  tasks-list works!
-</p>
+<div *ngIf="(tasksService.state$ | async) as state" class="wrapper">
+  <app-task *ngFor="let task of state.tasks" [task]="task"></app-task>
+</div>

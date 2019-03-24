@@ -140,6 +140,7 @@
       "call-signature",
       "parameter"
     ],
-    "variable-name": false
+    "variable-name": false,
+    "no-angle-bracket-type-assertion": false
   }
 }
