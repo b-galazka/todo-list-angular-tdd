@@ -9,7 +9,13 @@ import { EditTaskComponent } from './pages/edit-task/edit-task.component';
 import { TaskComponent } from './components/task/task.component';
 
 @NgModule({
-  declarations: [TasksListComponent, NewTaskComponent, TaskDetailsComponent, EditTaskComponent, TaskComponent],
+  declarations: [
+    TasksListComponent,
+    NewTaskComponent,
+    TaskDetailsComponent,
+    EditTaskComponent,
+    TaskComponent
+  ],
   imports: [
     CommonModule,
     TasksRoutingModule,
