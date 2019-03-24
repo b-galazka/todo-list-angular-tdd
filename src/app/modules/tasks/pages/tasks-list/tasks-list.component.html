@@ -1,3 +1,10 @@
-<div *ngIf="(tasksService.state$ | async) as state" class="wrapper">
-  <app-task *ngFor="let task of state.tasks" [task]="task"></app-task>
-</div>
+<ng-container *ngIf="(tasksService.state$ | async) as state">
+  <div class="wrapper" [ngSwitch]="state.tasksFetchingStatus">
+    <div *ngSwitchCase="RequestStatus.Pending" class="loader"></div>
+    <div *ngSwitchCase="RequestStatus.Error" class="fetching-error">Something went wrong.</div>
+
+    <ng-container *ngSwitchCase="RequestStatus.Success">
+      <app-task *ngFor="let task of state.tasks" [task]="task"></app-task>
+    </ng-container>
+  </div>
+</ng-container>

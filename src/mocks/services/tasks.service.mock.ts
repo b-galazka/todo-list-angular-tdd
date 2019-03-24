@@ -16,7 +16,7 @@ export class TasksServiceMock {
     return this._state.value;
   }
 
-  public getTasks(page: number): any { }
+  public getTasks(page: number): any {}
 
   public setState(data: Partial<ITasksState>): void {
     this._state.next({ ...this.state, ...data });

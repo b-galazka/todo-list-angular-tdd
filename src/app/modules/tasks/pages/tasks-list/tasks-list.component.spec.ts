@@ -5,7 +5,7 @@ import { TasksService } from 'src/app/core/services/tasks.service';
 import { TasksServiceMock } from 'src/mocks/services/tasks.service.mock';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute } from '@angular/router';
-import { Subject } from 'rxjs';
+import { Subject, of } from 'rxjs';
 import { TaskComponent } from '../../components/task/task.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ITask } from 'src/app/core/models/task.model';
@@ -48,11 +48,14 @@ describe('TasksListComponent', () => {
   it('should fetch tasks on :page param change', () => {
 
     const page = 89;
-    const spy = spyOn(tasksService, 'getTasks');
+    const observable = of();
+    const subSpy = spyOn(observable, 'subscribe');
+    const getTasksSpy = spyOn(tasksService, 'getTasks').and.returnValue(observable);
 
     (<Subject<any>> activatedRoute.params).next({ page });
 
-    expect(spy).toHaveBeenCalledWith(page);
+    expect(getTasksSpy).toHaveBeenCalledWith(page);
+    expect(subSpy).toHaveBeenCalled();
   });
 
   it('should render all fetched tasks', () => {
@@ -76,5 +79,27 @@ describe('TasksListComponent', () => {
     tasksComponents.forEach(
       (taskComponent, index) => expect(taskComponent.task).toBe(tasks[index])
     );
+  });
+
+  it('should render loader during tasks fetching', () => {
+
+    tasksService.setState({ tasksFetchingStatus: RequestStatus.Pending });
+
+    fixture.detectChanges();
+
+    const loaderElem = fixture.debugElement.query(By.css('.loader'));
+
+    expect(loaderElem).toBeTruthy();
+  });
+
+  it('should render error message if tasks fetching has failed', () => {
+
+    tasksService.setState({ tasksFetchingStatus: RequestStatus.Error });
+
+    fixture.detectChanges();
+
+    const errorElem = fixture.debugElement.query(By.css('.fetching-error'));
+
+    expect(errorElem).toBeTruthy();
   });
 });

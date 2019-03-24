@@ -1,3 +1,5 @@
-@import './_main';
-@import './_buttons';
-@import './typography';
+@import './_internal/_main';
+@import './_internal/_buttons';
+@import './_internal/_typography';
+@import './_internal/_loader';
+@import './_internal/_animations';

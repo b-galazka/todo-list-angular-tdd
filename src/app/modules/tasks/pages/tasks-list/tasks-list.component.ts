@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TasksService } from 'src/app/core/services/tasks.service';
 import { ITasksParams } from './tasks-list.model';
+import { RequestStatus } from 'src/app/core/models/server-request.model';
 
 @Component({
   selector: 'app-tasks-list',
@@ -9,6 +10,8 @@ import { ITasksParams } from './tasks-list.model';
   styleUrls: ['./tasks-list.component.scss']
 })
 export class TasksListComponent implements OnInit {
+
+  public readonly RequestStatus = RequestStatus;
 
   public constructor(
     private readonly route: ActivatedRoute,
@@ -20,6 +23,6 @@ export class TasksListComponent implements OnInit {
   }
 
   private readonly fetchTasks = ({ page }: ITasksParams): void => {
-    this.tasksService.getTasks(page);
+    this.tasksService.getTasks(page).subscribe();
   }
 }
