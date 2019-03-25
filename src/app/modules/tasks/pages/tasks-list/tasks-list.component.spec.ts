@@ -1,17 +1,18 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 
 import { TasksListComponent } from './tasks-list.component';
 import { TasksService } from 'src/app/core/services/tasks.service';
 import { TasksServiceMock } from 'src/mocks/services/tasks.service.mock';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Routes } from '@angular/router';
 import { Subject, of } from 'rxjs';
 import { TaskComponent } from '../../components/task/task.component';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, DebugElement } from '@angular/core';
 import { ITask } from 'src/app/core/models/task.model';
 import { taskMock } from 'src/mocks/data/task.mock';
 import { RequestStatus } from 'src/app/core/models/server-request.model';
 import { By } from '@angular/platform-browser';
+import { Location } from '@angular/common';
 
 describe('TasksListComponent', () => {
 
@@ -19,10 +20,16 @@ describe('TasksListComponent', () => {
   let fixture: ComponentFixture<TasksListComponent>;
   let tasksService: TasksServiceMock;
   let activatedRoute: ActivatedRoute;
+  let location: Location;
 
   beforeEach(async(() => {
+
+    const routes: Routes = [
+      { path: '**', component: TasksListComponent }
+    ];
+
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
+      imports: [RouterTestingModule.withRoutes(routes)],
       declarations: [TasksListComponent, TaskComponent],
       providers: [
         { provide: TasksService, useClass: TasksServiceMock },
@@ -37,6 +44,7 @@ describe('TasksListComponent', () => {
     fixture = TestBed.createComponent(TasksListComponent);
     tasksService = TestBed.get(TasksService);
     activatedRoute = TestBed.get(ActivatedRoute);
+    location = TestBed.get(Location);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -101,5 +109,83 @@ describe('TasksListComponent', () => {
     const errorElem = fixture.debugElement.query(By.css('.fetching-error'));
 
     expect(errorElem).toBeTruthy();
+  });
+
+  it('should navigate to new task form on new task link click', fakeAsync(() => {
+
+    const linkElem: HTMLAnchorElement = fixture.debugElement
+      .query(By.css('.new-task-link'))
+      .nativeElement;
+
+    linkElem.click();
+    tick();
+
+    expect(location.path()).toBe('/tasks/new');
+  }));
+
+  it('should navigate to prev page on prev link click', fakeAsync(() => {
+
+    tasksService.setState({
+      tasksFetchingStatus: RequestStatus.Success,
+      tasksPagination: { prevPage: 5, nextPage: null }
+    });
+
+    fixture.detectChanges();
+
+    const linkElem: HTMLAnchorElement = fixture.debugElement
+      .query(By.css('.prev-page-link'))
+      .nativeElement;
+
+    linkElem.click();
+    tick();
+
+    expect(location.path()).toBe('/tasks/5');
+  }));
+
+  it('should not show prev page link if prev page does not exist', () => {
+
+    tasksService.setState({
+      tasksFetchingStatus: RequestStatus.Success,
+      tasksPagination: { prevPage: null, nextPage: null }
+    });
+
+    fixture.detectChanges();
+
+    const linkElem = fixture.debugElement.query(By.css('.prev-page-link'));
+
+    expect(linkElem).toBeFalsy();
+  });
+
+  it('should navigate to the next page on next link click', fakeAsync(() => {
+
+    tasksService.setState({
+      tasksFetchingStatus: RequestStatus.Success,
+      tasksPagination: { prevPage: null, nextPage: 6 }
+    });
+
+    fixture.detectChanges();
+
+    const linkElem: HTMLAnchorElement = fixture.debugElement
+      .query(By.css('.next-page-link'))
+      .nativeElement;
+
+    linkElem.click();
+    tick();
+
+    expect(location.path()).toBe('/tasks/6');
+  }));
+
+  it('should not show the next page link if next page does not exist', () => {
+
+    tasksService.setState({
+      tasksFetchingStatus: RequestStatus.Success,
+      tasksPagination: { prevPage: null, nextPage: null }
+    });
+
+    fixture.detectChanges();
+
+    const linkElem = fixture.debugElement.query(By.css('.next-page-link'));
+
+    expect(linkElem).toBeFalsy();
   });
 });

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
-import { IServerResponse } from '../models/server-response.model';
+import { IServerResponse, IPaginationParams } from '../models/server-response.model';
 import { ITask } from '../models/task.model';
 import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { ITasksState } from '../models/tasks-state.model';
+import { ITasksState, IPaginationState } from '../models/tasks-state.model';
 import { RequestStatus } from '../models/server-request.model';
 
 @Injectable({
@@ -17,7 +17,7 @@ export class TasksService {
 
   private readonly _state = new BehaviorSubject<ITasksState>({
     tasks: [],
-    tasksPagination: { next: null, prev: null },
+    tasksPagination: { nextPage: null, prevPage: null },
     tasksFetchingStatus: RequestStatus.Idle
   });
 
@@ -31,6 +31,15 @@ export class TasksService {
 
   private static readonly mapServerReponseToData = <T>(response: IServerResponse<T>): T => {
     return response.data;
+  }
+
+  private static getPageNumber(paginationParams: IPaginationParams): number {
+
+    if (!paginationParams) {
+      return null;
+    }
+
+    return (paginationParams.offset + paginationParams.limit) / TasksService.RECORDS_PER_PAGE;
   }
 
   public getTasks(page: number): Observable<Array<ITask>> {
@@ -55,9 +64,14 @@ export class TasksService {
 
   private readonly handleTasksFetchingSuccess = (res: IServerResponse<Array<ITask>>): void => {
 
+    const tasksPagination: IPaginationState = {
+      nextPage: TasksService.getPageNumber(res.pagination.next),
+      prevPage: TasksService.getPageNumber(res.pagination.prev)
+    };
+
     this.setState({
       tasks: res.data,
-      tasksPagination: res.pagination,
+      tasksPagination,
       tasksFetchingStatus: RequestStatus.Success
     });
   }

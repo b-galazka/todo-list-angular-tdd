@@ -6,7 +6,7 @@ export class TasksServiceMock {
 
   private readonly _state = new BehaviorSubject<ITasksState>({
     tasks: [],
-    tasksPagination: { next: null, prev: null },
+    tasksPagination: { nextPage: null, prevPage: null },
     tasksFetchingStatus: RequestStatus.Idle
   });
 

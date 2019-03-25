@@ -91,16 +91,48 @@ describe('TasksService', () => {
 
     it('should update state on fetching success', () => {
 
-      tasksService.getTasks(1).subscribe((tasks) => {
+      tasksService.getTasks(1).subscribe(() => {
         expect(tasksService.state.tasks).toEqual(res.data);
         expect(tasksService.state.tasksFetchingStatus).toBe(RequestStatus.Success);
-        expect(tasksService.state.tasksPagination).toEqual(res.pagination);
+        expect(tasksService.state.tasksPagination).toEqual({ prevPage: null, nextPage: null });
       });
 
       const req = httpClientMock.expectOne({
         method: 'GET',
         url: `${environment.apiUrl}/tasks?offset=0&limit=15`
       });
+
+      req.flush(res);
+    });
+
+    it('should set number of prev page', () => {
+
+      tasksService.getTasks(5).subscribe(() => {
+        expect(tasksService.state.tasksPagination).toEqual({ prevPage: 4, nextPage: null });
+      });
+
+      const req = httpClientMock.expectOne({
+        method: 'GET',
+        url: `${environment.apiUrl}/tasks?offset=60&limit=15`
+      });
+
+      res.pagination.prev = { offset: 45, limit: 15 };
+
+      req.flush(res);
+    });
+
+    it('should set number of the next page', () => {
+
+      tasksService.getTasks(5).subscribe(() => {
+        expect(tasksService.state.tasksPagination).toEqual({ prevPage: null, nextPage: 6 });
+      });
+
+      const req = httpClientMock.expectOne({
+        method: 'GET',
+        url: `${environment.apiUrl}/tasks?offset=60&limit=15`
+      });
+
+      res.pagination.next = { offset: 75, limit: 15 };
 
       req.flush(res);
     });
