@@ -3,16 +3,17 @@
     <a routerLink="/tasks/new" class="new-task-link link col-auto">Create new task</a>
   </header>
 
-  <div class="row justify-content-center">
+  <div *ngIf="state.tasksFetchingStatus !== RequestStatus.Success" class="row justify-content-center">
     <div class="col-auto">
-      <p *ngIf="isInvalidPageNumberProvided" class="page-number-error">Invalid page number provided.</p>
       <div *ngSwitchCase="RequestStatus.Pending" class="loader"></div>
       <div *ngSwitchCase="RequestStatus.Error" class="fetching-error">Something went wrong.</div>
     </div>
   </div>
 
   <ng-container *ngSwitchCase="RequestStatus.Success">
-    <div class="row">
+    <div class="row" [ngClass]="{ 'justify-content-center': state.tasks.length === 0 }">
+      <p *ngIf="state.tasks.length === 0" class="col-auto no-data-msg">No tasks found.</p>
+
       <div *ngFor="let task of state.tasks" class="col-lg-6">
         <app-task class="task" [task]="task"></app-task>
       </div>

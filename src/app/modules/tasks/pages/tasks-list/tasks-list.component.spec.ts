@@ -4,7 +4,7 @@ import { TasksListComponent } from './tasks-list.component';
 import { TasksService } from 'src/app/core/services/tasks.service';
 import { TasksServiceMock } from 'src/mocks/services/tasks.service.mock';
 import { RouterTestingModule } from '@angular/router/testing';
-import { ActivatedRoute, Routes } from '@angular/router';
+import { ActivatedRoute, Routes, Router } from '@angular/router';
 import { Subject, of } from 'rxjs';
 import { TaskComponent } from '../../components/task/task.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -21,6 +21,7 @@ describe('TasksListComponent', () => {
   let tasksService: TasksServiceMock;
   let activatedRoute: ActivatedRoute;
   let location: Location;
+  let router: Router;
 
   beforeEach(async(() => {
 
@@ -45,6 +46,7 @@ describe('TasksListComponent', () => {
     tasksService = TestBed.get(TasksService);
     activatedRoute = TestBed.get(ActivatedRoute);
     location = TestBed.get(Location);
+    router = TestBed.get(Router);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -202,29 +204,67 @@ describe('TasksListComponent', () => {
     expect(subSpy).not.toHaveBeenCalled();
   });
 
-  it('should show error if :page is not an integer', () => {
+  it('should redirect to the first page if :page is not an integer', () => {
 
     const page = 'some text';
+    const spy = spyOn(router, 'navigate');
 
     (<Subject<any>> activatedRoute.params).next({ page });
 
-    fixture.detectChanges();
-
-    const pageNumberErrorElem = fixture.debugElement.query(By.css('.page-number-error'));
-
-    expect(pageNumberErrorElem).toBeTruthy();
+    expect(spy).toHaveBeenCalledWith(['/tasks/1']);
   });
 
-  it('should show error if :page is not an positive integer', () => {
+  it('should redirect to the first page if :page is not an positive integer', () => {
 
     const page = -1;
+    const spy = spyOn(router, 'navigate');
 
     (<Subject<any>> activatedRoute.params).next({ page });
 
+    expect(spy).toHaveBeenCalledWith(['/tasks/1']);
+  });
+
+  it('should redirect to the first page if there is no tasks and :page is greater than 1', () => {
+
+    const page = 5;
+    const spy = spyOn(router, 'navigate');
+
+    spyOn(tasksService, 'getTasks').and.returnValue(of([]));
+    (<Subject<any>> activatedRoute.params).next({ page });
+
+    expect(spy).toHaveBeenCalledWith(['/tasks/1']);
+  });
+
+  it('should not redirect to the first page if there are tasks or :page is equals 1', () => {
+
+    const page = 5;
+    const spy = spyOn(router, 'navigate');
+
+    spyOn(tasksService, 'getTasks').and.returnValue(of([taskMock]));
+    (<Subject<any>> activatedRoute.params).next({ page });
+
+    expect(spy).not.toHaveBeenCalled();
+  });
+
+  it('should show message if there is no tasks', () => {
+
+    tasksService.setState({ tasksFetchingStatus: RequestStatus.Success, tasks: [] });
+
     fixture.detectChanges();
 
-    const pageNumberErrorElem = fixture.debugElement.query(By.css('.page-number-error'));
+    const msgElem = fixture.debugElement.query(By.css('.no-data-msg'));
 
-    expect(pageNumberErrorElem).toBeTruthy();
+    expect(msgElem).toBeTruthy();
+  });
+
+  it('should not show "no tasks" message if there are tasks', () => {
+
+    tasksService.setState({ tasksFetchingStatus: RequestStatus.Success, tasks: [taskMock] });
+
+    fixture.detectChanges();
+
+    const msgElem = fixture.debugElement.query(By.css('.no-data-msg'));
+
+    expect(msgElem).toBeFalsy();
   });
 });

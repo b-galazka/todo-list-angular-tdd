@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TasksService } from 'src/app/core/services/tasks.service';
 import { ITasksParams } from './tasks-list.model';
 import { RequestStatus } from 'src/app/core/models/server-request.model';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-tasks-list',
@@ -13,11 +14,10 @@ export class TasksListComponent implements OnInit {
 
   public readonly RequestStatus = RequestStatus;
 
-  public isInvalidPageNumberProvided = false;
-
   public constructor(
+    public readonly tasksService: TasksService,
     private readonly route: ActivatedRoute,
-    public readonly tasksService: TasksService
+    private readonly router: Router
   ) { }
 
   public ngOnInit(): void {
@@ -26,14 +26,17 @@ export class TasksListComponent implements OnInit {
 
   private readonly fetchTasks = ({ page }: ITasksParams): void => {
 
-    // TODO: redirect to first page
-    this.isInvalidPageNumberProvided = !Number.isInteger(+page) || page < 1;
-
-    if (this.isInvalidPageNumberProvided) {
-      return;
+    if (!Number.isInteger(+page) || page < 1) {
+      return this.redirectToFirstPage();
     }
 
-    // TODO: if no tasks found and page > 1 then redirect to first page
-    this.tasksService.getTasks(+page).subscribe();
+    this.tasksService
+      .getTasks(+page)
+      .pipe(filter(tasks => tasks.length === 0 && page > 1))
+      .subscribe(this.redirectToFirstPage);
+  }
+
+  private readonly redirectToFirstPage = (): void => {
+    this.router.navigate(['/tasks/1']);
   }
 }
