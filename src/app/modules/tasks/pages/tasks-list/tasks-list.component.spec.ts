@@ -7,7 +7,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { ActivatedRoute, Routes } from '@angular/router';
 import { Subject, of } from 'rxjs';
 import { TaskComponent } from '../../components/task/task.component';
-import { CUSTOM_ELEMENTS_SCHEMA, DebugElement } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ITask } from 'src/app/core/models/task.model';
 import { taskMock } from 'src/mocks/data/task.mock';
 import { RequestStatus } from 'src/app/core/models/server-request.model';
