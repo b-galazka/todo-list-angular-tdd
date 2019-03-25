@@ -25,3 +25,13 @@ input, textarea, select {
     color: $light-gray;
   }
 }
+
+a {
+  text-decoration: none;
+  transition: 250ms;
+  transition-property: color;
+
+  &:hover, &:focus {
+    color: $dark-blue;
+  }
+}

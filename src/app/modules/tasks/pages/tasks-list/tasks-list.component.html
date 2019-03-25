@@ -1,19 +1,33 @@
-<div *ngIf="(tasksService.state$ | async) as state" [ngSwitch]="state.tasksFetchingStatus" class="wrapper">
-  <a routerLink="/tasks/new" class="new-task-link">Create new task</a>
+<div *ngIf="(tasksService.state$ | async) as state" [ngSwitch]="state.tasksFetchingStatus">
+  <header class="row justify-content-center header">
+    <a routerLink="/tasks/new" class="new-task-link link col-auto">Create new task</a>
+  </header>
 
-  <p *ngIf="isInvalidPageNumberProvided" class="page-number-error">Invalid page number provided.</p>
-
-  <div *ngSwitchCase="RequestStatus.Pending" class="loader"></div>
-  <div *ngSwitchCase="RequestStatus.Error" class="fetching-error">Something went wrong.</div>
+  <div class="row justify-content-center">
+    <div class="col-auto">
+      <p *ngIf="isInvalidPageNumberProvided" class="page-number-error">Invalid page number provided.</p>
+      <div *ngSwitchCase="RequestStatus.Pending" class="loader"></div>
+      <div *ngSwitchCase="RequestStatus.Error" class="fetching-error">Something went wrong.</div>
+    </div>
+  </div>
 
   <ng-container *ngSwitchCase="RequestStatus.Success">
-    <app-task *ngFor="let task of state.tasks" [task]="task"></app-task>
+    <div class="row">
+      <div *ngFor="let task of state.tasks" class="col-lg-6">
+        <app-task class="task" [task]="task"></app-task>
+      </div>
+    </div>
 
-    <div class="pagination">
+    <div
+      class="row"
+      [ngClass]="{
+        'justify-content-between': state.tasksPagination.prevPage && state.tasksPagination.nextPage,
+        'justify-content-end': !state.tasksPagination.prevPage && state.tasksPagination.nextPage
+      }">
       <a
         *ngIf="state.tasksPagination.prevPage !== null"
         [routerLink]="['/tasks', state.tasksPagination.prevPage]"
-        class="prev-page-link"
+        class="prev-page-link link col-auto"
       >
         Previous
       </a>
@@ -21,7 +35,7 @@
       <a
         *ngIf="state.tasksPagination.nextPage !== null"
         [routerLink]="['/tasks', state.tasksPagination.nextPage]"
-        class="next-page-link"
+        class="next-page-link link col-auto"
       >
         Next
       </a>

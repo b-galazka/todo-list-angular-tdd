@@ -1,0 +1,8 @@
+@import 'variables';
+
+:host {
+  display: block;
+  border: 1px solid $white;
+  border-radius: 8px;
+  padding: 10px 15px;
+}

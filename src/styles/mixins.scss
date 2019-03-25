@@ -12,3 +12,9 @@
     @content;
   }
 }
+
+@mixin breakpoint($screenWidth) {
+  @media screen and (min-width: $screenWidth) {
+    @content;
+  }
+}

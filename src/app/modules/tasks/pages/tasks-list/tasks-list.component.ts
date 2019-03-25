@@ -26,12 +26,14 @@ export class TasksListComponent implements OnInit {
 
   private readonly fetchTasks = ({ page }: ITasksParams): void => {
 
-    this.isInvalidPageNumberProvided = !Number.isInteger(+page);
+    // TODO: redirect to first page
+    this.isInvalidPageNumberProvided = !Number.isInteger(+page) || page < 1;
 
     if (this.isInvalidPageNumberProvided) {
       return;
     }
 
+    // TODO: if no tasks found and page > 1 then redirect to first page
     this.tasksService.getTasks(+page).subscribe();
   }
 }

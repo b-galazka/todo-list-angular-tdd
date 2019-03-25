@@ -214,4 +214,17 @@ describe('TasksListComponent', () => {
 
     expect(pageNumberErrorElem).toBeTruthy();
   });
+
+  it('should show error if :page is not an positive integer', () => {
+
+    const page = -1;
+
+    (<Subject<any>> activatedRoute.params).next({ page });
+
+    fixture.detectChanges();
+
+    const pageNumberErrorElem = fixture.debugElement.query(By.css('.page-number-error'));
+
+    expect(pageNumberErrorElem).toBeTruthy();
+  });
 });
