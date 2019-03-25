@@ -188,4 +188,30 @@ describe('TasksListComponent', () => {
 
     expect(linkElem).toBeFalsy();
   });
+
+  it('should not fetch tasks if :page is not an integer', () => {
+
+    const page = 'some text';
+    const observable = of();
+    const subSpy = spyOn(observable, 'subscribe');
+    const getTasksSpy = spyOn(tasksService, 'getTasks').and.returnValue(observable);
+
+    (<Subject<any>> activatedRoute.params).next({ page });
+
+    expect(getTasksSpy).not.toHaveBeenCalled();
+    expect(subSpy).not.toHaveBeenCalled();
+  });
+
+  it('should show error if :page is not an integer', () => {
+
+    const page = 'some text';
+
+    (<Subject<any>> activatedRoute.params).next({ page });
+
+    fixture.detectChanges();
+
+    const pageNumberErrorElem = fixture.debugElement.query(By.css('.page-number-error'));
+
+    expect(pageNumberErrorElem).toBeTruthy();
+  });
 });

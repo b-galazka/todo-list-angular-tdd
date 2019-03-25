@@ -13,6 +13,8 @@ export class TasksListComponent implements OnInit {
 
   public readonly RequestStatus = RequestStatus;
 
+  public isInvalidPageNumberProvided = false;
+
   public constructor(
     private readonly route: ActivatedRoute,
     public readonly tasksService: TasksService
@@ -23,6 +25,13 @@ export class TasksListComponent implements OnInit {
   }
 
   private readonly fetchTasks = ({ page }: ITasksParams): void => {
-    this.tasksService.getTasks(page).subscribe();
+
+    this.isInvalidPageNumberProvided = !Number.isInteger(+page);
+
+    if (this.isInvalidPageNumberProvided) {
+      return;
+    }
+
+    this.tasksService.getTasks(+page).subscribe();
   }
 }

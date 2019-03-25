@@ -1,6 +1,8 @@
 <div *ngIf="(tasksService.state$ | async) as state" [ngSwitch]="state.tasksFetchingStatus" class="wrapper">
   <a routerLink="/tasks/new" class="new-task-link">Create new task</a>
 
+  <p *ngIf="isInvalidPageNumberProvided" class="page-number-error">Invalid page number provided.</p>
+
   <div *ngSwitchCase="RequestStatus.Pending" class="loader"></div>
   <div *ngSwitchCase="RequestStatus.Error" class="fetching-error">Something went wrong.</div>
 
