@@ -1,8 +1,36 @@
 @import 'variables';
 
-:host {
+.wrapper {
   display: block;
   border: 1px solid $white;
   border-radius: 8px;
   padding: 10px 15px;
+
+  &.finished {
+    opacity: 0.6;
+  }
+}
+
+.task-name, .task-desc {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.task-name {
+  padding: 0 0 10px 0;
+  font-size: 1.2rem;
+}
+
+.task-desc {
+  padding-bottom: 15px;
+}
+
+.task-status {
+  padding-bottom: 20px;
+}
+
+.button {
+  border-radius: 6px;
+  padding: 4px 8px;
 }

@@ -1,3 +1,26 @@
-<p>
-  task works!
-</p>
+<div class="wrapper" [ngClass]="{ finished: task.status === TaskStatus.Finished }">
+  <div class="row no-gutters">
+    <h2 class="col-12 task-name">{{ task.name }}</h2>
+  </div>
+
+  <div class="row no-gutters">
+    <p class="col-12 task-desc">{{ task.description }}</p>
+  </div>
+
+  <div class="row no-gutters">
+    <p class="col-12 task-status">
+      <span>Status: </span>
+
+      <span [ngSwitch]="task.status">
+        <ng-container *ngSwitchCase="TaskStatus.New">new</ng-container>
+        <ng-container *ngSwitchCase="TaskStatus.InProgress">in progress</ng-container>
+        <ng-container *ngSwitchCase="TaskStatus.Finished">finished</ng-container>
+      </span>
+    </p>
+  </div>
+
+  <div class="row no-gutters justify-content-between">
+    <a [routerLink]="['/tasks/details', task.id]" class="task-details-link button">Show details</a>
+  </div>
+</div>
+
