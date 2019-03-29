@@ -5,12 +5,15 @@ import { By } from '@angular/platform-browser';
 import { Location } from '@angular/common';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Routes } from '@angular/router';
+import { AppTitleService } from 'src/app/core/services/app-title.service';
+import { AppTitleServiceMock } from 'src/mocks/services/app-title.service.mock';
 
 describe('NotFoundComponent', () => {
   let component: NotFoundComponent;
   let fixture: ComponentFixture<NotFoundComponent>;
   let debugElem: DebugElement;
   let location: Location;
+  let appTitleService: AppTitleService;
 
   beforeEach(async(() => {
 
@@ -20,7 +23,10 @@ describe('NotFoundComponent', () => {
 
     TestBed.configureTestingModule({
       declarations: [NotFoundComponent],
-      imports: [RouterTestingModule.withRoutes(routes)]
+      imports: [RouterTestingModule.withRoutes(routes)],
+      providers: [
+        { provide: AppTitleService, useClass: AppTitleServiceMock }
+      ]
     })
     .compileComponents();
   }));
@@ -28,6 +34,7 @@ describe('NotFoundComponent', () => {
   beforeEach(() => {
 
     location = TestBed.get(Location);
+    appTitleService = TestBed.get(AppTitleService);
     fixture = TestBed.createComponent(NotFoundComponent);
     component = fixture.componentInstance;
     debugElem = fixture.debugElement;
@@ -48,4 +55,16 @@ describe('NotFoundComponent', () => {
 
     expect(location.path()).toBe('/');
   }));
+
+  describe('#ngOnInit', () => {
+
+    it('should update page title', () => {
+
+      const spy = spyOn(appTitleService, 'setPageTitle');
+
+      component.ngOnInit();
+
+      expect(spy).toHaveBeenCalledWith('not found');
+    });
+  });
 });
