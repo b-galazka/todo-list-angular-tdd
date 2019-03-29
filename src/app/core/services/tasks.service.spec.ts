@@ -1,4 +1,4 @@
-import { TestBed, fakeAsync } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TasksService } from './tasks.service';
 import { Observable } from 'rxjs';
@@ -8,7 +8,6 @@ import { IServerResponse } from '../models/server-response.model';
 import { ITask } from '../models/task.model';
 import { RequestStatus } from '../models/server-request.model';
 import { HttpErrorResponse } from '@angular/common/http';
-import { switchMap, tap } from 'rxjs/operators';
 
 describe('TasksService', () => {
 
