@@ -11,7 +11,7 @@
   </div>
 
   <ng-container *ngSwitchCase="RequestStatus.Success">
-    <div class="row" [ngClass]="{ 'justify-content-center': state.tasks.length === 0 }">
+    <div class="row tasks-wrapper" [ngClass]="{ 'justify-content-center': state.tasks.length === 0 }">
       <p *ngIf="state.tasks.length === 0" class="col-auto no-data-msg">No tasks found.</p>
 
       <div *ngFor="let task of state.tasks" class="col-lg-6">
@@ -20,13 +20,14 @@
     </div>
 
     <div
-      class="row"
+      class="row pagination"
       [ngClass]="{
         'justify-content-between': state.tasksPagination.prevPage && state.tasksPagination.nextPage,
         'justify-content-end': !state.tasksPagination.prevPage && state.tasksPagination.nextPage
-      }">
+      }"
+    >
       <a
-        *ngIf="state.tasksPagination.prevPage !== null"
+        *ngIf="state.tasksPagination.prevPage"
         [routerLink]="['/tasks', state.tasksPagination.prevPage]"
         class="prev-page-link link col-auto"
       >
@@ -34,7 +35,7 @@
       </a>
 
       <a
-        *ngIf="state.tasksPagination.nextPage !== null"
+        *ngIf="state.tasksPagination.nextPage"
         [routerLink]="['/tasks', state.tasksPagination.nextPage]"
         class="next-page-link link col-auto"
       >

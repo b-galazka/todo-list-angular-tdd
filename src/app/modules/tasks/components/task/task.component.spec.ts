@@ -104,4 +104,17 @@ describe('TaskComponent', () => {
 
     expect(location.path()).toBe(`/tasks/details/${taskMock.id}`);
   }));
+
+  it('should add "finished" class to wrapper if task is finished', () => {
+
+    component.task = { ...taskMock, status: TaskStatus.Finished };
+
+    fixture.detectChanges();
+
+    const wrapperElem: HTMLDivElement = fixture.debugElement
+      .query(By.css('.wrapper'))
+      .nativeElement;
+
+    expect(wrapperElem.classList.contains('finished')).toBe(true);
+  });
 });

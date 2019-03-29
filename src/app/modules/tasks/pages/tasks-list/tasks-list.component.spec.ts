@@ -267,4 +267,51 @@ describe('TasksListComponent', () => {
 
     expect(msgElem).toBeFalsy();
   });
+
+  it('should add "justify-content-center" class to tasks container if tasks list is empty', () => {
+
+    tasksService.setState({ tasksFetchingStatus: RequestStatus.Success, tasks: [] });
+
+    fixture.detectChanges();
+
+    const tasksWrapper: HTMLDivElement = fixture.debugElement
+      .query(By.css('.tasks-wrapper'))
+      .nativeElement;
+
+    expect(tasksWrapper.classList.contains('justify-content-center')).toBe(true);
+  });
+
+  it('should add "justify-content-between" class to pagination container ' +
+    'if there are next and prev pages', () => {
+
+    tasksService.setState({
+      tasksFetchingStatus: RequestStatus.Success,
+      tasksPagination: { prevPage: 5, nextPage: 7 }
+    });
+
+    fixture.detectChanges();
+
+    const paginationWrapper: HTMLDivElement = fixture.debugElement
+      .query(By.css('.pagination'))
+      .nativeElement;
+
+    expect(paginationWrapper.classList.contains('justify-content-between')).toBe(true);
+  });
+
+  it('should add "justify-content-end" class to pagination container ' +
+    'if there is next and no prev page', () => {
+
+    tasksService.setState({
+      tasksFetchingStatus: RequestStatus.Success,
+      tasksPagination: { prevPage: null, nextPage: 2 }
+    });
+
+    fixture.detectChanges();
+
+    const paginationWrapper: HTMLDivElement = fixture.debugElement
+      .query(By.css('.pagination'))
+      .nativeElement;
+
+    expect(paginationWrapper.classList.contains('justify-content-end')).toBe(true);
+  });
 });
