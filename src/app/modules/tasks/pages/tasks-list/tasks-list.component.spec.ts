@@ -13,6 +13,8 @@ import { taskMock } from 'src/mocks/data/task.mock';
 import { RequestStatus } from 'src/app/core/models/server-request.model';
 import { By } from '@angular/platform-browser';
 import { Location } from '@angular/common';
+import { AppTitleService } from 'src/app/core/services/app-title.service';
+import { AppTitleServiceMock } from 'src/mocks/services/app-title.service.mock';
 
 describe('TasksListComponent', () => {
 
@@ -22,6 +24,7 @@ describe('TasksListComponent', () => {
   let activatedRoute: ActivatedRoute;
   let location: Location;
   let router: Router;
+  let appTitleService: AppTitleService;
 
   beforeEach(async(() => {
 
@@ -34,7 +37,8 @@ describe('TasksListComponent', () => {
       declarations: [TasksListComponent, TaskComponent],
       providers: [
         { provide: TasksService, useClass: TasksServiceMock },
-        { provide: ActivatedRoute, useValue: { params: new Subject<any>() } }
+        { provide: ActivatedRoute, useValue: { params: new Subject<any>() } },
+        { provide: AppTitleService, useClass: AppTitleServiceMock }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     })
@@ -47,6 +51,7 @@ describe('TasksListComponent', () => {
     activatedRoute = TestBed.get(ActivatedRoute);
     location = TestBed.get(Location);
     router = TestBed.get(Router);
+    appTitleService = TestBed.get(AppTitleService);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -66,6 +71,28 @@ describe('TasksListComponent', () => {
 
     expect(getTasksSpy).toHaveBeenCalledWith(page);
     expect(subSpy).toHaveBeenCalled();
+  });
+
+  it('should set page title on :page param change', () => {
+
+    const page = 89;
+    const spy = spyOn(appTitleService, 'setPageTitle');
+
+    spyOn(tasksService, 'getTasks').and.returnValue(of());
+
+    (<Subject<any>> activatedRoute.params).next({ page });
+
+    expect(spy).toHaveBeenCalledWith(`page ${page}`);
+  });
+
+  it('should set page title on :page param change if it is invalid', () => {
+
+    const page = -1;
+    const spy = spyOn(appTitleService, 'setPageTitle');
+
+    (<Subject<any>> activatedRoute.params).next({ page });
+
+    expect(spy).not.toHaveBeenCalled();
   });
 
   it('should render all fetched tasks', () => {
