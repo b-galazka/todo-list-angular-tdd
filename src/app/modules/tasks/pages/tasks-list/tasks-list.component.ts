@@ -36,7 +36,7 @@ export class TasksListComponent implements OnInit {
       .subscribe(this.redirectToFirstPage);
   }
 
-  private validPageNumberGuard = ({ page }: ITasksParams): boolean => {
+  private readonly validPageNumberGuard = ({ page }: ITasksParams): boolean => {
 
     const isPageNumberValid = Number.isInteger(+page) && page >= 1;
 
@@ -47,7 +47,7 @@ export class TasksListComponent implements OnInit {
     return isPageNumberValid;
   }
 
-  private setPageTitle = ({ page }: ITasksParams): void => {
+  private readonly setPageTitle = ({ page }: ITasksParams): void => {
     this.appTitleService.setPageTitle(`page ${page}`);
   }
 

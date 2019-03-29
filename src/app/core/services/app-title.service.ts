@@ -6,9 +6,9 @@ import { Title } from '@angular/platform-browser';
 })
 export class AppTitleService {
 
-  private appTitle: string;
+  private readonly appTitle: string;
 
-  public constructor(private titleService: Title) {
+  public constructor(private readonly titleService: Title) {
     this.appTitle = titleService.getTitle();
   }
 
