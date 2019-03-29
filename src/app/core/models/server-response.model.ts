@@ -10,5 +10,5 @@ export interface IPagination {
 
 export interface IServerResponse<T> {
   data: T;
-  pagination: IPagination;
+  pagination?: IPagination;
 }

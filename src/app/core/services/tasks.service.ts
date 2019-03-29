@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject, throwError } from 'rxjs';
+import { Observable, BehaviorSubject, throwError, of } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
 import { IServerResponse, IPaginationParams } from '../models/server-response.model';
 import { ITask } from '../models/task.model';
@@ -81,6 +81,25 @@ export class TasksService {
     this.setState({ tasksFetchingStatus: RequestStatus.Error });
 
     return throwError(error);
+  }
+
+  public patchTask(data: Partial<ITask>, taskId: number): Observable<ITask> {
+
+    return this.httpClient
+      .patch<IServerResponse<ITask>>(`${environment.apiUrl}/tasks/${taskId}`, { task: data })
+      .pipe(
+        map(TasksService.mapServerReponseToData),
+        tap(this.patchFetchedTasks)
+      );
+  }
+
+  private readonly patchFetchedTasks = (patchedTask: ITask): void => {
+
+    const tasks = this.state.tasks.map(
+      (task) => (task.id === patchedTask.id) ? ({ ...task, ...patchedTask }) : task
+    );
+
+    this.setState({ tasks });
   }
 
   private setState(data: Partial<ITasksState>): void {

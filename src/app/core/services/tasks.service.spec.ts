@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing';
+import { TestBed, fakeAsync } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TasksService } from './tasks.service';
 import { Observable } from 'rxjs';
@@ -8,6 +8,7 @@ import { IServerResponse } from '../models/server-response.model';
 import { ITask } from '../models/task.model';
 import { RequestStatus } from '../models/server-request.model';
 import { HttpErrorResponse } from '@angular/common/http';
+import { switchMap, tap } from 'rxjs/operators';
 
 describe('TasksService', () => {
 
@@ -164,6 +165,78 @@ describe('TasksService', () => {
       });
 
       req.error(new ErrorEvent('unknown error'));
+    });
+  });
+
+  describe('#patchTask', () => {
+
+    let patchRes: IServerResponse<ITask>;
+
+    beforeEach(() => {
+      patchRes = { data: taskMock };
+    });
+
+    it('should return an observable', () => {
+
+      const value = tasksService.patchTask({}, 1);
+
+      expect(value instanceof Observable).toBe(true);
+    });
+
+    it('should patch specific task', () => {
+
+      const patchData: Partial<ITask> = { name: 'sample name' };
+      const taskId = 1;
+
+      patchRes.data = { ...patchRes.data, ...patchData };
+
+      tasksService.patchTask(patchData, taskId).subscribe((task) => {
+        expect(task).toEqual(patchRes.data);
+      });
+
+      const req = httpClientMock.expectOne({
+        method: 'PATCH',
+        url: `${environment.apiUrl}/tasks/${taskId}`
+      });
+
+      expect(req.request.body).toEqual({ task: patchData });
+
+      req.flush(patchRes);
+    });
+
+    it('should patch fetched task', () => {
+
+      const fetchingResponse: IServerResponse<Array<ITask>> = {
+        data: new Array(15).fill(taskMock).map((task: ITask, index) => ({ ...task, id: index })),
+        pagination: {}
+      };
+
+      tasksService.getTasks(1).subscribe();
+      httpClientMock.expectOne({ method: 'GET' }).flush(fetchingResponse);
+
+      const patchData: Partial<ITask> = {
+        name: 'sample new task name',
+        description: 'updated description'
+      };
+
+      const taskId = 9;
+
+      patchRes.data = { ...patchRes.data, ...patchData, id: taskId };
+
+      tasksService.patchTask(patchData, taskId).subscribe(() => {
+
+        const { data } = fetchingResponse;
+
+        const expectedState: Array<ITask> = [
+          ...data.slice(0, taskId),
+          { ...data[taskId], ...patchRes.data },
+          ...data.slice(taskId + 1)
+        ];
+
+        expect(tasksService.state.tasks).toEqual(expectedState);
+      });
+
+      httpClientMock.expectOne({ method: 'PATCH' }).flush(patchRes);
     });
   });
 
