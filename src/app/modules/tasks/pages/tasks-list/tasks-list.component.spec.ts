@@ -12,7 +12,7 @@ import { ITask } from 'src/app/core/models/task.model';
 import { taskMock } from 'src/mocks/data/task.mock';
 import { RequestStatus } from 'src/app/core/models/server-request.model';
 import { By } from '@angular/platform-browser';
-import { Location, NgForOf } from '@angular/common';
+import { Location } from '@angular/common';
 import { AppTitleService } from 'src/app/core/services/app-title.service';
 import { AppTitleServiceMock } from 'src/mocks/services/app-title.service.mock';
 

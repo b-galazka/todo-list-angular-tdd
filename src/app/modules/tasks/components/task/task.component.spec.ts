@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core
 
 import { TaskComponent } from './task.component';
 import { taskMock } from 'src/mocks/data/task.mock';
-import { By, BrowserModule } from '@angular/platform-browser';
+import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Routes } from '@angular/router';
 import { Location } from '@angular/common';
