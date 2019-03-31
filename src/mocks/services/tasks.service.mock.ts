@@ -1,6 +1,7 @@
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { RequestStatus } from 'src/app/core/models/server-request.model';
 import { ITasksState } from 'src/app/core/models/tasks-state.model';
+import { ITask } from 'src/app/core/models/task.model';
 
 export class TasksServiceMock {
 
@@ -16,9 +17,15 @@ export class TasksServiceMock {
     return this._state.value;
   }
 
-  public getTasks(page: number): any {}
+  public getTasks(page: number): any {
+    return of();
+  }
 
   public setState(data: Partial<ITasksState>): void {
     this._state.next({ ...this.state, ...data });
+  }
+
+  public patchTask(data: Partial<ITask>, taskId: number): any {
+    return of();
   }
 }

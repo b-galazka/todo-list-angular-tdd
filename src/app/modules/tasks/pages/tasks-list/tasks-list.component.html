@@ -14,7 +14,7 @@
     <div class="row tasks-wrapper" [ngClass]="{ 'justify-content-center': state.tasks.length === 0 }">
       <p *ngIf="state.tasks.length === 0" class="col-auto no-data-msg">No tasks found.</p>
 
-      <div *ngFor="let task of state.tasks" class="col-lg-6">
+      <div *ngFor="let task of state.tasks; trackBy: trackTasks" class="col-lg-6">
         <app-task class="task" [task]="task"></app-task>
       </div>
     </div>

@@ -5,6 +5,7 @@ import { ITasksParams } from './tasks-list.model';
 import { RequestStatus } from 'src/app/core/models/server-request.model';
 import { filter, tap } from 'rxjs/operators';
 import { AppTitleService } from 'src/app/core/services/app-title.service';
+import { ITask } from 'src/app/core/models/task.model';
 
 @Component({
   selector: 'app-tasks-list',
@@ -53,5 +54,9 @@ export class TasksListComponent implements OnInit {
 
   private readonly redirectToFirstPage = (): void => {
     this.router.navigate(['/tasks/1']);
+  }
+
+  public trackTasks(task: ITask): number {
+    return task.id;
   }
 }

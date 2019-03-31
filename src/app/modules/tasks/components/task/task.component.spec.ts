@@ -2,12 +2,15 @@ import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core
 
 import { TaskComponent } from './task.component';
 import { taskMock } from 'src/mocks/data/task.mock';
-import { By } from '@angular/platform-browser';
+import { By, BrowserModule } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Routes } from '@angular/router';
 import { Location } from '@angular/common';
 import { TaskStatus } from 'src/app/core/models/task.model';
 import { ChangeDetectionStrategy } from '@angular/core';
+import { TasksService } from 'src/app/core/services/tasks.service';
+import { TasksServiceMock } from 'src/mocks/services/tasks.service.mock';
+import { of } from 'rxjs';
 
 describe('TaskComponent', () => {
   let component: TaskComponent;
@@ -22,7 +25,10 @@ describe('TaskComponent', () => {
 
     TestBed.configureTestingModule({
       declarations: [TaskComponent],
-      imports: [RouterTestingModule.withRoutes(routes)]
+      imports: [RouterTestingModule.withRoutes(routes) ],
+      providers: [
+        { provide: TasksService, useClass: TasksServiceMock }
+      ]
     })
     .overrideComponent(TaskComponent, { set: { changeDetection: ChangeDetectionStrategy.Default } })
     .compileComponents();
@@ -116,5 +122,136 @@ describe('TaskComponent', () => {
       .nativeElement;
 
     expect(wrapperElem.classList.contains('finished')).toBe(true);
+  });
+
+  it('should display "mark as started" button if task is new', () => {
+
+    component.task = { ...taskMock, status: TaskStatus.New };
+
+    fixture.detectChanges();
+
+    const taskStatusBtnElem: HTMLButtonElement = fixture.debugElement
+      .query(By.css('.task-status-button'))
+      .nativeElement;
+
+    expect(taskStatusBtnElem.textContent.trim().toLowerCase()).toBe('mark as started');
+  });
+
+  it('should display "mark as finished" button if task is already in progress', () => {
+
+    component.task = { ...taskMock, status: TaskStatus.InProgress };
+
+    fixture.detectChanges();
+
+    const taskStatusBtnElem: HTMLButtonElement = fixture.debugElement
+      .query(By.css('.task-status-button'))
+      .nativeElement;
+
+    expect(taskStatusBtnElem.textContent.trim().toLowerCase()).toBe('mark as finished');
+  });
+
+  it('should not display task status button if task is finished', () => {
+
+    component.task = { ...taskMock, status: TaskStatus.Finished };
+
+    fixture.detectChanges();
+
+    const taskStatusBtn = fixture.debugElement.query(By.css('.task-status-button'));
+
+    expect(taskStatusBtn).toBeFalsy();
+  });
+
+  describe('task status button click', () => {
+
+    let tasksService: TasksService;
+
+    beforeEach(() => {
+      tasksService = TestBed.get(TasksService);
+    });
+
+    it('should disable button on click', () => {
+
+      component.task = { ...taskMock, status: TaskStatus.New };
+
+      fixture.detectChanges();
+
+      let taskStatusBtnElem: HTMLButtonElement = fixture.debugElement
+        .query(By.css('.task-status-button'))
+        .nativeElement;
+
+      taskStatusBtnElem.click();
+
+      taskStatusBtnElem = fixture.debugElement
+        .query(By.css('.task-status-button'))
+        .nativeElement;
+
+      fixture.detectChanges();
+
+      expect(taskStatusBtnElem.disabled).toBe(true);
+    });
+
+    it('should update task status to "in progress" on click if task is new', () => {
+
+      const observable = of();
+      const subSpy = spyOn(observable, 'subscribe');
+      const patchTaskSpy = spyOn(tasksService, 'patchTask').and.returnValue(observable);
+
+      component.task = { ...taskMock, status: TaskStatus.New };
+
+      fixture.detectChanges();
+
+      const taskStatusBtnElem: HTMLButtonElement = fixture.debugElement
+        .query(By.css('.task-status-button'))
+        .nativeElement;
+
+      taskStatusBtnElem.click();
+
+      expect(subSpy).toHaveBeenCalled();
+      expect(patchTaskSpy).toHaveBeenCalledWith({ status: TaskStatus.InProgress }, taskMock.id);
+    });
+
+    it('should update task status to "finished" on click if task is in progress', () => {
+
+      const observable = of();
+      const subSpy = spyOn(observable, 'subscribe');
+      const patchTaskSpy = spyOn(tasksService, 'patchTask').and.returnValue(observable);
+
+      component.task = { ...taskMock, status: TaskStatus.InProgress };
+
+      fixture.detectChanges();
+
+      const taskStatusBtnElem: HTMLButtonElement = fixture.debugElement
+        .query(By.css('.task-status-button'))
+        .nativeElement;
+
+      taskStatusBtnElem.click();
+
+      expect(subSpy).toHaveBeenCalled();
+      expect(patchTaskSpy).toHaveBeenCalledWith({ status: TaskStatus.Finished }, taskMock.id);
+    });
+
+    it('should enable button on request success', fakeAsync(() => {
+
+      spyOn(tasksService, 'patchTask').and.returnValue(of(null));
+
+      component.task = { ...taskMock, status: TaskStatus.InProgress };
+
+      fixture.detectChanges();
+
+      let taskStatusBtnElem: HTMLButtonElement = fixture.debugElement
+        .query(By.css('.task-status-button'))
+        .nativeElement;
+
+      taskStatusBtnElem.click();
+      tick();
+
+      taskStatusBtnElem = fixture.debugElement
+        .query(By.css('.task-status-button'))
+        .nativeElement;
+
+      fixture.detectChanges();
+
+      expect(taskStatusBtnElem.disabled).toBe(false);
+    }));
   });
 });

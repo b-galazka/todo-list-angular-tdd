@@ -21,6 +21,17 @@
 
   <div class="row no-gutters justify-content-between">
     <a [routerLink]="['/tasks/details', task.id]" class="task-details-link button">Show details</a>
+
+    <button
+      *ngIf="task.status !== TaskStatus.Finished"
+      class="task-status-button button"
+      [ngSwitch]="task.status"
+      [disabled]="isPending"
+      (click)="changeTaskStatus()"
+    >
+      <ng-container *ngSwitchCase="TaskStatus.New">Mark as started</ng-container>
+      <ng-container *ngSwitchCase="TaskStatus.InProgress">Mark as finished</ng-container>
+    </button>
   </div>
 </div>
 

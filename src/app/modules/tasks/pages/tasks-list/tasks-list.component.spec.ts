@@ -12,7 +12,7 @@ import { ITask } from 'src/app/core/models/task.model';
 import { taskMock } from 'src/mocks/data/task.mock';
 import { RequestStatus } from 'src/app/core/models/server-request.model';
 import { By } from '@angular/platform-browser';
-import { Location } from '@angular/common';
+import { Location, NgForOf } from '@angular/common';
 import { AppTitleService } from 'src/app/core/services/app-title.service';
 import { AppTitleServiceMock } from 'src/mocks/services/app-title.service.mock';
 
@@ -340,5 +340,26 @@ describe('TasksListComponent', () => {
       .nativeElement;
 
     expect(paginationWrapper.classList.contains('justify-content-end')).toBe(true);
+  });
+
+  it('should keep tasks\' components state', () => {
+
+    tasksService.setState({ tasks: [{ ...taskMock }], tasksFetchingStatus: RequestStatus.Success });
+    fixture.detectChanges();
+
+    let tasksComponents: Array<TaskComponent> = fixture.debugElement
+      .queryAll(By.css('app-task'))
+      .map(taskDebugElem => taskDebugElem.componentInstance);
+
+    tasksComponents[0].isPending = true;
+
+    tasksService.setState({ tasks: [{ ...taskMock }] });
+    fixture.detectChanges();
+
+    tasksComponents = fixture.debugElement
+      .queryAll(By.css('app-task'))
+      .map(taskDebugElem => taskDebugElem.componentInstance);
+
+    expect(tasksComponents[0].isPending).toBe(true);
   });
 });
