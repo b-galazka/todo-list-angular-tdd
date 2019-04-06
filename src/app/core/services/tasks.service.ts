@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject, throwError } from 'rxjs';
+import { Observable, BehaviorSubject, throwError, of } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
 import { IServerResponse, IPaginationParams } from '../models/server-response.model';
 import { ITask } from '../models/task.model';
@@ -18,7 +18,9 @@ export class TasksService {
   private readonly _state = new BehaviorSubject<ITasksState>({
     tasks: [],
     tasksPagination: { nextPage: null, prevPage: null },
-    tasksFetchingStatus: RequestStatus.Idle
+    tasksFetchingStatus: RequestStatus.Idle,
+    currentTask: null,
+    currentTaskFetchingStatus: RequestStatus.Idle
   });
 
   public readonly state$ = this._state.asObservable();
@@ -100,6 +102,37 @@ export class TasksService {
     );
 
     this.setState({ tasks });
+  }
+
+  public getTask(taskId: number): Observable<ITask> {
+
+    const cachedTask = this.state.tasks.find(task => task.id === taskId);
+
+    if (cachedTask) {
+      return of(cachedTask).pipe(tap(this.handleTaskFetchingSuccess));
+    }
+
+    this.setState({ currentTaskFetchingStatus: RequestStatus.Pending });
+
+    return this.httpClient
+      .get<IServerResponse<ITask>>(`${environment.apiUrl}/tasks/${taskId}`)
+      .pipe(
+        map(TasksService.mapServerReponseToData),
+        tap(this.handleTaskFetchingSuccess),
+        catchError(this.handleTaskFetchingError)
+      );
+  }
+
+  private readonly handleTaskFetchingSuccess = (task: ITask): void => {
+
+    this.setState({ currentTask: task, currentTaskFetchingStatus: RequestStatus.Success });
+  }
+
+  private readonly handleTaskFetchingError = (error: HttpErrorResponse): Observable<never> => {
+
+    this.setState({ currentTaskFetchingStatus: RequestStatus.Error });
+
+    return throwError(error);
   }
 
   private setState(data: Partial<ITasksState>): void {

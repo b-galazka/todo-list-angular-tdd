@@ -28,7 +28,6 @@ export class TaskComponent {
       TaskStatus.InProgress :
       TaskStatus.Finished;
 
-    // TODO: arr error handling
     this.tasksService.patchTask({ status }, this.task.id).subscribe(() => {
       this.isPending = false;
     });

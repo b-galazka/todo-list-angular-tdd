@@ -8,7 +8,9 @@ export class TasksServiceMock {
   private readonly _state = new BehaviorSubject<ITasksState>({
     tasks: [],
     tasksPagination: { nextPage: null, prevPage: null },
-    tasksFetchingStatus: RequestStatus.Idle
+    tasksFetchingStatus: RequestStatus.Idle,
+    currentTask: null,
+    currentTaskFetchingStatus: RequestStatus.Idle
   });
 
   public readonly state$ = this._state.asObservable();
@@ -26,6 +28,10 @@ export class TasksServiceMock {
   }
 
   public patchTask(data: Partial<ITask>, taskId: number): any {
+    return of();
+  }
+
+  public getTask(taskId: number): any {
     return of();
   }
 }

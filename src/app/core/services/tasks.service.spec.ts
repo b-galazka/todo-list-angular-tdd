@@ -239,6 +239,142 @@ describe('TasksService', () => {
     });
   });
 
+  describe('#getTask', () => {
+
+    const taskId = 8;
+
+    let res: IServerResponse<ITask>;
+
+    beforeAll(() => {
+
+      res = {
+        data: { ...taskMock, id: taskId }
+      };
+    });
+
+    it('should return an observable', () => {
+
+      const value = tasksService.getTask(1);
+
+      expect(value instanceof Observable).toBe(true);
+    });
+
+    it('should fetch specific task', () => {
+
+      tasksService.getTask(taskId).subscribe((task) => {
+        expect(task).toEqual(res.data);
+      });
+
+      const req = httpClientMock.expectOne({
+        method: 'GET',
+        url: `${environment.apiUrl}/tasks/${taskId}`
+      });
+
+      req.flush(res);
+    });
+
+    it('should update request status to "pending" on fetching start', () => {
+
+      tasksService.getTask(taskId).subscribe();
+
+      expect(tasksService.state.currentTaskFetchingStatus).toBe(RequestStatus.Pending);
+
+      const req = httpClientMock.expectOne({
+        method: 'GET',
+        url: `${environment.apiUrl}/tasks/${taskId}`
+      });
+
+      req.flush(res);
+    });
+
+    it('should update request status to "error" on fetching failure', () => {
+
+      tasksService.getTask(taskId).subscribe(null, () => {
+        expect(tasksService.state.currentTaskFetchingStatus).toBe(RequestStatus.Error);
+      });
+
+      const req = httpClientMock.expectOne({
+        method: 'GET',
+        url: `${environment.apiUrl}/tasks/${taskId}`
+      });
+
+      req.error(new ErrorEvent('unknown error'));
+    });
+
+    it('should update request status to "success" on fetching success', () => {
+
+      tasksService.getTask(taskId).subscribe(() => {
+        expect(tasksService.state.currentTaskFetchingStatus).toBe(RequestStatus.Success);
+      });
+
+      const req = httpClientMock.expectOne({
+        method: 'GET',
+        url: `${environment.apiUrl}/tasks/${taskId}`
+      });
+
+      req.flush(res);
+    });
+
+    it('should update state to fetched task on fetching success', () => {
+
+      tasksService.getTask(taskId).subscribe(() => {
+        expect(tasksService.state.currentTask).toBe(res.data);
+      });
+
+      const req = httpClientMock.expectOne({
+        method: 'GET',
+        url: `${environment.apiUrl}/tasks/${taskId}`
+      });
+
+      req.flush(res);
+    });
+
+    it('should return cached task from tasks list', () => {
+
+      const fetchingResponse: IServerResponse<Array<ITask>> = {
+        data: new Array(15).fill(taskMock).map((task: ITask, index) => ({ ...task, id: index })),
+        pagination: {}
+      };
+
+      tasksService.getTasks(1).subscribe();
+      httpClientMock.expectOne({ method: 'GET' }).flush(fetchingResponse);
+
+      tasksService.getTask(taskId).subscribe((task) => {
+        expect(task).toBe(fetchingResponse.data[8]);
+      });
+    });
+
+    it('should update state to cached task', () => {
+
+      const fetchingResponse: IServerResponse<Array<ITask>> = {
+        data: new Array(15).fill(taskMock).map((task: ITask, index) => ({ ...task, id: index })),
+        pagination: {}
+      };
+
+      tasksService.getTasks(1).subscribe();
+      httpClientMock.expectOne({ method: 'GET' }).flush(fetchingResponse);
+
+      tasksService.getTask(taskId).subscribe(() => {
+        expect(tasksService.state.currentTask).toBe(fetchingResponse.data[8]);
+      });
+    });
+
+    it('should update fetching status to "success" when returning cached task', () => {
+
+      const fetchingResponse: IServerResponse<Array<ITask>> = {
+        data: new Array(15).fill(taskMock).map((task: ITask, index) => ({ ...task, id: index })),
+        pagination: {}
+      };
+
+      tasksService.getTasks(1).subscribe();
+      httpClientMock.expectOne({ method: 'GET' }).flush(fetchingResponse);
+
+      tasksService.getTask(taskId).subscribe(() => {
+        expect(tasksService.state.currentTaskFetchingStatus).toBe(RequestStatus.Success);
+      });
+    });
+  });
+
   afterEach(() => {
 
     httpClientMock.verify();
