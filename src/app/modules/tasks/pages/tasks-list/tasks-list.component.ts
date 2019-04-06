@@ -33,13 +33,13 @@ export class TasksListComponent implements OnInit {
 
     this.tasksService
       .getTasks(+page)
-      .pipe(filter(tasks => tasks.length === 0 && page > 1))
+      .pipe(filter(tasks => tasks.length === 0 && +page > 1))
       .subscribe(this.redirectToFirstPage);
   }
 
   private readonly validPageNumberGuard = ({ page }: ITasksParams): boolean => {
 
-    const isPageNumberValid = Number.isInteger(+page) && page >= 1;
+    const isPageNumberValid = Number.isInteger(+page) && +page >= 1;
 
     if (!isPageNumberValid) {
       this.redirectToFirstPage();
