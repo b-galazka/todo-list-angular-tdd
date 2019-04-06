@@ -130,7 +130,9 @@ export class TasksService {
 
   private readonly handleTaskFetchingError = (error: HttpErrorResponse): Observable<never> => {
 
-    this.setState({ currentTaskFetchingStatus: RequestStatus.Error });
+    const requestStatus = (error.status === 404) ? RequestStatus.NotFound : RequestStatus.Error;
+
+    this.setState({ currentTaskFetchingStatus: requestStatus });
 
     return throwError(error);
   }

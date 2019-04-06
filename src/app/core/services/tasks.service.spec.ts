@@ -373,6 +373,20 @@ describe('TasksService', () => {
         expect(tasksService.state.currentTaskFetchingStatus).toBe(RequestStatus.Success);
       });
     });
+
+    it('should update request status to "not found" it task has not been found', () => {
+
+      tasksService.getTask(taskId).subscribe(null, () => {
+        expect(tasksService.state.currentTaskFetchingStatus).toBe(RequestStatus.NotFound);
+      });
+
+      const req = httpClientMock.expectOne({
+        method: 'GET',
+        url: `${environment.apiUrl}/tasks/${taskId}`
+      });
+
+      req.error(new ErrorEvent('404 not found'), { status: 404 });
+    });
   });
 
   afterEach(() => {
