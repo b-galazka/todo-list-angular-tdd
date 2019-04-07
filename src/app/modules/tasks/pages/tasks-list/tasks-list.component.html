@@ -1,4 +1,4 @@
-<div *ngIf="(tasksService.state$ | async) as state" [ngSwitch]="state.tasksFetchingStatus">
+<ng-container *ngIf="(tasksService.state$ | async) as state" [ngSwitch]="state.tasksFetchingStatus">
   <header class="row justify-content-center header">
     <a routerLink="/tasks/new" class="new-task-link link col-auto">Create new task</a>
   </header>
@@ -19,28 +19,19 @@
       </div>
     </div>
 
-    <div
-      class="row pagination"
-      [ngClass]="{
-        'justify-content-between': state.tasksPagination.prevPage && state.tasksPagination.nextPage,
-        'justify-content-end': !state.tasksPagination.prevPage && state.tasksPagination.nextPage
-      }"
-    >
-      <a
-        *ngIf="state.tasksPagination.prevPage"
-        [routerLink]="['/tasks', state.tasksPagination.prevPage]"
-        class="prev-page-link link col-auto"
-      >
+    <div class="row pagination" [ngClass]="{
+          'justify-content-between': state.tasksPagination.prevPage && state.tasksPagination.nextPage,
+          'justify-content-end': !state.tasksPagination.prevPage && state.tasksPagination.nextPage
+        }">
+      <a *ngIf="state.tasksPagination.prevPage" [routerLink]="['/tasks', state.tasksPagination.prevPage]"
+        class="prev-page-link link col-auto">
         Previous
       </a>
 
-      <a
-        *ngIf="state.tasksPagination.nextPage"
-        [routerLink]="['/tasks', state.tasksPagination.nextPage]"
-        class="next-page-link link col-auto"
-      >
+      <a *ngIf="state.tasksPagination.nextPage" [routerLink]="['/tasks', state.tasksPagination.nextPage]"
+        class="next-page-link link col-auto">
         Next
       </a>
     </div>
   </ng-container>
-</div>
+</ng-container>

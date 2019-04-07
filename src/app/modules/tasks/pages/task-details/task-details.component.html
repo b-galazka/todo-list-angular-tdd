@@ -1,1 +1,31 @@
-<a routerLink="/tasks/1" class="tasks-list-link">Show all tasks</a>
+<ng-container *ngIf="(tasksService.state$ | async) as state" [ngSwitch]="state.currentTaskFetchingStatus">
+  <header class="row justify-content-center header">
+    <a routerLink="/tasks/1" class="tasks-list-link link col-auto">Show all tasks</a>
+  </header>
+
+  <div *ngIf="state.currentTaskFetchingStatus !== RequestStatus.Success" class="row justify-content-center">
+    <div class="col-auto">
+      <div *ngSwitchCase="RequestStatus.Pending" class="loader"></div>
+      <p *ngSwitchCase="RequestStatus.NotFound" class="not-found-msg">Task has not been found</p>
+      <p *ngSwitchCase="RequestStatus.Error" class="fetching-error">Something went wrong</p>
+    </div>
+  </div>
+
+  <ng-container *ngSwitchCase="RequestStatus.Success">
+    <h4 class="task-name">{{ state.currentTask.name }}</h4>
+    <p class="task-desc">{{ state.currentTask.description }}</p>
+
+    <p class="task-status">
+      <span>Status: </span>
+
+      <span [ngSwitch]="state.currentTask.status">
+        <ng-container *ngSwitchCase="TaskStatus.New">new</ng-container>
+        <ng-container *ngSwitchCase="TaskStatus.InProgress">in progress</ng-container>
+        <ng-container *ngSwitchCase="TaskStatus.Finished">finished</ng-container>
+      </span>
+    </p>
+
+    <p class="task-creation-date">Created at: {{ state.currentTask.createdAt | date: 'd/M/y H:mm' }}</p>
+    <p class="task-update-date">Updated at: {{ state.currentTask.updatedAt | date: 'd/M/y H:mm' }}</p>
+  </ng-container>
+</ng-container>

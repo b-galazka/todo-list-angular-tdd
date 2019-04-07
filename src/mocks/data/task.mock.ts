@@ -5,6 +5,6 @@ export const taskMock: ITask = {
   description: 'task description',
   id: 1,
   createdAt: '2019-03-19T19:52:38.955Z',
-  updatedAt: '2019-03-19T19:52:38.955Z',
+  updatedAt: '2019-03-19T13:12:38.955Z',
   status: TaskStatus.InProgress
 };
