@@ -34,4 +34,8 @@ export class TasksServiceMock {
   public getTask(taskId: number): any {
     return of();
   }
+
+  public deleteTask(taskId: number): any {
+    return of();
+  }
 }

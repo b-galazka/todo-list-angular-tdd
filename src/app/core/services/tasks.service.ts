@@ -137,6 +137,23 @@ export class TasksService {
     return throwError(error);
   }
 
+  public deleteTask(taskId: number): Observable<ITask> {
+
+    return this.httpClient
+      .delete<IServerResponse<ITask>>(`${environment.apiUrl}/tasks/${taskId}`)
+      .pipe(
+        map(TasksService.mapServerReponseToData),
+        tap(this.deleteFetchedTask)
+      );
+  }
+
+  private readonly deleteFetchedTask = (deletedTask: ITask): void => {
+
+    const tasks = this.state.tasks.filter(task => task.id !== deletedTask.id);
+
+    this.setState({ tasks });
+  }
+
   private setState(data: Partial<ITasksState>): void {
     this._state.next({ ...this.state, ...data });
   }

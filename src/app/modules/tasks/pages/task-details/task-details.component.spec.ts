@@ -1,8 +1,8 @@
 import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 
 import { TaskDetailsComponent } from './task-details.component';
-import { Routes, ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
+import { Routes, ActivatedRoute, Router } from '@angular/router';
+import { RouterTestingModule, SpyNgModuleFactoryLoader } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
 import { Location } from '@angular/common';
 import { TasksService } from 'src/app/core/services/tasks.service';
@@ -310,5 +310,105 @@ describe('TaskDetailsComponent', () => {
       .nativeElement;
 
     expect(taskStatusElem.textContent.trim()).toBe('finished');
+  });
+
+  it('should navigate to tasks edit form on tasks edit button click', fakeAsync(() => {
+
+    tasksService.setState({
+      currentTaskFetchingStatus: RequestStatus.Success,
+      currentTask: { ...taskMock, status: TaskStatus.Finished }
+    });
+
+    fixture.detectChanges();
+
+    const linkElem: HTMLAnchorElement = fixture.debugElement
+      .query(By.css('.task-edit-button'))
+      .nativeElement;
+
+    linkElem.click();
+    tick();
+
+    expect(location.path()).toBe(`/tasks/edit/${taskMock.id}`);
+  }));
+
+  describe('delete task button', () => {
+
+    let deleteTaskBtnElem: HTMLButtonElement;
+    let router: Router;
+    let windowConfirmSpy: jasmine.Spy;
+
+    beforeEach(() => {
+
+      tasksService.setState({
+        currentTaskFetchingStatus: RequestStatus.Success,
+        currentTask: taskMock
+      });
+
+      fixture.detectChanges();
+
+      router = TestBed.get(Router);
+      deleteTaskBtnElem = fixture.debugElement.query(By.css('.task-delete-button')).nativeElement;
+
+      windowConfirmSpy = spyOn(window, 'confirm').and.returnValue(true);
+    });
+
+    it('should disable delete button on click', () => {
+
+      deleteTaskBtnElem.click();
+      fixture.detectChanges();
+
+      deleteTaskBtnElem = fixture.debugElement
+        .query(By.css('.task-delete-button'))
+        .nativeElement;
+
+      expect(deleteTaskBtnElem.disabled).toBe(true);
+    });
+
+    it('should disable edit button on click', () => {
+
+      deleteTaskBtnElem.click();
+      fixture.detectChanges();
+
+      const editTaskBtnElem: HTMLButtonElement = fixture.debugElement
+        .query(By.css('.task-edit-button'))
+        .nativeElement;
+
+      expect(editTaskBtnElem.disabled).toBe(true);
+    });
+
+    it('should delete task', () => {
+
+      const observable = of();
+      const subSpy = spyOn(observable, 'subscribe');
+      const deleteTaskSpy = spyOn(tasksService, 'deleteTask').and.returnValue(observable);
+
+      deleteTaskBtnElem.click();
+
+      expect(subSpy).toHaveBeenCalled();
+      expect(deleteTaskSpy).toHaveBeenCalledWith(taskMock.id);
+    });
+
+    it('should navigate to tasks list on deleting success', fakeAsync(() => {
+
+      const spy = spyOn(router, 'navigate');
+
+      spyOn(tasksService, 'deleteTask').and.returnValue(of(taskMock));
+
+      deleteTaskBtnElem.click();
+      tick();
+
+      expect(spy).toHaveBeenCalledWith(['/tasks/1']);
+    }));
+
+    it('should not delete task if it has been canceled by user', () => {
+
+      windowConfirmSpy.and.returnValue(false);
+
+      const spy = spyOn(tasksService, 'deleteTask');
+
+      deleteTaskBtnElem.click();
+
+      expect(spy).not.toHaveBeenCalled();
+    });
   });
 });

@@ -27,5 +27,27 @@
 
     <p class="task-creation-date">Created at: {{ state.currentTask.createdAt | date: 'd/M/y H:mm' }}</p>
     <p class="task-update-date">Updated at: {{ state.currentTask.updatedAt | date: 'd/M/y H:mm' }}</p>
+
+    <footer class="footer row">
+      <div class="col-6 col-sm-auto">
+        <button
+          [disabled]="isPending"
+          [routerLink]="['/tasks/edit', state.currentTask.id]"
+          class="task-edit-button footer-button button"
+        >
+          Edit
+        </button>
+      </div>
+
+      <div class="col-6 col-sm-auto">
+        <button
+          [disabled]="isPending"
+          class="task-delete-button footer-button button"
+          (click)="deleteTask()"
+        >
+          Delete
+        </button>
+      </div>
+    </footer>
   </ng-container>
 </ng-container>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TasksService } from 'src/app/core/services/tasks.service';
 import { AppTitleService } from 'src/app/core/services/app-title.service';
 import { RequestStatus } from 'src/app/core/models/server-request.model';
@@ -15,10 +15,13 @@ export class TaskDetailsComponent implements OnInit {
   public readonly RequestStatus = RequestStatus;
   public readonly TaskStatus = TaskStatus;
 
+  public isPending = false;
+
   public constructor(
     private readonly route: ActivatedRoute,
     public readonly tasksService: TasksService,
-    private readonly appTitleService: AppTitleService
+    private readonly appTitleService: AppTitleService,
+    private readonly router: Router
   ) {}
 
   public ngOnInit(): void {
@@ -29,6 +32,19 @@ export class TaskDetailsComponent implements OnInit {
 
     this.tasksService.getTask(+taskId).subscribe((task) => {
       this.appTitleService.setPageTitle(`details of "${task.name}"`);
+    });
+  }
+
+  public deleteTask(): void {
+
+    if (!confirm('Are you sure you want to delete this task?')) {
+      return;
+    }
+
+    this.isPending = true;
+
+    this.tasksService.deleteTask(this.tasksService.state.currentTask.id).subscribe(() => {
+      this.router.navigate(['/tasks/1']);
     });
   }
 }

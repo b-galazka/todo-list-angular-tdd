@@ -389,6 +389,53 @@ describe('TasksService', () => {
     });
   });
 
+  describe('#deleteTask', () => {
+
+    it('should return an observable', () => {
+
+      const value = tasksService.deleteTask(1);
+
+      expect(value instanceof Observable).toBe(true);
+    });
+
+    it('should delete specific task', () => {
+
+      tasksService.deleteTask(taskMock.id).subscribe((task) => {
+        expect(task).toEqual(taskMock);
+      });
+
+      const req = httpClientMock.expectOne({
+        method: 'DELETE',
+        url: `${environment.apiUrl}/tasks/${taskMock.id}`
+      });
+
+      req.flush({ data: taskMock });
+    });
+
+    it('should delete fetched task', () => {
+
+      const fetchingResponse: IServerResponse<Array<ITask>> = {
+        data: new Array(15).fill(taskMock).map((task: ITask, index) => ({ ...task, id: index })),
+        pagination: {}
+      };
+
+      tasksService.getTasks(1).subscribe();
+      httpClientMock.expectOne({ method: 'GET' }).flush(fetchingResponse);
+
+      const taskId = 9;
+
+      tasksService.deleteTask(taskId).subscribe(() => {
+
+        const { data } = fetchingResponse;
+        const expectedState: Array<ITask> = [...data.slice(0, taskId), ...data.slice(taskId + 1)];
+
+        expect(tasksService.state.tasks).toEqual(expectedState);
+      });
+
+      httpClientMock.expectOne({ method: 'DELETE' }).flush({ data: { ...taskMock, id: taskId } });
+    });
+  });
+
   afterEach(() => {
 
     httpClientMock.verify();
