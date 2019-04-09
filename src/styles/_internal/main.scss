@@ -15,7 +15,7 @@ html {
 }
 
 body {
-  background-color: $blue;
+  background-color: $dark-blue;
 }
 
 input, textarea, select {
@@ -32,6 +32,6 @@ a {
   transition-property: color;
 
   &:hover, &:focus {
-    color: $dark-blue;
+    color: $blue;
   }
 }

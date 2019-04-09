@@ -8,15 +8,15 @@
   padding: 8px 16px;
   border-radius: 8px;
   background-color: transparent;
-  transition: 250ms;
+  transition: 500ms;
   transition-property: color, border-color;
 
   &:not(:disabled) {
     cursor: pointer;
 
     &:hover, &:focus {
-      color: $dark-blue;
-      border-color: $dark-blue;
+      color: $blue;
+      border-color: $blue;
     }
   }
 

@@ -7,7 +7,7 @@
     <div class="col-auto">
       <div *ngSwitchCase="RequestStatus.Pending" class="loader"></div>
       <p *ngSwitchCase="RequestStatus.NotFound" class="not-found-msg">Task has not been found</p>
-      <p *ngSwitchCase="RequestStatus.Error" class="fetching-error">Something went wrong</p>
+      <p *ngSwitchCase="RequestStatus.Error" class="fetching-error error-message">Something went wrong</p>
     </div>
   </div>
 

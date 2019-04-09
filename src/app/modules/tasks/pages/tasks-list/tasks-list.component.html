@@ -6,7 +6,7 @@
   <div *ngIf="state.tasksFetchingStatus !== RequestStatus.Success" class="row justify-content-center">
     <div class="col-auto">
       <div *ngSwitchCase="RequestStatus.Pending" class="loader"></div>
-      <div *ngSwitchCase="RequestStatus.Error" class="fetching-error">Something went wrong.</div>
+      <div *ngSwitchCase="RequestStatus.Error" class="fetching-error error-message">Something went wrong.</div>
     </div>
   </div>
 
