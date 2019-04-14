@@ -1,8 +1,21 @@
-<div class="form-control" [formGroup]="formCtrl.parent">
-  <label class="label">
-    <ng-content></ng-content>
-  </label>
-  <p *ngIf="formCtrl.touched && formCtrl.hasError('required')" class="required-error">Required</p>
-  <input [type]="type" [formControl]="formCtrl" class="input">
-</div>
+<ng-container [formGroup]="formCtrl.parent">
+  <header class="header row">
+    <label class="label col">
+      <ng-content></ng-content>
+    </label>
+
+    <p
+      *ngIf="formCtrl.touched && formCtrl.hasError('required')"
+      class="required-error col validation-error"
+    >
+      Required
+    </p>
+  </header>
+
+  <div class="row">
+    <div class="col">
+      <input [type]="type" [formControl]="formCtrl" class="input">
+    </div>
+  </div>
+</ng-container>
 
