@@ -1,0 +1,27 @@
+@import 'variables';
+
+.header {
+  margin-bottom: 5px;
+  padding: 0 8px;
+}
+
+.validation-error {
+  color: $pink;
+  text-align: right;
+}
+
+.text-field {
+  width: 100%;
+  padding: 0 8px;
+  border-radius: 8px;
+  border: 3px solid transparent;
+  outline: 0;
+
+  &:focus {
+    border-color: $blue !important;
+  }
+
+  &.ng-touched.ng-invalid {
+    border-color: $pink;
+  }
+}

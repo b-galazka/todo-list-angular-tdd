@@ -44,7 +44,8 @@ describe('TextInputComponent', () => {
 
   it('should render input of type text by default', () => {
 
-    const inputElem: HTMLInputElement = fixture.debugElement.query(By.css('.input')).nativeElement;
+    const inputElem: HTMLInputElement = fixture.debugElement
+      .query(By.css('.text-field')).nativeElement;
 
     expect(inputElem.type).toBe('text');
   });
@@ -57,14 +58,16 @@ describe('TextInputComponent', () => {
 
     fixture.detectChanges();
 
-    const inputElem: HTMLInputElement = fixture.debugElement.query(By.css('.input')).nativeElement;
+    const inputElem: HTMLInputElement = fixture.debugElement
+      .query(By.css('.text-field')).nativeElement;
 
     expect(inputElem.type).toBe(inputType);
   });
 
   it('should render input with empty placeholder by default', () => {
 
-    const inputElem: HTMLInputElement = fixture.debugElement.query(By.css('.input')).nativeElement;
+    const inputElem: HTMLInputElement = fixture.debugElement
+      .query(By.css('.text-field')).nativeElement;
 
     expect(inputElem.placeholder).toBe('');
   });
@@ -77,14 +80,15 @@ describe('TextInputComponent', () => {
 
     fixture.detectChanges();
 
-    const inputElem: HTMLInputElement = fixture.debugElement.query(By.css('.input')).nativeElement;
+    const inputElem: HTMLInputElement = fixture.debugElement
+      .query(By.css('.text-field')).nativeElement;
 
     expect(inputElem.placeholder).toBe(placeholder);
   });
 
   it('should connect input with provided form control', () => {
 
-    const inputElem = fixture.debugElement.query(By.css('.input'));
+    const inputElem = fixture.debugElement.query(By.css('.text-field'));
     const fromControlDirective = inputElem.injector.get(FormControlDirective);
 
     expect(fromControlDirective.form).toBe(<FormControl> form.get('name'));

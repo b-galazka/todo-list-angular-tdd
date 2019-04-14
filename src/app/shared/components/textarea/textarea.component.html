@@ -14,8 +14,12 @@
 
   <div class="row">
     <div class="col">
-      <input [type]="type" [placeholder]="placeholder" [formControl]="formCtrl" class="text-field">
+      <textarea
+        [placeholder]="placeholder"
+        [formControl]="formCtrl"
+        [rows]="rows"
+        class="text-field"
+      ></textarea>
     </div>
   </div>
 </ng-container>
-
