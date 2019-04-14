@@ -7,6 +7,7 @@ import { NewTaskComponent } from './pages/new-task/new-task.component';
 import { TaskDetailsComponent } from './pages/task-details/task-details.component';
 import { EditTaskComponent } from './pages/edit-task/edit-task.component';
 import { TaskComponent } from './components/task/task.component';
+import { TaskFormComponent } from './components/task-form/task-form.component';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { TaskComponent } from './components/task/task.component';
     NewTaskComponent,
     TaskDetailsComponent,
     EditTaskComponent,
-    TaskComponent
+    TaskComponent,
+    TaskFormComponent
   ],
   imports: [
     CommonModule,
