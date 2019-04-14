@@ -2,16 +2,17 @@ import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject, throwError, of } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
 import { IServerResponse, IPaginationParams } from '../models/server-response.model';
-import { ITask } from '../models/task.model';
+import { ITask, ITaskCreationData, ITaskUpdateData } from '../models/task.model';
 import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { ITasksState, IPaginationState } from '../models/tasks-state.model';
 import { RequestStatus } from '../models/server-request.model';
+import { IDataService } from '../models/data.service.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TasksService {
+export class TasksService implements IDataService<ITasksState> {
 
   private static readonly RECORDS_PER_PAGE = 15;
 
@@ -58,13 +59,13 @@ export class TasksService {
     return this.httpClient
       .get<IServerResponse<Array<ITask>>>(`${environment.apiUrl}/tasks`, { params })
       .pipe(
-        tap(this.handleTasksFetchingSuccess),
+        tap(this.putFetchedTasksToState),
         map(TasksService.mapServerReponseToData),
-        catchError(this.handleTasksFetchingError)
+        catchError(this.putTasksFetchingErrorToState)
       );
   }
 
-  private readonly handleTasksFetchingSuccess = (res: IServerResponse<Array<ITask>>): void => {
+  private readonly putFetchedTasksToState = (res: IServerResponse<Array<ITask>>): void => {
 
     const tasksPagination: IPaginationState = {
       nextPage: TasksService.getPageNumber(res.pagination.next),
@@ -78,14 +79,14 @@ export class TasksService {
     });
   }
 
-  private readonly handleTasksFetchingError = (error: HttpErrorResponse): Observable<never> => {
+  private readonly putTasksFetchingErrorToState = (error: HttpErrorResponse): Observable<never> => {
 
     this.setState({ tasksFetchingStatus: RequestStatus.Error });
 
     return throwError(error);
   }
 
-  public patchTask(data: Partial<ITask>, taskId: number): Observable<ITask> {
+  public patchTask(data: ITaskUpdateData, taskId: number): Observable<ITask> {
 
     return this.httpClient
       .patch<IServerResponse<ITask>>(`${environment.apiUrl}/tasks/${taskId}`, { task: data })
@@ -152,6 +153,20 @@ export class TasksService {
     const tasks = this.state.tasks.filter(task => task.id !== deletedTask.id);
 
     this.setState({ tasks });
+  }
+
+  public createTask(data: ITaskCreationData): Observable<ITask> {
+
+    return this.httpClient
+      .post<IServerResponse<ITask>>(`${environment.apiUrl}/tasks`, { task: data })
+      .pipe(
+        map(TasksService.mapServerReponseToData),
+        tap(this.putCreatedTaskToState)
+      );
+  }
+
+  private readonly putCreatedTaskToState = (createdTask: ITask): void => {
+    this.setState({ tasks: [createdTask, ...this.state.tasks] });
   }
 
   private setState(data: Partial<ITasksState>): void {

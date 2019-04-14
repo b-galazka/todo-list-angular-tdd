@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { taskMock } from 'src/mocks/data/task.mock';
 import { environment } from 'src/environments/environment';
 import { IServerResponse } from '../models/server-response.model';
-import { ITask } from '../models/task.model';
+import { ITask, TaskStatus, ITaskCreationData } from '../models/task.model';
 import { RequestStatus } from '../models/server-request.model';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -433,6 +433,77 @@ describe('TasksService', () => {
       });
 
       httpClientMock.expectOne({ method: 'DELETE' }).flush({ data: { ...taskMock, id: taskId } });
+    });
+  });
+
+  describe('#createTask', () => {
+
+    let newTask: ITaskCreationData;
+    let res: IServerResponse<ITask>;
+
+    beforeEach(() => {
+
+      newTask = { name: 'name', description: 'description', status: TaskStatus.New };
+      res = { data: { ...taskMock, ...newTask } };
+    });
+
+    it('should return an observable', () => {
+
+      const value = tasksService.createTask(newTask);
+
+      expect(value instanceof Observable).toBe(true);
+    });
+
+    it('should create task', () => {
+
+      tasksService.createTask(newTask).subscribe((task) => {
+        expect(task).toEqual(res.data);
+      });
+
+      const req = httpClientMock.expectOne({
+        method: 'POST',
+        url: `${environment.apiUrl}/tasks`
+      });
+
+      expect(req.request.body).toEqual({ task: newTask });
+
+      req.flush(res);
+    });
+
+    it('should put created task to state', () => {
+
+      tasksService.createTask(newTask).subscribe((task) => {
+        expect(tasksService.state.tasks).toEqual([task]);
+      });
+
+      const req = httpClientMock.expectOne({
+        method: 'POST',
+        url: `${environment.apiUrl}/tasks`
+      });
+
+      expect(req.request.body).toEqual({ task: newTask });
+
+      req.flush(res);
+    });
+
+    it('should put created task to state at the begining of tasks list', () => {
+
+      const fetchingResponse: IServerResponse<Array<ITask>> = {
+        data: new Array(15).fill(taskMock).map((task: ITask, index) => ({ ...task, id: index })),
+        pagination: {}
+      };
+
+      tasksService.getTasks(1).subscribe();
+      httpClientMock.expectOne({ method: 'GET' }).flush(fetchingResponse);
+
+      tasksService.createTask(newTask).subscribe((task) => {
+
+        const expectedState: Array<ITask> = [task, ...fetchingResponse.data];
+
+        expect(tasksService.state.tasks).toEqual(expectedState);
+      });
+
+      httpClientMock.expectOne({ method: 'POST' }).flush(res);
     });
   });
 

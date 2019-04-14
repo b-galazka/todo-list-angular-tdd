@@ -1,9 +1,10 @@
 import { BehaviorSubject, of } from 'rxjs';
 import { RequestStatus } from 'src/app/core/models/server-request.model';
 import { ITasksState } from 'src/app/core/models/tasks-state.model';
-import { ITask } from 'src/app/core/models/task.model';
+import { ITaskUpdateData, ITaskCreationData } from 'src/app/core/models/task.model';
+import { IDataService } from 'src/app/core/models/data.service.model';
 
-export class TasksServiceMock {
+export class TasksServiceMock implements IDataService<ITasksState> {
 
   private readonly _state = new BehaviorSubject<ITasksState>({
     tasks: [],
@@ -27,7 +28,7 @@ export class TasksServiceMock {
     this._state.next({ ...this.state, ...data });
   }
 
-  public patchTask(data: Partial<ITask>, taskId: number): any {
+  public patchTask(data: ITaskUpdateData, taskId: number): any {
     return of();
   }
 
@@ -36,6 +37,10 @@ export class TasksServiceMock {
   }
 
   public deleteTask(taskId: number): any {
+    return of();
+  }
+
+  public createTask(data: ITaskCreationData): any {
     return of();
   }
 }
