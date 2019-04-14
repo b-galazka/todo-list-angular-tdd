@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { AbstractInputComponent } from '../shared/abstracts/abstract-input.component';
 
 @Component({
