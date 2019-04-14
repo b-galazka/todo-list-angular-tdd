@@ -62,6 +62,26 @@ describe('TextInputComponent', () => {
     expect(inputElem.type).toBe(inputType);
   });
 
+  it('should render input with empty placeholder by default', () => {
+
+    const inputElem: HTMLInputElement = fixture.debugElement.query(By.css('.input')).nativeElement;
+
+    expect(inputElem.placeholder).toBe('');
+  });
+
+  it('should render input with provided placeholder', () => {
+
+    const placeholder = 'some text';
+
+    component.placeholder = placeholder;
+
+    fixture.detectChanges();
+
+    const inputElem: HTMLInputElement = fixture.debugElement.query(By.css('.input')).nativeElement;
+
+    expect(inputElem.placeholder).toBe(placeholder);
+  });
+
   it('should connect input with provided form control', () => {
 
     const inputElem = fixture.debugElement.query(By.css('.input'));
