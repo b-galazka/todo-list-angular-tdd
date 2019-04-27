@@ -1,14 +1,23 @@
-<label class="label">{{ label }}</label>
+<header class="header row">
+  <label class="label col">{{ label }}</label>
 
-<p *ngIf="ngControl.touched && ngControl.hasError('required')" class="required-error">
-  Required
-</p>
+  <p
+    *ngIf="ngControl.touched && ngControl.hasError('required')"
+    class="required-error col validation-error"
+  >
+    Required
+  </p>
+</header>
 
-<select
-  [ngModel]="value"
-  (ngModelChange)="handleChange($event)"
-  (blur)="handleTouch()"
-  class="field"
->
-  <ng-content></ng-content>
-</select>
+<div class="row">
+  <div class="col">
+    <select
+      [ngModel]="value"
+      (ngModelChange)="handleChange($event)"
+      (blur)="handleTouch()"
+      class="field"
+    >
+      <ng-content></ng-content>
+    </select>
+  </div>
+</div>

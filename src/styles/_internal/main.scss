@@ -18,9 +18,11 @@ body {
   background-color: $dark-blue;
 }
 
-input, textarea, select {
+input, textarea, select, option {
   color: $very-dark-gray;
+}
 
+input, textarea {
   @include placeholder {
     color: $light-gray;
   }
