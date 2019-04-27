@@ -56,7 +56,7 @@ describe('TextInputComponent', () => {
   it('should render input of type text by default', () => {
 
     const inputElem: HTMLInputElement = fixture.debugElement
-      .query(By.css('.text-field')).nativeElement;
+      .query(By.css('.field')).nativeElement;
 
     expect(inputElem.type).toBe('text');
   });
@@ -70,7 +70,7 @@ describe('TextInputComponent', () => {
     fixture.detectChanges();
 
     const inputElem: HTMLInputElement = fixture.debugElement
-      .query(By.css('.text-field')).nativeElement;
+      .query(By.css('.field')).nativeElement;
 
     expect(inputElem.type).toBe(inputType);
   });
@@ -78,7 +78,7 @@ describe('TextInputComponent', () => {
   it('should render input with empty placeholder by default', () => {
 
     const inputElem: HTMLInputElement = fixture.debugElement
-      .query(By.css('.text-field')).nativeElement;
+      .query(By.css('.field')).nativeElement;
 
     expect(inputElem.placeholder).toBe('');
   });
@@ -92,7 +92,7 @@ describe('TextInputComponent', () => {
     fixture.detectChanges();
 
     const inputElem: HTMLInputElement = fixture.debugElement
-      .query(By.css('.text-field')).nativeElement;
+      .query(By.css('.field')).nativeElement;
 
     expect(inputElem.placeholder).toBe(placeholder);
   });
@@ -144,7 +144,7 @@ describe('TextInputComponent', () => {
     tick();
 
     const inputElem: HTMLInputElement = fixture.debugElement
-      .query(By.css('.text-field')).nativeElement;
+      .query(By.css('.field')).nativeElement;
 
     expect(inputElem.value).toBe(inputValue);
   }));
@@ -152,7 +152,7 @@ describe('TextInputComponent', () => {
   it('should call #handleTouch() on input blur', () => {
 
     const spy = spyOn(component, 'handleTouch');
-    const inputElem = fixture.debugElement.query(By.css('.text-field'));
+    const inputElem = fixture.debugElement.query(By.css('.field'));
 
     inputElem.triggerEventHandler('blur', new FocusEvent('blur'));
 
@@ -164,7 +164,7 @@ describe('TextInputComponent', () => {
     const typedText = 'some typed text';
 
     const inputElem: HTMLInputElement = fixture.debugElement
-      .query(By.css('.text-field')).nativeElement;
+      .query(By.css('.field')).nativeElement;
 
     inputElem.value = typedText;
     inputElem.dispatchEvent(new Event('input'));

@@ -1,7 +1,7 @@
 @import 'variables';
 
 :host(.ng-touched.ng-invalid) {
-  .text-field {
+  .field {
     border-color: $pink;
   }
 }
@@ -16,7 +16,7 @@
   text-align: right;
 }
 
-.text-field {
+.field {
   width: 100%;
   padding: 0 8px;
   border-radius: 8px;

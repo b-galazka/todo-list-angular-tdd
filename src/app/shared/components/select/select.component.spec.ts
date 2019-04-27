@@ -124,7 +124,7 @@ describe('SelectComponent', () => {
     tick();
 
     const selectElem: HTMLSelectElement = fixture.debugElement
-      .query(By.css('.select-field')).nativeElement;
+      .query(By.css('.field')).nativeElement;
 
     expect(selectElem.value).toBe(selectValue);
   }));
@@ -134,7 +134,7 @@ describe('SelectComponent', () => {
     const selectedValue = wrapperComponent.options[1].value;
 
     const selectElem: HTMLSelectElement = fixture.debugElement
-      .query(By.css('.select-field')).nativeElement;
+      .query(By.css('.field')).nativeElement;
 
     selectElem.value = selectedValue;
     selectElem.dispatchEvent(new Event('change'));
@@ -148,7 +148,7 @@ describe('SelectComponent', () => {
   it('should call #handleTouch() on select blur', () => {
 
     const spy = spyOn(component, 'handleTouch');
-    const selectElem = fixture.debugElement.query(By.css('.select-field'));
+    const selectElem = fixture.debugElement.query(By.css('.field'));
 
     selectElem.triggerEventHandler('blur', new FocusEvent('blur'));
 

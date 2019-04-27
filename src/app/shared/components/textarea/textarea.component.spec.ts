@@ -56,7 +56,7 @@ describe('TextareaComponent', () => {
   it('should render textarea', () => {
 
     const textAreaElem: HTMLTextAreaElement = fixture.debugElement
-      .query(By.css('.text-field')).nativeElement;
+      .query(By.css('.field')).nativeElement;
 
     expect(textAreaElem.type).toBe('textarea');
   });
@@ -64,7 +64,7 @@ describe('TextareaComponent', () => {
   it('should render input with empty placeholder by default', () => {
 
     const textAreaElem: HTMLTextAreaElement = fixture.debugElement
-      .query(By.css('.text-field')).nativeElement;
+      .query(By.css('.field')).nativeElement;
 
     expect(textAreaElem.placeholder).toBe('');
   });
@@ -78,7 +78,7 @@ describe('TextareaComponent', () => {
     fixture.detectChanges();
 
     const textAreaElem: HTMLTextAreaElement = fixture.debugElement
-      .query(By.css('.text-field')).nativeElement;
+      .query(By.css('.field')).nativeElement;
 
     expect(textAreaElem.placeholder).toBe(placeholder);
   });
@@ -108,7 +108,7 @@ describe('TextareaComponent', () => {
   it('should render input with 10 rows by default', () => {
 
     const textAreaElem: HTMLTextAreaElement = fixture.debugElement
-      .query(By.css('.text-field')).nativeElement;
+      .query(By.css('.field')).nativeElement;
 
     expect(textAreaElem.rows).toBe(10);
   });
@@ -122,7 +122,7 @@ describe('TextareaComponent', () => {
     fixture.detectChanges();
 
     const textAreaElem: HTMLTextAreaElement = fixture.debugElement
-      .query(By.css('.text-field')).nativeElement;
+      .query(By.css('.field')).nativeElement;
 
     expect(textAreaElem.rows).toBe(rowsAmount);
   });
@@ -152,7 +152,7 @@ describe('TextareaComponent', () => {
     tick();
 
     const inputElem: HTMLInputElement = fixture.debugElement
-      .query(By.css('.text-field')).nativeElement;
+      .query(By.css('.field')).nativeElement;
 
     expect(inputElem.value).toBe(textareaValue);
   }));
@@ -160,7 +160,7 @@ describe('TextareaComponent', () => {
   it('should call #handleTouch() on textarea blur', () => {
 
     const spy = spyOn(component, 'handleTouch');
-    const textareaElem = fixture.debugElement.query(By.css('.text-field'));
+    const textareaElem = fixture.debugElement.query(By.css('.field'));
 
     textareaElem.triggerEventHandler('blur', new FocusEvent('blur'));
 
@@ -172,7 +172,7 @@ describe('TextareaComponent', () => {
     const typedText = 'some typed text';
 
     const textareaElem: HTMLTextAreaElement = fixture.debugElement
-      .query(By.css('.text-field')).nativeElement;
+      .query(By.css('.field')).nativeElement;
 
     textareaElem.value = typedText;
     textareaElem.dispatchEvent(new Event('input'));
