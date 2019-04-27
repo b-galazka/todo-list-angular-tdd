@@ -1,6 +1,7 @@
 <header class="header row">
   <label class="label col">{{ label }}</label>
 
+  <!-- TODO: display max length error -->
   <p
     *ngIf="ngControl.touched && ngControl.hasError('required')"
     class="required-error col validation-error"

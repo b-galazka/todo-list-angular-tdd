@@ -1,3 +1,6 @@
-<p>
-  task-form works!
-</p>
+<form [formGroup]="form" (ngSubmit)="submitForm()">
+  <app-text-input formControlName="name"></app-text-input>
+  <app-textarea formControlName="description"></app-textarea>
+  <app-select formControlName="status"></app-select>
+  <button class="submit-button" [disabled]="pending || existingTask && form.pristine">Save</button>
+</form>
