@@ -7,7 +7,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Routes } from '@angular/router';
 import { Location } from '@angular/common';
 import { TaskStatus } from 'src/app/core/models/task.model';
-import { ChangeDetectionStrategy } from '@angular/core';
 import { TasksService } from 'src/app/core/services/tasks.service';
 import { TasksServiceMock } from 'src/mocks/services/tasks.service.mock';
 import { of } from 'rxjs';
@@ -16,6 +15,13 @@ describe('TaskComponent', () => {
   let component: TaskComponent;
   let fixture: ComponentFixture<TaskComponent>;
   let location: Location;
+
+  function initValues(): void {
+    fixture = TestBed.createComponent(TaskComponent);
+    location = TestBed.get(Location);
+    component = fixture.componentInstance;
+    component.task = taskMock;
+  }
 
   beforeEach(async(() => {
 
@@ -30,15 +36,11 @@ describe('TaskComponent', () => {
         { provide: TasksService, useClass: TasksServiceMock }
       ]
     })
-    .overrideComponent(TaskComponent, { set: { changeDetection: ChangeDetectionStrategy.Default } })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TaskComponent);
-    location = TestBed.get(Location);
-    component = fixture.componentInstance;
-    component.task = taskMock;
+    initValues();
     fixture.detectChanges();
   });
 
@@ -66,6 +68,12 @@ describe('TaskComponent', () => {
 
   it('should display task status as "in progress" if task is in progress', () => {
 
+    initValues();
+
+    component.task = { ...taskMock, status: TaskStatus.InProgress };
+
+    fixture.detectChanges();
+
     const taskStatusElem: HTMLParagraphElement = fixture.debugElement
       .query(By.css('.task-status span:last-child'))
       .nativeElement;
@@ -74,6 +82,8 @@ describe('TaskComponent', () => {
   });
 
   it('should display task status as "new" if task is new', () => {
+
+    initValues();
 
     component.task = { ...taskMock, status: TaskStatus.New };
 
@@ -87,6 +97,8 @@ describe('TaskComponent', () => {
   });
 
   it('should display task status as "finished" if task is finished', () => {
+
+    initValues();
 
     component.task = { ...taskMock, status: TaskStatus.Finished };
 
@@ -113,6 +125,8 @@ describe('TaskComponent', () => {
 
   it('should add "finished" class to wrapper if task is finished', () => {
 
+    initValues();
+
     component.task = { ...taskMock, status: TaskStatus.Finished };
 
     fixture.detectChanges();
@@ -125,6 +139,8 @@ describe('TaskComponent', () => {
   });
 
   it('should display "mark as started" button if task is new', () => {
+
+    initValues();
 
     component.task = { ...taskMock, status: TaskStatus.New };
 
@@ -139,6 +155,8 @@ describe('TaskComponent', () => {
 
   it('should display "mark as finished" button if task is already in progress', () => {
 
+    initValues();
+
     component.task = { ...taskMock, status: TaskStatus.InProgress };
 
     fixture.detectChanges();
@@ -151,6 +169,8 @@ describe('TaskComponent', () => {
   });
 
   it('should not display task status button if task is finished', () => {
+
+    initValues();
 
     component.task = { ...taskMock, status: TaskStatus.Finished };
 
