@@ -1,40 +1,53 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { TextInputComponent } from './text-input.component';
 import { By } from '@angular/platform-browser';
 
 import {
   FormGroup,
   FormControl,
-  FormControlDirective,
   ReactiveFormsModule,
-  Validators
+  Validators,
+  FormsModule,
 } from '@angular/forms';
 
 import { Component } from '@angular/core';
 
+// TODO: wrapper component?
+
+@Component({
+  selector: 'app-text-input-wrapper-component',
+  template: `
+    <ng-container [formGroup]="form">
+      <app-text-input formControlName="name"></app-text-input>
+    </ng-container>
+  `
+})
+class TextInputWrapperComponent {
+  public readonly form = new FormGroup({
+    name: new FormControl()
+  });
+}
+
 describe('TextInputComponent', () => {
   let component: TextInputComponent;
-  let fixture: ComponentFixture<TextInputComponent>;
-  let form: FormGroup;
+  let wrapperComponent: TextInputWrapperComponent;
+  let fixture: ComponentFixture<TextInputWrapperComponent>;
+  let formControl: FormControl;
 
   beforeEach(async(() => {
-
-    form = new FormGroup({
-      name: new FormControl()
-    });
-
     TestBed.configureTestingModule({
-      declarations: [TextInputComponent],
-      imports: [ReactiveFormsModule],
-      providers: [FormControlDirective]
+      declarations: [TextInputComponent, TextInputWrapperComponent],
+      imports: [ReactiveFormsModule, FormsModule]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TextInputComponent);
-    component = fixture.componentInstance;
-    component.formCtrl = <FormControl> form.get('name');
+    fixture = TestBed.createComponent(TextInputWrapperComponent);
+    component = fixture.debugElement.query(By.css('app-text-input')).componentInstance;
+    wrapperComponent = fixture.componentInstance;
+    formControl = <FormControl> wrapperComponent.form.get('name');
+
     fixture.detectChanges();
   });
 
@@ -86,17 +99,29 @@ describe('TextInputComponent', () => {
     expect(inputElem.placeholder).toBe(placeholder);
   });
 
-  it('should connect input with provided form control', () => {
+  it('should empty label by default', () => {
 
-    const inputElem = fixture.debugElement.query(By.css('.text-field'));
-    const fromControlDirective = inputElem.injector.get(FormControlDirective);
+    const labelElem: HTMLInputElement = fixture.debugElement
+      .query(By.css('.label')).nativeElement;
 
-    expect(fromControlDirective.form).toBe(<FormControl> form.get('name'));
+    expect(labelElem.textContent).toBe('');
+  });
+
+  it('should render provided label', () => {
+
+    const label = 'some text';
+
+    component.label = label;
+
+    fixture.detectChanges();
+
+    const labelElem: HTMLInputElement = fixture.debugElement
+      .query(By.css('.label')).nativeElement;
+
+    expect(labelElem.textContent).toBe(label);
   });
 
   it('should render "required" validation error if input is touched', () => {
-
-    const formControl = form.get('name');
 
     formControl.setValidators(Validators.required);
     formControl.setValue('');
@@ -109,46 +134,30 @@ describe('TextInputComponent', () => {
 
     expect(validationErrorElem).toBeTruthy();
   });
-});
 
-describe('TextInputComponent', () => {
+  it('should set input value of form control value', fakeAsync(() => {
 
-  @Component({
-    selector: 'app-test-wrapper',
-    template: `
-    <app-text-input [formCtrl]="form.get('name')">
-      <p class="really-rare-label-css-class-name">Name</p>
-    </app-text-input>
-  `
-  })
-  class TestWrapperComponent {
-    public readonly form = new FormGroup({
-      name: new FormControl()
-    });
-  }
+    const inputValue = 'some text';
 
-  let fixture: ComponentFixture<TestWrapperComponent>;
+    formControl.setValue(inputValue);
+    formControl.updateValueAndValidity();
 
-  beforeEach(async(() => {
+    fixture.detectChanges();
+    tick();
 
-    TestBed.configureTestingModule({
-      declarations: [TestWrapperComponent, TextInputComponent],
-      imports: [ReactiveFormsModule]
-    })
-    .compileComponents();
+    const inputElem: HTMLInputElement = fixture.debugElement
+      .query(By.css('.text-field')).nativeElement;
+
+    expect(inputElem.value).toBe(inputValue);
   }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(TestWrapperComponent);
-    fixture.detectChanges();
-  });
+  it('should call #handleTouch() on input blur', () => {
 
-  it('should render provided label', () => {
+    const spy = spyOn(component, 'handleTouch');
+    const inputElem = fixture.debugElement.query(By.css('.text-field'));
 
-    const labelElem: HTMLParagraphElement = fixture.debugElement
-      .query(By.css('app-text-input .label .really-rare-label-css-class-name'))
-      .nativeElement;
+    inputElem.triggerEventHandler('blur', new FocusEvent('blur'));
 
-    expect(labelElem.textContent).toBe('Name');
+    expect(spy).toHaveBeenCalled();
   });
 });

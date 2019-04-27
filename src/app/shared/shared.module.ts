@@ -4,7 +4,7 @@ import { ContentLayoutComponent } from './layouts/content-layout/content-layout.
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { TextInputComponent } from './components/text-input/text-input.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { TextareaComponent } from './components/textarea/textarea.component';
 
 @NgModule({
@@ -13,12 +13,14 @@ import { TextareaComponent } from './components/textarea/textarea.component';
     CommonModule,
     RouterModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
   ],
   exports: [
     ReactiveFormsModule,
     TextInputComponent,
-    TextareaComponent
+    TextareaComponent,
+    FormsModule
   ]
 })
 export class SharedModule { }

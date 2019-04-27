@@ -1,5 +1,11 @@
 @import 'variables';
 
+:host(.ng-touched.ng-invalid) {
+  .text-field {
+    border-color: $pink;
+  }
+}
+
 .header {
   margin-bottom: 5px;
   padding: 0 8px;
@@ -19,9 +25,5 @@
 
   &:focus {
     border-color: $blue !important;
-  }
-
-  &.ng-touched.ng-invalid {
-    border-color: $pink;
   }
 }
