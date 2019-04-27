@@ -6,9 +6,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { TextInputComponent } from './components/text-input/text-input.component';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { TextareaComponent } from './components/textarea/textarea.component';
+import { SelectComponent } from './components/select/select.component';
 
 @NgModule({
-  declarations: [ContentLayoutComponent, TextInputComponent, TextareaComponent],
+  declarations: [ContentLayoutComponent, TextInputComponent, TextareaComponent, SelectComponent],
   imports: [
     CommonModule,
     RouterModule,
@@ -20,7 +21,8 @@ import { TextareaComponent } from './components/textarea/textarea.component';
     ReactiveFormsModule,
     TextInputComponent,
     TextareaComponent,
-    FormsModule
+    FormsModule,
+    SelectComponent
   ]
 })
 export class SharedModule { }

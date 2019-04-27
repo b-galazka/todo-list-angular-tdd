@@ -1,0 +1,14 @@
+<label class="label">{{ label }}</label>
+
+<p *ngIf="ngControl.touched && ngControl.hasError('required')" class="required-error">
+  Required
+</p>
+
+<select
+  [ngModel]="value"
+  (ngModelChange)="handleChange($event)"
+  (blur)="handleTouch()"
+  class="select-field"
+>
+  <ng-content></ng-content>
+</select>
