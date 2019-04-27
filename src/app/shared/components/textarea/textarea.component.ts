@@ -12,6 +12,7 @@ import { NgControl } from '@angular/forms';
 })
 export class TextareaComponent extends AbstractReactiveInputComponent {
   @Input() public rows = 10;
+  @Input() public placeholder = '';
 
   public constructor(public ngControl: NgControl) {
     super(ngControl);

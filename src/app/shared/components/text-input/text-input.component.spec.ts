@@ -97,9 +97,9 @@ describe('TextInputComponent', () => {
     expect(inputElem.placeholder).toBe(placeholder);
   });
 
-  it('should empty label by default', () => {
+  it('should redner empty label by default', () => {
 
-    const labelElem: HTMLInputElement = fixture.debugElement
+    const labelElem: HTMLLabelElement = fixture.debugElement
       .query(By.css('.label')).nativeElement;
 
     expect(labelElem.textContent).toBe('');
@@ -113,7 +113,7 @@ describe('TextInputComponent', () => {
 
     fixture.detectChanges();
 
-    const labelElem: HTMLInputElement = fixture.debugElement
+    const labelElem: HTMLLabelElement = fixture.debugElement
       .query(By.css('.label')).nativeElement;
 
     expect(labelElem.textContent).toBe(label);
@@ -158,4 +158,20 @@ describe('TextInputComponent', () => {
 
     expect(spy).toHaveBeenCalled();
   });
+
+  it('should update control value on typing', fakeAsync(() => {
+
+    const typedText = 'some typed text';
+
+    const inputElem: HTMLInputElement = fixture.debugElement
+      .query(By.css('.text-field')).nativeElement;
+
+    inputElem.value = typedText;
+    inputElem.dispatchEvent(new Event('input'));
+
+    fixture.detectChanges();
+    tick();
+
+    expect(formControl.value).toBe(typedText);
+  }));
 });

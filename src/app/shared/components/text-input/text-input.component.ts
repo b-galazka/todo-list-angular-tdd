@@ -13,6 +13,7 @@ import { NgControl } from '@angular/forms';
 })
 export class TextInputComponent extends AbstractReactiveInputComponent {
   @Input() public type = 'text';
+  @Input() public placeholder = '';
 
   public constructor(public ngControl: NgControl) {
     super(ngControl);

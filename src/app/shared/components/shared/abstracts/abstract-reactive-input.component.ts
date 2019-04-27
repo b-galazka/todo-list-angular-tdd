@@ -6,7 +6,6 @@ export type IReactiveInputTouchHandler = () => void;
 
 export abstract class AbstractReactiveInputComponent implements ControlValueAccessor {
 
-  @Input() public placeholder = '';
   @Input() public label = '';
 
   public value: string;

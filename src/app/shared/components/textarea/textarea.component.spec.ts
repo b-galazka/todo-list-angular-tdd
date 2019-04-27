@@ -83,9 +83,9 @@ describe('TextareaComponent', () => {
     expect(textAreaElem.placeholder).toBe(placeholder);
   });
 
-  it('should empty label by default', () => {
+  it('should render empty label by default', () => {
 
-    const labelElem: HTMLTextAreaElement = fixture.debugElement
+    const labelElem: HTMLLabelElement = fixture.debugElement
       .query(By.css('.label')).nativeElement;
 
     expect(labelElem.textContent).toBe('');
@@ -99,7 +99,7 @@ describe('TextareaComponent', () => {
 
     fixture.detectChanges();
 
-    const labelElem: HTMLTextAreaElement = fixture.debugElement
+    const labelElem: HTMLLabelElement = fixture.debugElement
       .query(By.css('.label')).nativeElement;
 
     expect(labelElem.textContent).toBe(label);
@@ -166,4 +166,20 @@ describe('TextareaComponent', () => {
 
     expect(spy).toHaveBeenCalled();
   });
+
+  it('should update control value on typing', fakeAsync(() => {
+
+    const typedText = 'some typed text';
+
+    const textareaElem: HTMLTextAreaElement = fixture.debugElement
+      .query(By.css('.text-field')).nativeElement;
+
+    textareaElem.value = typedText;
+    textareaElem.dispatchEvent(new Event('input'));
+
+    fixture.detectChanges();
+    tick();
+
+    expect(formControl.value).toBe(typedText);
+  }));
 });
