@@ -1,25 +1,23 @@
-<ng-container [formGroup]="formCtrl.parent">
-  <header class="header row">
-    <label class="label col">
-      <ng-content></ng-content>
-    </label>
+<header class="header row">
+  <label class="label col">{{ label }}</label>
 
-    <p
-      *ngIf="formCtrl.touched && formCtrl.hasError('required')"
-      class="required-error col validation-error"
-    >
-      Required
-    </p>
-  </header>
+  <p
+    *ngIf="ngControl.touched && ngControl.hasError('required')"
+    class="required-error col validation-error"
+  >
+    Required
+  </p>
+</header>
 
-  <div class="row">
-    <div class="col">
-      <textarea
-        [placeholder]="placeholder"
-        [formControl]="formCtrl"
-        [rows]="rows"
-        class="text-field"
-      ></textarea>
-    </div>
+<div class="row">
+  <div class="col">
+    <textarea
+      [placeholder]="placeholder"
+      [rows]="rows"
+      class="text-field"
+      [ngModel]="value"
+      (ngModelChange)="handleChange($event)"
+      (blur)="handleTouch()"
+    ></textarea>
   </div>
-</ng-container>
+</div>

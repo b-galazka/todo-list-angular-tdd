@@ -1,11 +1,19 @@
 import { Component, Input } from '@angular/core';
-import { AbstractInputComponent } from '../shared/abstracts/abstract-input.component';
+
+import {
+  AbstractReactiveInputComponent
+} from '../shared/abstracts/abstract-reactive-input.component';
+import { NgControl } from '@angular/forms';
 
 @Component({
   selector: 'app-textarea',
   templateUrl: './textarea.component.html',
   styleUrls: ['../shared/styles/text-input.scss', './textarea.component.scss']
 })
-export class TextareaComponent extends AbstractInputComponent {
+export class TextareaComponent extends AbstractReactiveInputComponent {
   @Input() public rows = 10;
+
+  public constructor(public ngControl: NgControl) {
+    super(ngControl);
+  }
 }

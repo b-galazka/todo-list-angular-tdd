@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { TextareaComponent } from './textarea.component';
 import { By } from '@angular/platform-browser';
 
@@ -6,34 +6,46 @@ import {
   FormGroup,
   FormControl,
   ReactiveFormsModule,
-  FormControlDirective,
-  Validators
+  Validators,
+  FormsModule
 } from '@angular/forms';
+
 import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-textarea-wrapper-component',
+  template: `
+    <ng-container [formGroup]="form">
+      <app-textarea formControlName="description"></app-textarea>
+    </ng-container>
+  `
+})
+class TextareaWrapperComponent {
+  public readonly form = new FormGroup({
+    description: new FormControl()
+  });
+}
 
 describe('TextareaComponent', () => {
   let component: TextareaComponent;
-  let fixture: ComponentFixture<TextareaComponent>;
-  let form: FormGroup;
+  let wrapperComponent: TextareaWrapperComponent;
+  let fixture: ComponentFixture<TextareaWrapperComponent>;
+  let formControl: FormControl;
 
   beforeEach(async(() => {
-
-    form = new FormGroup({
-      description: new FormControl()
-    });
-
     TestBed.configureTestingModule({
-      declarations: [TextareaComponent],
-      imports: [ReactiveFormsModule],
-      providers: [FormControlDirective]
+      declarations: [TextareaComponent, TextareaWrapperComponent],
+      imports: [ReactiveFormsModule, FormsModule]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TextareaComponent);
-    component = fixture.componentInstance;
-    component.formCtrl = <FormControl> form.get('description');
+    fixture = TestBed.createComponent(TextareaWrapperComponent);
+    component = fixture.debugElement.query(By.css('app-textarea')).componentInstance;
+    wrapperComponent = fixture.componentInstance;
+    formControl = <FormControl> wrapperComponent.form.get('description');
+
     fixture.detectChanges();
   });
 
@@ -71,6 +83,28 @@ describe('TextareaComponent', () => {
     expect(textAreaElem.placeholder).toBe(placeholder);
   });
 
+  it('should empty label by default', () => {
+
+    const labelElem: HTMLTextAreaElement = fixture.debugElement
+      .query(By.css('.label')).nativeElement;
+
+    expect(labelElem.textContent).toBe('');
+  });
+
+  it('should render provided label', () => {
+
+    const label = 'some text';
+
+    component.label = label;
+
+    fixture.detectChanges();
+
+    const labelElem: HTMLTextAreaElement = fixture.debugElement
+      .query(By.css('.label')).nativeElement;
+
+    expect(labelElem.textContent).toBe(label);
+  });
+
   it('should render input with 10 rows by default', () => {
 
     const textAreaElem: HTMLTextAreaElement = fixture.debugElement
@@ -93,17 +127,7 @@ describe('TextareaComponent', () => {
     expect(textAreaElem.rows).toBe(rowsAmount);
   });
 
-  it('should connect textarea with provided form control', () => {
-
-    const textAreaElem = fixture.debugElement.query(By.css('.text-field'));
-    const fromControlDirective = textAreaElem.injector.get(FormControlDirective);
-
-    expect(fromControlDirective.form).toBe(<FormControl> form.get('description'));
-  });
-
   it('should render "required" validation error if textarea is touched', () => {
-
-    const formControl = form.get('description');
 
     formControl.setValidators(Validators.required);
     formControl.setValue('');
@@ -116,46 +140,30 @@ describe('TextareaComponent', () => {
 
     expect(validationErrorElem).toBeTruthy();
   });
-});
 
-describe('TextareaComponent', () => {
+  it('should set textarea value of form control value', fakeAsync(() => {
 
-  @Component({
-    selector: 'app-test-wrapper',
-    template: `
-    <app-textarea [formCtrl]="form.get('description')">
-      <p class="really-rare-label-css-class-name">Description</p>
-    </app-textarea>
-  `
-  })
-  class TestWrapperComponent {
-    public readonly form = new FormGroup({
-      description: new FormControl()
-    });
-  }
+    const textareaValue = 'some text';
 
-  let fixture: ComponentFixture<TestWrapperComponent>;
+    formControl.setValue(textareaValue);
+    formControl.updateValueAndValidity();
 
-  beforeEach(async(() => {
+    fixture.detectChanges();
+    tick();
 
-    TestBed.configureTestingModule({
-      declarations: [TestWrapperComponent, TextareaComponent],
-      imports: [ReactiveFormsModule]
-    })
-    .compileComponents();
+    const inputElem: HTMLInputElement = fixture.debugElement
+      .query(By.css('.text-field')).nativeElement;
+
+    expect(inputElem.value).toBe(textareaValue);
   }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(TestWrapperComponent);
-    fixture.detectChanges();
-  });
+  it('should call #handleTouch() on textarea blur', () => {
 
-  it('should render provided label', () => {
+    const spy = spyOn(component, 'handleTouch');
+    const textareaElem = fixture.debugElement.query(By.css('.text-field'));
 
-    const labelElem: HTMLParagraphElement = fixture.debugElement
-      .query(By.css('app-textarea .label .really-rare-label-css-class-name'))
-      .nativeElement;
+    textareaElem.triggerEventHandler('blur', new FocusEvent('blur'));
 
-    expect(labelElem.textContent).toBe('Description');
+    expect(spy).toHaveBeenCalled();
   });
 });

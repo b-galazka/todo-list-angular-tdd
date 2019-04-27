@@ -12,8 +12,6 @@ import {
 
 import { Component } from '@angular/core';
 
-// TODO: wrapper component?
-
 @Component({
   selector: 'app-text-input-wrapper-component',
   template: `
