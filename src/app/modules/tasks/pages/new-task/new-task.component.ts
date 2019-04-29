@@ -8,9 +8,9 @@ import { AppTitleService } from 'src/app/core/services/app-title.service';
 })
 export class NewTaskComponent implements OnInit {
 
-  public constructor(private readonly appTitleSevice: AppTitleService) {}
+  public constructor(private readonly appTitleService: AppTitleService) {}
 
   public ngOnInit(): void {
-    this.appTitleSevice.setPageTitle('new task');
+    this.appTitleService.setPageTitle('new task');
   }
 }
