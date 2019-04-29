@@ -8,8 +8,18 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { TextareaComponent } from './components/textarea/textarea.component';
 import { SelectComponent } from './components/select/select.component';
 
+import {
+  FormFieldValidationErrorComponent
+} from './components/form-field-validation-error/form-field-validation-error.component';
+
 @NgModule({
-  declarations: [ContentLayoutComponent, TextInputComponent, TextareaComponent, SelectComponent],
+  declarations: [
+    ContentLayoutComponent,
+    TextInputComponent,
+    TextareaComponent,
+    SelectComponent,
+    FormFieldValidationErrorComponent
+  ],
   imports: [
     CommonModule,
     RouterModule,

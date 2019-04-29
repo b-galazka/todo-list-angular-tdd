@@ -5,6 +5,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { TextInputComponent } from 'src/app/shared/components/text-input/text-input.component';
 import { TextareaComponent } from 'src/app/shared/components/textarea/textarea.component';
 import { SelectComponent } from 'src/app/shared/components/select/select.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('NewTaskComponent', () => {
   let component: NewTaskComponent;
@@ -19,7 +20,8 @@ describe('NewTaskComponent', () => {
         TextareaComponent,
         SelectComponent
       ],
-      imports: [ReactiveFormsModule, FormsModule]
+      imports: [ReactiveFormsModule, FormsModule],
+      schemas: [NO_ERRORS_SCHEMA]
     })
     .compileComponents();
   }));

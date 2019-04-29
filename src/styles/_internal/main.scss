@@ -7,7 +7,6 @@
   box-sizing: border-box;
   font-size: 1rem;
   font-family: Arial, Helvetica, sans-serif;
-  color: $white;
 }
 
 html {
@@ -16,6 +15,7 @@ html {
 
 body {
   background-color: $dark-blue;
+  color: $white;
 }
 
 input, textarea, select, option {

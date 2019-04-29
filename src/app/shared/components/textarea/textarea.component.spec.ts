@@ -12,6 +12,10 @@ import {
 
 import { Component } from '@angular/core';
 
+import {
+  FormFieldValidationErrorComponent
+} from '../form-field-validation-error/form-field-validation-error.component';
+
 @Component({
   selector: 'app-textarea-wrapper-component',
   template: `
@@ -34,7 +38,11 @@ describe('TextareaComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [TextareaComponent, TextareaWrapperComponent],
+      declarations: [
+        TextareaComponent,
+        TextareaWrapperComponent,
+        FormFieldValidationErrorComponent
+      ],
       imports: [ReactiveFormsModule, FormsModule]
     })
     .compileComponents();
@@ -127,7 +135,7 @@ describe('TextareaComponent', () => {
     expect(textAreaElem.rows).toBe(rowsAmount);
   });
 
-  it('should render "required" validation error if textarea is touched', () => {
+  it('should render validation errors', () => {
 
     formControl.setValidators(Validators.required);
     formControl.setValue('');
@@ -136,9 +144,11 @@ describe('TextareaComponent', () => {
 
     fixture.detectChanges();
 
-    const validationErrorElem = fixture.debugElement.query(By.css('.required-error'));
+    const validationErrorComponent: FormFieldValidationErrorComponent = fixture.debugElement.query(
+      By.css('app-form-field-validation-error')
+    ).componentInstance;
 
-    expect(validationErrorElem).toBeTruthy();
+    expect(validationErrorComponent.errors).toBe(formControl.errors);
   });
 
   it('should set textarea value of form control value', fakeAsync(() => {

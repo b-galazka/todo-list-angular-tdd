@@ -12,6 +12,10 @@ import {
 
 import { Component } from '@angular/core';
 
+import {
+  FormFieldValidationErrorComponent
+} from '../form-field-validation-error/form-field-validation-error.component';
+
 @Component({
   selector: 'app-text-input-wrapper-component',
   template: `
@@ -34,7 +38,11 @@ describe('TextInputComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [TextInputComponent, TextInputWrapperComponent],
+      declarations: [
+        TextInputComponent,
+        TextInputWrapperComponent,
+        FormFieldValidationErrorComponent
+      ],
       imports: [ReactiveFormsModule, FormsModule]
     })
     .compileComponents();
@@ -119,7 +127,7 @@ describe('TextInputComponent', () => {
     expect(labelElem.textContent).toBe(label);
   });
 
-  it('should render "required" validation error if input is touched', () => {
+  it('should render validation errors', () => {
 
     formControl.setValidators(Validators.required);
     formControl.setValue('');
@@ -128,9 +136,11 @@ describe('TextInputComponent', () => {
 
     fixture.detectChanges();
 
-    const validationErrorElem = fixture.debugElement.query(By.css('.required-error'));
+    const validationErrorComponent: FormFieldValidationErrorComponent = fixture.debugElement.query(
+      By.css('app-form-field-validation-error')
+    ).componentInstance;
 
-    expect(validationErrorElem).toBeTruthy();
+    expect(validationErrorComponent.errors).toBe(formControl.errors);
   });
 
   it('should set input value of form control value', fakeAsync(() => {

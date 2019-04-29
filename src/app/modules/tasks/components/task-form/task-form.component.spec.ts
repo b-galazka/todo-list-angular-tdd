@@ -11,7 +11,7 @@ import {
 
 import { TaskStatus } from 'src/app/core/models/task.model';
 import { taskMock } from 'src/mocks/data/task.mock';
-import { DebugElement } from '@angular/core';
+import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { TextInputComponent } from 'src/app/shared/components/text-input/text-input.component';
 import { TextareaComponent } from 'src/app/shared/components/textarea/textarea.component';
@@ -33,7 +33,8 @@ describe('TaskFormComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [TaskFormComponent, TextInputComponent, TextareaComponent, SelectComponent],
-      imports: [ReactiveFormsModule, FormsModule]
+      imports: [ReactiveFormsModule, FormsModule],
+      schemas: [NO_ERRORS_SCHEMA]
     })
     .compileComponents();
   }));

@@ -12,6 +12,10 @@ import {
 
 import { By } from '@angular/platform-browser';
 
+import {
+  FormFieldValidationErrorComponent
+} from '../form-field-validation-error/form-field-validation-error.component';
+
 @Component({
   selector: 'app-select-wrapper-component',
   template: `
@@ -42,7 +46,7 @@ describe('SelectComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [SelectComponent, SelectWrapperComponent],
+      declarations: [SelectComponent, SelectWrapperComponent, FormFieldValidationErrorComponent],
       imports: [ReactiveFormsModule, FormsModule]
     })
     .compileComponents();
@@ -83,7 +87,7 @@ describe('SelectComponent', () => {
     expect(labelElem.textContent).toBe(label);
   });
 
-  it('should render "required" validation error if select is touched', () => {
+  it('should render validation errors', () => {
 
     formControl.setValidators(Validators.required);
     formControl.setValue('');
@@ -92,9 +96,11 @@ describe('SelectComponent', () => {
 
     fixture.detectChanges();
 
-    const validationErrorElem = fixture.debugElement.query(By.css('.required-error'));
+    const validationErrorComponent: FormFieldValidationErrorComponent = fixture.debugElement.query(
+      By.css('app-form-field-validation-error')
+    ).componentInstance;
 
-    expect(validationErrorElem).toBeTruthy();
+    expect(validationErrorComponent.errors).toBe(formControl.errors);
   });
 
   it('should render ng-content as possible options', () => {

@@ -1,12 +1,13 @@
 <header class="header row">
   <label class="label col">{{ label }}</label>
 
-  <p
-    *ngIf="ngControl.touched && ngControl.hasError('required')"
-    class="required-error col validation-error"
-  >
-    Required
-  </p>
+  <div class="col">
+    <app-form-field-validation-error
+      *ngIf="ngControl.touched"
+      [errors]="ngControl.errors"
+    >
+    </app-form-field-validation-error>
+  </div>
 </header>
 
 <div class="row">
