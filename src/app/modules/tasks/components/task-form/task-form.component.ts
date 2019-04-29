@@ -17,6 +17,9 @@ import { TaskStatus, ITask, ITaskCreationData } from 'src/app/core/models/task.m
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaskFormComponent implements OnInit {
+
+  public readonly TaskStatus = TaskStatus;
+
   @Input() public existingTask: ITask;
   @Input() public pending = false;
   @Output() public submit = new EventEmitter<ITaskCreationData>();

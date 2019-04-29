@@ -1,6 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { NewTaskComponent } from './new-task.component';
+import { TaskFormComponent } from '../../components/task-form/task-form.component';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { TextInputComponent } from 'src/app/shared/components/text-input/text-input.component';
+import { TextareaComponent } from 'src/app/shared/components/textarea/textarea.component';
+import { SelectComponent } from 'src/app/shared/components/select/select.component';
 
 describe('NewTaskComponent', () => {
   let component: NewTaskComponent;
@@ -8,7 +12,14 @@ describe('NewTaskComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ NewTaskComponent ]
+      declarations: [
+        NewTaskComponent,
+        TaskFormComponent,
+        TextInputComponent,
+        TextareaComponent,
+        SelectComponent
+      ],
+      imports: [ReactiveFormsModule, FormsModule]
     })
     .compileComponents();
   }));

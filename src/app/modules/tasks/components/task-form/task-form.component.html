@@ -1,6 +1,30 @@
 <form [formGroup]="form" (ngSubmit)="submitForm()">
-  <app-text-input formControlName="name"></app-text-input>
-  <app-textarea formControlName="description"></app-textarea>
-  <app-select formControlName="status"></app-select>
-  <button class="submit-button" [disabled]="pending || existingTask && form.pristine">Save</button>
+  <div class="row">
+    <div class="col-12 col-md form-field-col">
+      <app-text-input formControlName="name" label="Name"></app-text-input>
+    </div>
+
+    <div class="col-12 col-md form-field-col">
+      <app-select formControlName="status" label="Status">
+        <option [value]="TaskStatus.New">New</option>
+        <option [value]="TaskStatus.InProgress">In progress</option>
+        <option [value]="TaskStatus.Finished">Finished</option>
+      </app-select>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col form-field-col">
+      <app-textarea formControlName="description" label="Description"></app-textarea>
+    </div>
+  </div>
+
+  <div class="row justify-content-end">
+    <div class="col-12 col-md-auto">
+      <button class="button submit-button" [disabled]="pending || existingTask && form.pristine">
+        <span *ngIf="existingTask" class="update-task-button-text">Save changes</span>
+        <span *ngIf="!existingTask" class="new-task-button-text">Add new task</span>
+      </button>
+    </div>
+  </div>
 </form>

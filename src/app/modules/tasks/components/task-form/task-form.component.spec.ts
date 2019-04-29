@@ -147,6 +147,13 @@ describe('TaskFormComponent', () => {
         status: TaskStatus.New
       });
     });
+
+    it('should render button to add new task', () => {
+
+      const buttonTextElem = debugElement.query(By.css('.submit-button .new-task-button-text'));
+
+      expect(buttonTextElem).toBeTruthy();
+    });
   });
 
   describe('Edition mode', () => {
@@ -170,6 +177,13 @@ describe('TaskFormComponent', () => {
         .query(By.css('.submit-button')).nativeElement;
 
       expect(buttonElem.disabled).toBe(true);
+    });
+
+    it('should render button to update existing task', () => {
+
+      const buttonTextElem = debugElement.query(By.css('.submit-button .update-task-button-text'));
+
+      expect(buttonTextElem).toBeTruthy();
     });
   });
 });
