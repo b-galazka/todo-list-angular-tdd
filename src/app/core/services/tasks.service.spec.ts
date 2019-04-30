@@ -203,7 +203,7 @@ describe('TasksService', () => {
       req.flush(patchRes);
     });
 
-    it('should patch fetched task', () => {
+    it('should patch fetched task on tasks list', () => {
 
       const fetchingResponse: IServerResponse<Array<ITask>> = {
         data: new Array(15).fill(taskMock).map((task: ITask, index) => ({ ...task, id: index })),
@@ -233,6 +233,28 @@ describe('TasksService', () => {
         ];
 
         expect(tasksService.state.tasks).toEqual(expectedState);
+      });
+
+      httpClientMock.expectOne({ method: 'PATCH' }).flush(patchRes);
+    });
+
+    it('should patch fetched current task', () => {
+
+      const fetchingResponse: IServerResponse<ITask> = { data: taskMock };
+
+      tasksService.getTask(taskMock.id).subscribe();
+      httpClientMock.expectOne({ method: 'GET' }).flush(fetchingResponse);
+
+      const patchData: Partial<ITask> = {
+        name: 'sample new task name',
+        description: 'updated description'
+      };
+
+      patchRes.data = { ...patchRes.data, ...patchData, id: taskMock.id };
+
+      tasksService.patchTask(patchData, taskMock.id).subscribe(() => {
+        const expectedState: ITask = { ...fetchingResponse.data, ...patchData };
+        expect(tasksService.state.currentTask).toEqual(expectedState);
       });
 
       httpClientMock.expectOne({ method: 'PATCH' }).flush(patchRes);
@@ -424,7 +446,7 @@ describe('TasksService', () => {
       req.flush({ data: taskMock });
     });
 
-    it('should delete fetched task', () => {
+    it('should delete fetched task from the list', () => {
 
       const fetchingResponse: IServerResponse<Array<ITask>> = {
         data: new Array(15).fill(taskMock).map((task: ITask, index) => ({ ...task, id: index })),
@@ -445,6 +467,20 @@ describe('TasksService', () => {
       });
 
       httpClientMock.expectOne({ method: 'DELETE' }).flush({ data: { ...taskMock, id: taskId } });
+    });
+
+    it('should delete fetched current task', () => {
+
+      const fetchingResponse: IServerResponse<ITask> = { data: taskMock };
+
+      tasksService.getTask(taskMock.id).subscribe();
+      httpClientMock.expectOne({ method: 'GET' }).flush(fetchingResponse);
+
+      tasksService.deleteTask(taskMock.id).subscribe(() => {
+        expect(tasksService.state.currentTask).toBe(null);
+      });
+
+      httpClientMock.expectOne({ method: 'DELETE' }).flush({ data: taskMock });
     });
   });
 

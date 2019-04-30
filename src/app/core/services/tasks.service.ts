@@ -102,9 +102,11 @@ export class TasksService implements IDataService<ITasksState> {
       (task) => (task.id === patchedTask.id) ? ({ ...task, ...patchedTask }) : task
     );
 
-    // TODO: patch current task
+    const currentTask = (this.state.currentTask && this.state.currentTask.id === patchedTask.id) ?
+      { ...this.state.currentTask, ...patchedTask } :
+      this.state.currentTask;
 
-    this.setState({ tasks });
+    this.setState({ tasks, currentTask });
   }
 
   public getTask(taskId: number): Observable<ITask> {
@@ -156,9 +158,11 @@ export class TasksService implements IDataService<ITasksState> {
 
     const tasks = this.state.tasks.filter(task => task.id !== deletedTask.id);
 
-    // TODO: delete current task
+    const currentTask = (this.state.currentTask && this.state.currentTask.id === deletedTask.id) ?
+      null :
+      this.state.currentTask;
 
-    this.setState({ tasks });
+    this.setState({ tasks, currentTask });
   }
 
   public createTask(data: ITaskCreationData): Observable<ITask> {
