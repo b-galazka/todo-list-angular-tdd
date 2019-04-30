@@ -1,5 +1,4 @@
 import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-
 import { TaskDetailsComponent } from './task-details.component';
 import { Routes, ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -22,7 +21,7 @@ describe('TaskDetailsComponent', () => {
   let appTitleService: AppTitleService;
 
   const params: Record<string, any> = {
-    taskId: 9
+    taskId: taskMock.id
   };
 
   const activatedRouteMock = {
@@ -59,6 +58,12 @@ describe('TaskDetailsComponent', () => {
     tasksService = TestBed.get(TasksService);
     appTitleService = TestBed.get(AppTitleService);
     component = fixture.componentInstance;
+
+    tasksService.setState({
+      currentTaskFetchingStatus: RequestStatus.Success,
+      currentTask: taskMock
+    });
+
     fixture.detectChanges();
   });
 
@@ -87,12 +92,14 @@ describe('TaskDetailsComponent', () => {
     expect(spy).toHaveBeenCalledWith('task details');
   });
 
-  it('should set detailed pag title when task is fetched', () => {
+  it('should set detailed page title when task is fetched', () => {
 
     const spy = spyOn(appTitleService, 'setPageTitle');
     const taskObservable = of(taskMock);
 
-    spyOn(tasksService, 'getTask').and.returnValue(taskObservable);
+    spyOn(tasksService, 'getTask').and.callFake(
+      (taskId: number) => taskId === taskMock.id ? taskObservable : null
+    );
 
     component.ngOnInit();
 
@@ -126,13 +133,6 @@ describe('TaskDetailsComponent', () => {
 
   it('should not display loader if task is not being fetched', () => {
 
-    tasksService.setState({
-      currentTaskFetchingStatus: RequestStatus.Success,
-      currentTask: taskMock
-    });
-
-    fixture.detectChanges();
-
     const loaderElem = fixture.debugElement.query(By.css('.loader'));
 
     expect(loaderElem).toBeFalsy();
@@ -150,13 +150,6 @@ describe('TaskDetailsComponent', () => {
   });
 
   it('should not display "not found" message if task has been found', () => {
-
-    tasksService.setState({
-      currentTaskFetchingStatus: RequestStatus.Success,
-      currentTask: taskMock
-    });
-
-    fixture.detectChanges();
 
     const notFoundMsgElem = fixture.debugElement.query(By.css('.not-found-msg'));
 
@@ -176,26 +169,12 @@ describe('TaskDetailsComponent', () => {
 
   it('should not display fetching error if task has been fetched', () => {
 
-    tasksService.setState({
-      currentTaskFetchingStatus: RequestStatus.Success,
-      currentTask: taskMock
-    });
-
-    fixture.detectChanges();
-
     const fetchingErrorElem = fixture.debugElement.query(By.css('.fetching-error'));
 
     expect(fetchingErrorElem).toBeFalsy();
   });
 
   it('should display task name', () => {
-
-    tasksService.setState({
-      currentTaskFetchingStatus: RequestStatus.Success,
-      currentTask: taskMock
-    });
-
-    fixture.detectChanges();
 
     const taskNameElem: HTMLHeadingElement = fixture.debugElement
       .query(By.css('.task-name'))
@@ -206,13 +185,6 @@ describe('TaskDetailsComponent', () => {
 
   it('should display task description', () => {
 
-    tasksService.setState({
-      currentTaskFetchingStatus: RequestStatus.Success,
-      currentTask: taskMock
-    });
-
-    fixture.detectChanges();
-
     const taskDescElem: HTMLParagraphElement = fixture.debugElement
       .query(By.css('.task-desc'))
       .nativeElement;
@@ -221,13 +193,6 @@ describe('TaskDetailsComponent', () => {
   });
 
   it('should display task creation date', () => {
-
-    tasksService.setState({
-      currentTaskFetchingStatus: RequestStatus.Success,
-      currentTask: taskMock
-    });
-
-    fixture.detectChanges();
 
     const taskCreationDateElem: HTMLParagraphElement = fixture.debugElement
       .query(By.css('.task-creation-date'))
@@ -243,13 +208,6 @@ describe('TaskDetailsComponent', () => {
   });
 
   it('should display tast last update date', () => {
-
-    tasksService.setState({
-      currentTaskFetchingStatus: RequestStatus.Success,
-      currentTask: taskMock
-    });
-
-    fixture.detectChanges();
 
     const taskLastUpdateDateElem: HTMLParagraphElement = fixture.debugElement
       .query(By.css('.task-update-date'))

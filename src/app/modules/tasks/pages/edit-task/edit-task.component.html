@@ -1,3 +1,19 @@
-<p>
-  edit-task works!
-</p>
+<ng-container *ngIf="(tasksService.state$ | async) as state" [ngSwitch]="state.currentTaskFetchingStatus">
+  <div *ngIf="state.currentTaskFetchingStatus !== RequestStatus.Success" class="row justify-content-center">
+    <div class="col-auto">
+      <div *ngSwitchCase="RequestStatus.Pending" class="loader"></div>
+      <p *ngSwitchCase="RequestStatus.NotFound" class="not-found-msg">Task has not been found</p>
+      <p *ngSwitchCase="RequestStatus.Error" class="fetching-error error-message">Something went wrong</p>
+    </div>
+  </div>
+
+  <ng-container *ngSwitchCase="RequestStatus.Success">
+    <header class="row justify-content-center header">
+      <a [routerLink]="['/tasks/details', state.currentTask.id]" class="task-details-link link col-auto">
+        Show details of "{{ state.currentTask.name }}"
+      </a>
+    </header>
+  </ng-container>
+</ng-container>
+
+<app-task-form></app-task-form>
