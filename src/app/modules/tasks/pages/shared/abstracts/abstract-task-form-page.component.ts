@@ -22,6 +22,7 @@ export abstract class AbstractTaskFormPageComponent implements ICanBeDeactivated
   }
 
   protected readonly handleRequestSuccess = (task: ITask): void => {
+    this._taskFormComponentRef.form.markAsPristine();
     this.router.navigate(['/tasks/details', task.id]);
   }
 

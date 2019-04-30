@@ -13,7 +13,11 @@
         Show details of "{{ state.currentTask.name }}"
       </a>
     </header>
+
+    <app-task-form
+      [existingTask]="state.currentTask"
+      [pending]="isPending"
+      (submitted)="updateTask($event)"
+    ></app-task-form>
   </ng-container>
 </ng-container>
-
-<app-task-form></app-task-form>

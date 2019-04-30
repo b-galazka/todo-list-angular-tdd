@@ -102,6 +102,8 @@ export class TasksService implements IDataService<ITasksState> {
       (task) => (task.id === patchedTask.id) ? ({ ...task, ...patchedTask }) : task
     );
 
+    // TODO: patch current task
+
     this.setState({ tasks });
   }
 
@@ -153,6 +155,8 @@ export class TasksService implements IDataService<ITasksState> {
   private readonly deleteFetchedTask = (deletedTask: ITask): void => {
 
     const tasks = this.state.tasks.filter(task => task.id !== deletedTask.id);
+
+    // TODO: delete current task
 
     this.setState({ tasks });
   }

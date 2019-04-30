@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core
 import { EditTaskComponent } from './edit-task.component';
 import { By } from '@angular/platform-browser';
 import { TaskFormComponent } from '../../components/task-form/task-form.component';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule, FormGroup } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppTitleService } from 'src/app/core/services/app-title.service';
 import { TasksService } from 'src/app/core/services/tasks.service';
@@ -13,10 +13,11 @@ import { NO_ERRORS_SCHEMA, DebugElement } from '@angular/core';
 import { TextInputComponent } from 'src/app/shared/components/text-input/text-input.component';
 import { TextareaComponent } from 'src/app/shared/components/textarea/textarea.component';
 import { SelectComponent } from 'src/app/shared/components/select/select.component';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { taskMock } from 'src/mocks/data/task.mock';
 import { RequestStatus } from 'src/app/core/models/server-request.model';
 import { Location } from '@angular/common';
+import { ITaskCreationData } from 'src/app/core/models/task.model';
 
 describe('EditTaskComponent', () => {
   let component: EditTaskComponent;
@@ -176,7 +177,74 @@ describe('EditTaskComponent', () => {
     expect(location.path()).toBe(`/tasks/details/${taskMock.id}`);
   }));
 
-  // TODO: handle form
+  it('should provide task to task form', () => {
+
+    const taskFormComponentElem = debugElement.query(By.css('app-task-form'));
+    const taskFormComponent: TaskFormComponent = taskFormComponentElem.componentInstance;
+
+    expect(taskFormComponent.existingTask).toBe(taskMock);
+  });
+
+  it('should update task on form submit', () => {
+
+    const observable = of(taskMock);
+    const spy = spyOn(tasksService, 'patchTask').and.returnValue(observable);
+    const subSpy = spyOn(observable, 'subscribe');
+    const taskData: ITaskCreationData = { name: 'task name', description: 'task desc' };
+    const taskFormComponentElem = debugElement.query(By.css('app-task-form'));
+
+    taskFormComponentElem.triggerEventHandler('submitted', taskData);
+
+    expect(spy).toHaveBeenCalledWith(taskData, taskMock.id);
+    expect(subSpy).toHaveBeenCalled();
+  });
+
+  it('should mark form as pending when updating task', () => {
+
+    const taskFormComponentElem = debugElement.query(By.css('app-task-form'));
+    const taskFormComponent: TaskFormComponent = taskFormComponentElem.componentInstance;
+
+    taskFormComponentElem.triggerEventHandler('submitted', {});
+    fixture.detectChanges();
+
+    expect(taskFormComponent.pending).toBe(true);
+  });
+
+  it('should redirect to updated task details', fakeAsync(() => {
+
+    const taskFormComponentElem = debugElement.query(By.css('app-task-form'));
+
+    spyOn(tasksService, 'patchTask').and.returnValue(of(taskMock));
+    taskFormComponentElem.triggerEventHandler('submitted', {});
+
+    tick();
+
+    expect(location.path()).toBe(`/tasks/details/${taskMock.id}`);
+  }));
+
+  it('should mark form as pristine on task creation success', fakeAsync(() => {
+
+    const taskFormComponentElem = debugElement.query(By.css('app-task-form'));
+    const form: FormGroup = taskFormComponentElem.componentInstance.form;
+    const spy = spyOn(form, 'markAsPristine');
+
+    spyOn(tasksService, 'patchTask').and.returnValue(of(taskMock));
+    taskFormComponentElem.triggerEventHandler('submitted', {});
+    tick();
+
+    expect(spy).toHaveBeenCalled();
+  }));
+
+  it('should unmark task form as pending on request failure', () => {
+
+    const taskFormComponentElem = debugElement.query(By.css('app-task-form'));
+    const taskFormComponent: TaskFormComponent = taskFormComponentElem.componentInstance;
+
+    spyOn(tasksService, 'patchTask').and.returnValue(throwError(new Error()));
+    taskFormComponentElem.triggerEventHandler('submitted', {});
+
+    expect(taskFormComponent.pending).toBe(false);
+  });
 
   describe('#canBeDeactivated', () => {
 

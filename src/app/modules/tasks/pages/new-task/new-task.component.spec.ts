@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { NewTaskComponent } from './new-task.component';
 import { TaskFormComponent } from '../../components/task-form/task-form.component';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule, FormGroup } from '@angular/forms';
 import { TextInputComponent } from 'src/app/shared/components/text-input/text-input.component';
 import { TextareaComponent } from 'src/app/shared/components/textarea/textarea.component';
 import { SelectComponent } from 'src/app/shared/components/select/select.component';
@@ -120,6 +120,19 @@ describe('NewTaskComponent', () => {
     tick();
 
     expect(location.path()).toBe(`/tasks/details/${taskMock.id}`);
+  }));
+
+  it('should mark form as pristine on task creation success', fakeAsync(() => {
+
+    const taskFormComponentElem = debugElement.query(By.css('app-task-form'));
+    const form: FormGroup = taskFormComponentElem.componentInstance.form;
+    const spy = spyOn(form, 'markAsPristine');
+
+    spyOn(tasksService, 'createTask').and.returnValue(of(taskMock));
+    taskFormComponentElem.triggerEventHandler('submitted', {});
+    tick();
+
+    expect(spy).toHaveBeenCalled();
   }));
 
   it('should unmark task form as pending on request failure', () => {

@@ -8,6 +8,7 @@ import { AppTitleService } from 'src/app/core/services/app-title.service';
 import { TasksService } from 'src/app/core/services/tasks.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { RequestStatus } from 'src/app/core/models/server-request.model';
+import { ITaskCreationData } from 'src/app/core/models/task.model';
 
 @Component({
   selector: 'app-edit-task',
@@ -36,5 +37,15 @@ export class EditTaskComponent extends AbstractTaskFormPageComponent implements 
     this.tasksService.getTask(+taskId).subscribe((task) => {
       this.appTitleService.setPageTitle(`edit "${task.name}" task`);
     });
+  }
+
+  public updateTask(taskData: ITaskCreationData): void {
+
+    this.isPending = true;
+
+    this.tasksService.patchTask(taskData, this.tasksService.state.currentTask.id).subscribe(
+      this.handleRequestSuccess,
+      this.handleRequestFailure
+    );
   }
 }
