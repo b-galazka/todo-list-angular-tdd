@@ -9,6 +9,7 @@ import {
 import { EditTaskComponent } from './pages/edit-task/edit-task.component';
 import { NewTaskComponent } from './pages/new-task/new-task.component';
 import { TaskDetailsComponent } from './pages/task-details/task-details.component';
+import { UnsavedChangesGuard } from './guards/unsaved-changes.guard';
 
 const routes: Routes = [
 
@@ -17,9 +18,9 @@ const routes: Routes = [
     component: ContentLayoutComponent,
     children: [
       { path: '', pathMatch: 'full', redirectTo: '/tasks/1' },
-      { path: 'edit/:taskId', component: EditTaskComponent },
+      { path: 'edit/:taskId', component: EditTaskComponent, canDeactivate: [UnsavedChangesGuard] },
       { path: 'details/:taskId', component: TaskDetailsComponent },
-      { path: 'new', component: NewTaskComponent },
+      { path: 'new', component: NewTaskComponent, canDeactivate: [UnsavedChangesGuard] },
       { path: ':page', component: TasksListComponent }
     ]
   }

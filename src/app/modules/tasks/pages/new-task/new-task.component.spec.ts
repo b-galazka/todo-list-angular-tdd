@@ -133,5 +133,52 @@ describe('NewTaskComponent', () => {
     expect(taskFormComponent.pending).toBe(false);
   });
 
-  // TODO: canDeactivate guard and popup onbeforeunload if form is dirty
+  describe('#canBeDeactivated', () => {
+
+    let windowConfirmSpy: jasmine.Spy;
+
+    beforeEach(() => {
+      windowConfirmSpy = spyOn(window, 'confirm').and.returnValue(true);
+    });
+
+    it('should return true if form is pristine', () => {
+
+      const taskFormComponent: TaskFormComponent = debugElement
+        .query(By.css('app-task-form')).componentInstance;
+
+      taskFormComponent.form.markAsPristine();
+
+      expect(component.canBeDeactivated()).toBe(true);
+    });
+
+    it('should return true if form is dirty and users confirmes', () => {
+
+      const taskFormComponent: TaskFormComponent = debugElement
+        .query(By.css('app-task-form')).componentInstance;
+
+      taskFormComponent.form.markAsDirty();
+
+      expect(component.canBeDeactivated()).toBe(true);
+    });
+
+    it('should return false if form is dirty and users declines', () => {
+
+      const taskFormComponent: TaskFormComponent = debugElement
+        .query(By.css('app-task-form')).componentInstance;
+
+      taskFormComponent.form.markAsDirty();
+      windowConfirmSpy.and.returnValue(false);
+
+      expect(component.canBeDeactivated()).toBe(false);
+    });
+
+    it('should be called on window:beforeunload', () => {
+
+      const spy = spyOn(component, 'canBeDeactivated');
+
+      window.dispatchEvent(new Event('beforeunload'));
+
+      expect(spy).toHaveBeenCalled();
+    });
+  });
 });

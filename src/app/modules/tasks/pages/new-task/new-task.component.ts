@@ -1,23 +1,27 @@
 import { Component, OnInit } from '@angular/core';
 import { AppTitleService } from 'src/app/core/services/app-title.service';
-import { ITaskCreationData, ITask } from 'src/app/core/models/task.model';
+import { ITaskCreationData } from 'src/app/core/models/task.model';
 import { TasksService } from 'src/app/core/services/tasks.service';
 import { Router } from '@angular/router';
+
+import {
+  AbstractTaskFormPageComponent
+} from '../shared/abstracts/abstract-task-form-page.component';
 
 @Component({
   selector: 'app-new-task',
   templateUrl: './new-task.component.html',
   styleUrls: ['../shared/styles/tasks-page.scss', './new-task.component.scss']
 })
-export class NewTaskComponent implements OnInit {
-
-  public isPending = false;
+export class NewTaskComponent extends AbstractTaskFormPageComponent implements OnInit {
 
   public constructor(
     private readonly appTitleService: AppTitleService,
     private readonly tasksService: TasksService,
-    private readonly router: Router
-  ) {}
+    router: Router
+  ) {
+    super(router);
+  }
 
   public ngOnInit(): void {
     this.appTitleService.setPageTitle('new task');
@@ -28,16 +32,8 @@ export class NewTaskComponent implements OnInit {
     this.isPending = true;
 
     this.tasksService.createTask(taskData).subscribe(
-      this.handleTaskCreationSuccess,
-      this.handleTaskCreationFailure
+      this.handleRequestSuccess,
+      this.handleRequestFailure
     );
-  }
-
-  private readonly handleTaskCreationSuccess = (createdTask: ITask): void => {
-    this.router.navigate(['/tasks/details', createdTask.id]);
-  }
-
-  private readonly handleTaskCreationFailure = (): void => {
-    this.isPending = false;
   }
 }
