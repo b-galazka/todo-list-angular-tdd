@@ -344,6 +344,18 @@ describe('TasksService', () => {
       });
     });
 
+    it('should return current cached task', () => {
+
+      const fetchingResponse: IServerResponse<ITask> = { data: taskMock };
+
+      tasksService.getTask(taskMock.id).subscribe();
+      httpClientMock.expectOne({ method: 'GET' }).flush(fetchingResponse);
+
+      tasksService.getTask(taskMock.id).subscribe((task) => {
+        expect(task).toBe(taskMock);
+      });
+    });
+
     it('should update state to cached task', () => {
 
       const fetchingResponse: IServerResponse<Array<ITask>> = {

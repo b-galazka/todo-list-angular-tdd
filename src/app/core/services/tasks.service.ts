@@ -107,8 +107,9 @@ export class TasksService implements IDataService<ITasksState> {
 
   public getTask(taskId: number): Observable<ITask> {
 
-    // TODO: do not make request if current task has been already fetched
-    const cachedTask = this.state.tasks.find(task => task.id === taskId);
+    const cachedTask = (this.state.currentTask && this.state.currentTask.id === taskId) ?
+      this.state.currentTask :
+      this.state.tasks.find(task => task.id === taskId);
 
     if (cachedTask) {
       return of(cachedTask).pipe(tap(this.handleTaskFetchingSuccess));
