@@ -22,7 +22,7 @@ export class TaskFormComponent implements OnInit {
 
   @Input() public existingTask: ITask;
   @Input() public pending = false;
-  @Output() public submit = new EventEmitter<ITaskCreationData>();
+  @Output() public submitted = new EventEmitter<ITaskCreationData>();
 
   public form: FormGroup;
 
@@ -45,7 +45,7 @@ export class TaskFormComponent implements OnInit {
 
   public submitForm(): void {
     if (this.validateForm()) {
-      this.submit.emit(this.form.value);
+      this.submitted.emit(this.form.value);
     }
   }
 

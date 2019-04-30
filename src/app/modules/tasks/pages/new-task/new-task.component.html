@@ -2,4 +2,4 @@
   <a routerLink="/tasks/1" class="tasks-list-link link col-auto">Show all tasks</a>
 </header>
 
-<app-task-form></app-task-form>
+<app-task-form (submitted)="createTask($event)" [pending]="isPending"></app-task-form>

@@ -57,7 +57,7 @@ describe('TaskFormComponent', () => {
 
     component.form.setValue({ name: 'X', description: 'X', status: 'new' });
 
-    const spy = spyOn(component.submit, 'emit');
+    const spy = spyOn(component.submitted, 'emit');
 
     const buttonElem: HTMLButtonElement = debugElement
       .query(By.css('.submit-button')).nativeElement;
@@ -115,7 +115,7 @@ describe('TaskFormComponent', () => {
 
   it('should not submit form on button click if form is invalid', () => {
 
-    const spy = spyOn(component.submit, 'emit');
+    const spy = spyOn(component.submitted, 'emit');
 
     const buttonElem: HTMLButtonElement = debugElement
       .query(By.css('.submit-button')).nativeElement;
