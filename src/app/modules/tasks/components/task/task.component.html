@@ -1,4 +1,4 @@
-<div class="wrapper" [ngClass]="{ finished: task.status === TaskStatus.Finished }">
+<div class="wrapper" [class.finished]="task.status === TaskStatus.Finished">
   <div class="row no-gutters">
     <h2 class="col-12 task-name">{{ task.name }}</h2>
   </div>
