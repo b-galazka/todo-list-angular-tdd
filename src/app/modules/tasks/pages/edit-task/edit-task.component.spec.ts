@@ -1,22 +1,23 @@
 import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { EditTaskComponent } from './edit-task.component';
+import { Location } from '@angular/common';
 import { By } from '@angular/platform-browser';
-import { TaskFormComponent } from '../../components/task-form/task-form.component';
 import { ReactiveFormsModule, FormsModule, FormGroup } from '@angular/forms';
 import { RouterTestingModule } from '@angular/router/testing';
+import { Routes, ActivatedRoute } from '@angular/router';
+import { NO_ERRORS_SCHEMA, DebugElement } from '@angular/core';
+import { of, throwError } from 'rxjs';
+
+import { EditTaskComponent } from './edit-task.component';
+import { TaskFormComponent } from '../../components/task-form/task-form.component';
 import { AppTitleService } from 'src/app/core/services/app-title.service';
 import { TasksService } from 'src/app/core/services/tasks.service';
 import { AppTitleServiceMock } from 'src/mocks/services/app-title.service.mock';
 import { TasksServiceMock } from 'src/mocks/services/tasks.service.mock';
-import { Routes, ActivatedRoute } from '@angular/router';
-import { NO_ERRORS_SCHEMA, DebugElement } from '@angular/core';
 import { TextInputComponent } from 'src/app/shared/components/text-input/text-input.component';
 import { TextareaComponent } from 'src/app/shared/components/textarea/textarea.component';
 import { SelectComponent } from 'src/app/shared/components/select/select.component';
-import { of, throwError } from 'rxjs';
 import { taskMock } from 'src/mocks/data/task.mock';
 import { RequestStatus } from 'src/app/core/models/server-request.model';
-import { Location } from '@angular/common';
 import { ITaskCreationData } from 'src/app/core/models/task.model';
 
 describe('EditTaskComponent', () => {

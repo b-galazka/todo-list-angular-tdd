@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { TextInputComponent } from './text-input.component';
+import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 import {
@@ -10,11 +10,11 @@ import {
   FormsModule,
 } from '@angular/forms';
 
-import { Component } from '@angular/core';
-
 import {
   FormFieldValidationErrorComponent
 } from '../form-field-validation-error/form-field-validation-error.component';
+
+import { TextInputComponent } from './text-input.component';
 
 @Component({
   selector: 'app-text-input-wrapper-component',

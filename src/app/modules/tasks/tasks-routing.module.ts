@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { TasksListComponent } from './pages/tasks-list/tasks-list.component';
 
 import {
   ContentLayoutComponent
 } from 'src/app/shared/layouts/content-layout/content-layout.component';
 
+import { TasksListComponent } from './pages/tasks-list/tasks-list.component';
 import { EditTaskComponent } from './pages/edit-task/edit-task.component';
 import { NewTaskComponent } from './pages/new-task/new-task.component';
 import { TaskDetailsComponent } from './pages/task-details/task-details.component';

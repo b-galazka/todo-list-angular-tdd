@@ -1,22 +1,23 @@
 import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { NewTaskComponent } from './new-task.component';
-import { TaskFormComponent } from '../../components/task-form/task-form.component';
-import { ReactiveFormsModule, FormsModule, FormGroup } from '@angular/forms';
-import { TextInputComponent } from 'src/app/shared/components/text-input/text-input.component';
-import { TextareaComponent } from 'src/app/shared/components/textarea/textarea.component';
-import { SelectComponent } from 'src/app/shared/components/select/select.component';
-import { NO_ERRORS_SCHEMA, DebugElement } from '@angular/core';
-import { AppTitleService } from 'src/app/core/services/app-title.service';
-import { AppTitleServiceMock } from 'src/mocks/services/app-title.service.mock';
 import { Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
 import { Location } from '@angular/common';
+import { of, throwError } from 'rxjs';
+import { ReactiveFormsModule, FormsModule, FormGroup } from '@angular/forms';
+import { NO_ERRORS_SCHEMA, DebugElement } from '@angular/core';
+
+import { NewTaskComponent } from './new-task.component';
+import { TaskFormComponent } from '../../components/task-form/task-form.component';
+import { TextInputComponent } from 'src/app/shared/components/text-input/text-input.component';
+import { TextareaComponent } from 'src/app/shared/components/textarea/textarea.component';
+import { SelectComponent } from 'src/app/shared/components/select/select.component';
+import { AppTitleService } from 'src/app/core/services/app-title.service';
+import { AppTitleServiceMock } from 'src/mocks/services/app-title.service.mock';
 import { TasksService } from 'src/app/core/services/tasks.service';
 import { TasksServiceMock } from 'src/mocks/services/tasks.service.mock';
 import { ITaskCreationData } from 'src/app/core/models/task.model';
 import { taskMock } from 'src/mocks/data/task.mock';
-import { of, throwError } from 'rxjs';
 
 describe('NewTaskComponent', () => {
   let component: NewTaskComponent;

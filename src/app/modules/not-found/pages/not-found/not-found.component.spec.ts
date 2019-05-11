@@ -1,10 +1,11 @@
 import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { NotFoundComponent } from './not-found.component';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { Location } from '@angular/common';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Routes } from '@angular/router';
+
+import { NotFoundComponent } from './not-found.component';
 import { AppTitleService } from 'src/app/core/services/app-title.service';
 import { AppTitleServiceMock } from 'src/mocks/services/app-title.service.mock';
 

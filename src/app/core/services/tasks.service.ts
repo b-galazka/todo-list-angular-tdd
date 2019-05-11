@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError, of } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
+
 import { IServerResponse, IPaginationParams } from '../models/server-response.model';
 import { ITask, ITaskCreationData, ITaskUpdateData } from '../models/task.model';
-import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { ITasksState, IPaginationState } from '../models/tasks-state.model';
 import { RequestStatus } from '../models/server-request.model';

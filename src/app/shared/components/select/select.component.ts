@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
+import { NgControl } from '@angular/forms';
 
 import {
   AbstractReactiveFormFieldComponent
 } from '../shared/abstracts/abstract-reactive-form-field.component';
-
-import { NgControl } from '@angular/forms';
 
 @Component({
   selector: 'app-select',

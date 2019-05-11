@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { AppTitleService } from 'src/app/core/services/app-title.service';
 import { ITaskCreationData } from 'src/app/core/models/task.model';
 import { TasksService } from 'src/app/core/services/tasks.service';
-import { Router } from '@angular/router';
 
 import {
   AbstractTaskFormPageComponent

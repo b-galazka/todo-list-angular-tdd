@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { TaskFormComponent } from './task-form.component';
+import { By } from '@angular/platform-browser';
 
 import {
   FormGroup,
@@ -9,10 +9,10 @@ import {
   Validators
 } from '@angular/forms';
 
+import { TaskFormComponent } from './task-form.component';
 import { TaskStatus } from 'src/app/core/models/task.model';
 import { taskMock } from 'src/mocks/data/task.mock';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
-import { By } from '@angular/platform-browser';
 import { TextInputComponent } from 'src/app/shared/components/text-input/text-input.component';
 import { TextareaComponent } from 'src/app/shared/components/textarea/textarea.component';
 import { SelectComponent } from 'src/app/shared/components/select/select.component';

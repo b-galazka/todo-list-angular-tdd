@@ -1,8 +1,9 @@
 import { Router } from '@angular/router';
+import { ViewChild, HostListener } from '@angular/core';
+
 import { ITask } from 'src/app/core/models/task.model';
 import { ICanBeDeactivated } from 'src/app/core/models/can-be-deactivated.model';
 import { TaskFormComponent } from '../../../components/task-form/task-form.component';
-import { ViewChild, HostListener } from '@angular/core';
 
 export abstract class AbstractTaskFormPageComponent implements ICanBeDeactivated {
 

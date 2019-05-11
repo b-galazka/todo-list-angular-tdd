@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { SelectComponent } from './select.component';
 import { Component } from '@angular/core';
+import { By } from '@angular/platform-browser';
 
 import {
   FormGroup,
@@ -10,7 +10,7 @@ import {
   FormsModule
 } from '@angular/forms';
 
-import { By } from '@angular/platform-browser';
+import { SelectComponent } from './select.component';
 
 import {
   FormFieldValidationErrorComponent

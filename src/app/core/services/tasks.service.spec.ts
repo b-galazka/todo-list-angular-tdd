@@ -1,13 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { TasksService } from './tasks.service';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
+
+import { TasksService } from './tasks.service';
 import { taskMock } from 'src/mocks/data/task.mock';
 import { environment } from 'src/environments/environment';
 import { IServerResponse } from '../models/server-response.model';
 import { ITask, TaskStatus, ITaskCreationData } from '../models/task.model';
 import { RequestStatus } from '../models/server-request.model';
-import { HttpErrorResponse } from '@angular/common/http';
+
 
 describe('TasksService', () => {
 

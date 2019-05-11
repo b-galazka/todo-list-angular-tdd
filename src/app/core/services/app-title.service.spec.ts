@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
+import { Title } from '@angular/platform-browser';
 
 import { AppTitleService } from './app-title.service';
-import { Title } from '@angular/platform-browser';
 
 describe('AppTitleService', () => {
 

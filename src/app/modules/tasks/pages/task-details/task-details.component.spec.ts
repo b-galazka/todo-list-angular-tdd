@@ -1,12 +1,13 @@
 import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { TaskDetailsComponent } from './task-details.component';
-import { Routes, ActivatedRoute, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { By } from '@angular/platform-browser';
 import { Location } from '@angular/common';
+import { of } from 'rxjs';
+
+import { TaskDetailsComponent } from './task-details.component';
+import { Routes, ActivatedRoute, Router } from '@angular/router';
 import { TasksService } from 'src/app/core/services/tasks.service';
 import { TasksServiceMock } from 'src/mocks/services/tasks.service.mock';
-import { of } from 'rxjs';
 import { AppTitleService } from 'src/app/core/services/app-title.service';
 import { AppTitleServiceMock } from 'src/mocks/services/app-title.service.mock';
 import { taskMock } from 'src/mocks/data/task.mock';

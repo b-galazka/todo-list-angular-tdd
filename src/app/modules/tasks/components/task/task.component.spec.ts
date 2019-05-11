@@ -1,15 +1,15 @@
 import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-
-import { TaskComponent } from './task.component';
-import { taskMock } from 'src/mocks/data/task.mock';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Routes } from '@angular/router';
 import { Location } from '@angular/common';
+import { of } from 'rxjs';
+
+import { TaskComponent } from './task.component';
+import { taskMock } from 'src/mocks/data/task.mock';
 import { TaskStatus } from 'src/app/core/models/task.model';
 import { TasksService } from 'src/app/core/services/tasks.service';
 import { TasksServiceMock } from 'src/mocks/services/tasks.service.mock';
-import { of } from 'rxjs';
 
 describe('TaskComponent', () => {
   let component: TaskComponent;

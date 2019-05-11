@@ -1,6 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormFieldValidationErrorComponent } from './form-field-validation-error.component';
 import { By } from '@angular/platform-browser';
+
+import { FormFieldValidationErrorComponent } from './form-field-validation-error.component';
 
 describe('FormFieldValidationErrorComponent', () => {
   let component: FormFieldValidationErrorComponent;

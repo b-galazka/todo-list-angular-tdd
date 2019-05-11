@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { TextareaComponent } from './textarea.component';
+import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 import {
@@ -10,11 +10,11 @@ import {
   FormsModule
 } from '@angular/forms';
 
-import { Component } from '@angular/core';
-
 import {
   FormFieldValidationErrorComponent
 } from '../form-field-validation-error/form-field-validation-error.component';
+
+import { TextareaComponent } from './textarea.component';
 
 @Component({
   selector: 'app-textarea-wrapper-component',
