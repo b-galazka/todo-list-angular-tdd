@@ -8,10 +8,7 @@ import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { TextareaComponent } from './components/textarea/textarea.component';
 import { SelectComponent } from './components/select/select.component';
 import { ContentLayoutComponent } from './layouts/content-layout/content-layout.component';
-
-import {
-  FormFieldValidationErrorComponent
-} from './components/form-field-validation-error/form-field-validation-error.component';
+import { FormFieldComponent } from './components/form-field/form-field.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +16,7 @@ import {
     TextInputComponent,
     TextareaComponent,
     SelectComponent,
-    FormFieldValidationErrorComponent
+    FormFieldComponent
   ],
   imports: [
     CommonModule,
@@ -33,7 +30,8 @@ import {
     TextInputComponent,
     TextareaComponent,
     FormsModule,
-    SelectComponent
+    SelectComponent,
+    FormFieldComponent
   ]
 })
 export class SharedModule { }

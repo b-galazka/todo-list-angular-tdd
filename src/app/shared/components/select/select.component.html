@@ -1,24 +1,8 @@
-<header class="header row">
-  <label class="col" data-test-id="label">{{ label }}</label>
-
-  <div class="col">
-    <app-form-field-validation-error
-      *ngIf="ngControl.touched"
-      [errors]="ngControl.errors"
-    >
-    </app-form-field-validation-error>
-  </div>
-</header>
-
-<div class="row">
-  <div class="col">
-    <select
-      [ngModel]="value"
-      (ngModelChange)="handleChange($event)"
-      (blur)="handleTouch()"
-      class="field"
-    >
-      <ng-content></ng-content>
-    </select>
-  </div>
-</div>
+<select
+  [ngModel]="value"
+  (ngModelChange)="handleChange($event)"
+  (blur)="handleTouch()"
+  class="field"
+>
+  <ng-content></ng-content>
+</select>

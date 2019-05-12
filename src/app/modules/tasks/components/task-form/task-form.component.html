@@ -1,22 +1,22 @@
 <form [formGroup]="form" (ngSubmit)="submitForm()">
   <div class="row">
-    <div class="col-12 col-md form-field-col">
-      <app-text-input formControlName="name" label="Name"></app-text-input>
-    </div>
+    <app-form-field label="Name" class="col-12 col-md form-field-col">
+      <app-text-input formControlName="name"></app-text-input>
+    </app-form-field>
 
-    <div class="col-12 col-md form-field-col">
-      <app-select formControlName="status" label="Status">
+    <app-form-field label="Status" class="col-12 col-md form-field-col">
+      <app-select formControlName="status">
         <option [value]="TaskStatus.New">New</option>
         <option [value]="TaskStatus.InProgress">In progress</option>
         <option [value]="TaskStatus.Finished">Finished</option>
       </app-select>
-    </div>
+    </app-form-field>
   </div>
 
   <div class="row">
-    <div class="col form-field-col">
-      <app-textarea formControlName="description" label="Description"></app-textarea>
-    </div>
+    <app-form-field label="Description" class="col form-field-col">
+      <app-textarea formControlName="description"></app-textarea>
+    </app-form-field>
   </div>
 
   <div class="row justify-content-end">

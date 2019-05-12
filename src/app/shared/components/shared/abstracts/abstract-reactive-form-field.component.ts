@@ -1,12 +1,9 @@
 import { NgControl, ControlValueAccessor } from '@angular/forms';
-import { Input } from '@angular/core';
 
 export type IReactiveFormFieldChangeHandler = (newValue: string) => void;
 export type IReactiveFormFieldTouchHandler = () => void;
 
 export abstract class AbstractReactiveFormFieldComponent implements ControlValueAccessor {
-
-  @Input() public label = '';
 
   public value: string;
   public handleChange: IReactiveFormFieldChangeHandler;
