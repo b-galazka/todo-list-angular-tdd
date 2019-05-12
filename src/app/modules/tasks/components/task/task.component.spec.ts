@@ -10,6 +10,7 @@ import { taskMock } from 'src/mocks/data/task.mock';
 import { TaskStatus } from 'src/app/core/models/task.model';
 import { TasksService } from 'src/app/core/services/tasks.service';
 import { TasksServiceMock } from 'src/mocks/services/tasks.service.mock';
+import { TaskStatusComponent } from '../task-status/task-status.component';
 
 describe('TaskComponent', () => {
   let component: TaskComponent;
@@ -32,7 +33,7 @@ describe('TaskComponent', () => {
     ];
 
     TestBed.configureTestingModule({
-      declarations: [TaskComponent],
+      declarations: [TaskComponent, TaskStatusComponent],
       imports: [RouterTestingModule.withRoutes(routes) ],
       providers: [
         { provide: TasksService, useClass: TasksServiceMock }
@@ -74,14 +75,6 @@ describe('TaskComponent', () => {
       initValues();
       component.task = { ...taskMock, status: TaskStatus.New };
       fixture.detectChanges();
-    });
-
-    it('should display task status as "new"', () => {
-      const taskStatusElem: HTMLParagraphElement = fixture.debugElement
-        .query(By.css('[data-test-id="task-status"]'))
-        .nativeElement;
-
-      expect(taskStatusElem.textContent.trim()).toBe('new');
     });
 
     it('should display "mark as started" button if task is new', () => {
@@ -134,14 +127,6 @@ describe('TaskComponent', () => {
       fixture.detectChanges();
     });
 
-    it('should display task status as "in progress"', () => {
-      const taskStatusElem: HTMLParagraphElement = fixture.debugElement
-        .query(By.css('[data-test-id="task-status"]'))
-        .nativeElement;
-
-      expect(taskStatusElem.textContent.trim()).toBe('in progress');
-    });
-
     it('should display "mark as finished" button', () => {
       const taskStatusBtnElem: HTMLButtonElement = fixture.debugElement
         .query(By.css('[data-test-id="task-status-button"]'))
@@ -175,14 +160,6 @@ describe('TaskComponent', () => {
       fixture.detectChanges();
     });
 
-    it('should display task status as "finished"', () => {
-      const taskStatusElem: HTMLParagraphElement = fixture.debugElement
-        .query(By.css('[data-test-id="task-status"]'))
-        .nativeElement;
-
-      expect(taskStatusElem.textContent.trim()).toBe('finished');
-    });
-
     it('should add "finished" class to wrapper', () => {
       const wrapperElem: HTMLDivElement = fixture.debugElement
         .query(By.css('.wrapper'))
@@ -198,6 +175,14 @@ describe('TaskComponent', () => {
 
       expect(taskStatusBtn).toBeFalsy();
     });
+  });
+
+  it('should display task status', () => {
+    const taskStatusComponent: TaskStatusComponent = fixture.debugElement
+      .query(By.css('app-task-status'))
+      .componentInstance;
+
+    expect(taskStatusComponent.task).toBe(taskMock);
   });
 
   it('should navigate to task details on task details link click', fakeAsync(() => {

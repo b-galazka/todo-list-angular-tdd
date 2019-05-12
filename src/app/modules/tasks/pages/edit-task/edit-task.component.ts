@@ -7,7 +7,6 @@ import {
 
 import { AppTitleService } from 'src/app/core/services/app-title.service';
 import { TasksService } from 'src/app/core/services/tasks.service';
-import { RequestStatus } from 'src/app/core/models/server-request.model';
 import { ITaskCreationData } from 'src/app/core/models/task.model';
 
 @Component({
@@ -17,8 +16,6 @@ import { ITaskCreationData } from 'src/app/core/models/task.model';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditTaskComponent extends AbstractTaskFormPageComponent implements OnInit {
-
-  public readonly RequestStatus = RequestStatus;
 
   public constructor(
     public readonly tasksService: TasksService,

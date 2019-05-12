@@ -29,12 +29,7 @@
 
     <p class="task-status">
       <span>Status: </span>
-
-      <span [ngSwitch]="state.tasksState.currentTask.status" data-test-id="task-status">
-        <ng-container *ngSwitchCase="TaskStatus.New">new</ng-container>
-        <ng-container *ngSwitchCase="TaskStatus.InProgress">in progress</ng-container>
-        <ng-container *ngSwitchCase="TaskStatus.Finished">finished</ng-container>
-      </span>
+      <app-task-status [task]="state.tasksState.currentTask"></app-task-status>
     </p>
 
     <p class="task-date" data-test-id="task-creation-date">

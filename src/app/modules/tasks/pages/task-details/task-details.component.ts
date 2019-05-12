@@ -3,8 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { TasksService } from 'src/app/core/services/tasks.service';
 import { AppTitleService } from 'src/app/core/services/app-title.service';
-import { RequestStatus } from 'src/app/core/models/server-request.model';
-import { TaskStatus } from 'src/app/core/models/task.model';
 import { AbstractTasksPageComponent } from '../shared/abstracts/abstract-tasks-page.component';
 
 @Component({
@@ -14,9 +12,6 @@ import { AbstractTasksPageComponent } from '../shared/abstracts/abstract-tasks-p
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaskDetailsComponent extends AbstractTasksPageComponent implements OnInit {
-
-  public readonly RequestStatus = RequestStatus;
-  public readonly TaskStatus = TaskStatus;
 
   public constructor(
     public readonly tasksService: TasksService,

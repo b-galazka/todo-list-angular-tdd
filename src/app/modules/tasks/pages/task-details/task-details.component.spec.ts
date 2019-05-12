@@ -12,7 +12,7 @@ import { AppTitleService } from 'src/app/core/services/app-title.service';
 import { AppTitleServiceMock } from 'src/mocks/services/app-title.service.mock';
 import { taskMock } from 'src/mocks/data/task.mock';
 import { RequestStatus } from 'src/app/core/models/server-request.model';
-import { TaskStatus } from 'src/app/core/models/task.model';
+import { TaskStatusComponent } from '../../components/task-status/task-status.component';
 
 describe('TaskDetailsComponent', () => {
   let component: TaskDetailsComponent;
@@ -48,7 +48,7 @@ describe('TaskDetailsComponent', () => {
 
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes(routes)],
-      declarations: [TaskDetailsComponent],
+      declarations: [TaskDetailsComponent, TaskStatusComponent],
       providers: [
         { provide: TasksService, useClass: TasksServiceMock },
         { provide: ActivatedRoute, useValue: activatedRouteMock },
@@ -222,65 +222,12 @@ describe('TaskDetailsComponent', () => {
     );
   });
 
-  describe('task is new', () => {
+  it('should display task status', () => {
+    const taskStatusComponent: TaskStatusComponent = fixture.debugElement
+      .query(By.css('app-task-status'))
+      .componentInstance;
 
-    beforeEach(() => {
-      tasksService.setState({
-        currentTaskFetchingStatus: RequestStatus.Success,
-        currentTask: { ...taskMock, status: TaskStatus.New }
-      });
-
-      fixture.detectChanges();
-    });
-
-    it('should display task status as "new"', () => {
-      const taskStatusElem: HTMLParagraphElement = fixture.debugElement
-        .query(By.css('[data-test-id="task-status"]'))
-        .nativeElement;
-
-      expect(taskStatusElem.textContent.trim()).toBe('new');
-    });
-  });
-
-  describe('task in progress', () => {
-
-    beforeEach(() => {
-      tasksService.setState({
-        currentTaskFetchingStatus: RequestStatus.Success,
-        currentTask: { ...taskMock, status: TaskStatus.InProgress }
-      });
-
-      fixture.detectChanges();
-    });
-
-    it('should display task status as "in progress"', () => {
-
-      const taskStatusElem: HTMLParagraphElement = fixture.debugElement
-        .query(By.css('[data-test-id="task-status"]'))
-        .nativeElement;
-
-      expect(taskStatusElem.textContent.trim()).toBe('in progress');
-    });
-  });
-
-  describe('task is finished', () => {
-
-    beforeEach(() => {
-      tasksService.setState({
-        currentTaskFetchingStatus: RequestStatus.Success,
-        currentTask: { ...taskMock, status: TaskStatus.Finished }
-      });
-
-      fixture.detectChanges();
-    });
-
-    it('should display task status as "finished"', () => {
-      const taskStatusElem: HTMLParagraphElement = fixture.debugElement
-        .query(By.css('[data-test-id="task-status"]'))
-        .nativeElement;
-
-      expect(taskStatusElem.textContent.trim()).toBe('finished');
-    });
+    expect(taskStatusComponent.task).toBe(taskMock);
   });
 
   it('should navigate to tasks edit form on tasks edit button click', fakeAsync(() => {

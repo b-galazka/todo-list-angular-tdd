@@ -4,9 +4,9 @@ import { filter, tap } from 'rxjs/operators';
 
 import { TasksService } from 'src/app/core/services/tasks.service';
 import { ITasksParams } from './tasks-list.model';
-import { RequestStatus } from 'src/app/core/models/server-request.model';
 import { AppTitleService } from 'src/app/core/services/app-title.service';
 import { ITask } from 'src/app/core/models/task.model';
+import { AbstractTasksPageComponent } from '../shared/abstracts/abstract-tasks-page.component';
 
 @Component({
   selector: 'app-tasks-list',
@@ -14,16 +14,16 @@ import { ITask } from 'src/app/core/models/task.model';
   styleUrls: ['../shared/styles/tasks-page.scss', './tasks-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TasksListComponent implements OnInit {
-
-  public readonly RequestStatus = RequestStatus;
+export class TasksListComponent extends AbstractTasksPageComponent implements OnInit {
 
   public constructor(
     public readonly tasksService: TasksService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly appTitleService: AppTitleService
-  ) { }
+  ) {
+    super();
+  }
 
   public ngOnInit(): void {
     this.route.params

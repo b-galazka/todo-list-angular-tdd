@@ -10,12 +10,7 @@
   <div class="row no-gutters">
     <p class="col-12 task-status">
       <span>Status: </span>
-
-      <span [ngSwitch]="task.status" data-test-id="task-status">
-        <ng-container *ngSwitchCase="TaskStatus.New">new</ng-container>
-        <ng-container *ngSwitchCase="TaskStatus.InProgress">in progress</ng-container>
-        <ng-container *ngSwitchCase="TaskStatus.Finished">finished</ng-container>
-      </span>
+      <app-task-status [task]="task"></app-task-status>
     </p>
   </div>
 

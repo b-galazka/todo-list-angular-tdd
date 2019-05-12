@@ -1,0 +1,11 @@
+<span [ngSwitch]="task.status">
+  <span *ngSwitchCase="TaskStatus.New" data-test-id="new-task-status">new</span>
+
+  <span *ngSwitchCase="TaskStatus.InProgress" data-test-id="in-progress-task-status">
+    in progress
+  </span>
+
+  <span *ngSwitchCase="TaskStatus.Finished" data-test-id="finished-task-status">
+    finished
+  </span>
+</span>
