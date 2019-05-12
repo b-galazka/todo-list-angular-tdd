@@ -1,9 +1,15 @@
-<ng-container *ngIf="(tasksService.state$ | async) as state" [ngSwitch]="state.currentTaskFetchingStatus">
+<ng-container
+  *ngIf="{ tasksState: tasksService.state$ | async, isPending: isPending$ | async  } as state"
+  [ngSwitch]="state.tasksState.currentTaskFetchingStatus"
+>
   <header class="row justify-content-center header">
     <a routerLink="/tasks/1" class="tasks-list-link link col-auto">Show all tasks</a>
   </header>
 
-  <div *ngIf="state.currentTaskFetchingStatus !== RequestStatus.Success" class="row justify-content-center">
+  <div
+    *ngIf="state.tasksState.currentTaskFetchingStatus !== RequestStatus.Success"
+    class="row justify-content-center"
+  >
     <div class="col-auto">
       <div *ngSwitchCase="RequestStatus.Pending" class="loader"></div>
       <p *ngSwitchCase="RequestStatus.NotFound" class="not-found-msg">Task has not been found</p>
@@ -12,27 +18,32 @@
   </div>
 
   <ng-container *ngSwitchCase="RequestStatus.Success">
-    <h4 class="task-name">{{ state.currentTask.name }}</h4>
-    <p class="task-desc">{{ state.currentTask.description }}</p>
+    <h4 class="task-name">{{ state.tasksState.currentTask.name }}</h4>
+    <p class="task-desc">{{ state.tasksState.currentTask.description }}</p>
 
     <p class="task-status">
       <span>Status: </span>
 
-      <span [ngSwitch]="state.currentTask.status">
+      <span [ngSwitch]="state.tasksState.currentTask.status">
         <ng-container *ngSwitchCase="TaskStatus.New">new</ng-container>
         <ng-container *ngSwitchCase="TaskStatus.InProgress">in progress</ng-container>
         <ng-container *ngSwitchCase="TaskStatus.Finished">finished</ng-container>
       </span>
     </p>
 
-    <p class="task-creation-date">Created at: {{ state.currentTask.createdAt | date: 'd/M/y H:mm' }}</p>
-    <p class="task-update-date">Updated at: {{ state.currentTask.updatedAt | date: 'd/M/y H:mm' }}</p>
+    <p class="task-creation-date">
+      Created at: {{ state.tasksState.currentTask.createdAt | date: 'd/M/y H:mm' }}
+    </p>
+
+    <p class="task-update-date">
+      Updated at: {{ state.tasksState.currentTask.updatedAt | date: 'd/M/y H:mm' }}
+    </p>
 
     <footer class="footer row">
       <div class="col-6 col-sm-auto">
         <button
-          [disabled]="isPending"
-          [routerLink]="['/tasks/edit', state.currentTask.id]"
+          [disabled]="state.isPending"
+          [routerLink]="['/tasks/edit', state.tasksState.currentTask.id]"
           class="task-edit-button footer-button button"
         >
           Edit
@@ -41,7 +52,7 @@
 
       <div class="col-6 col-sm-auto">
         <button
-          [disabled]="isPending"
+          [disabled]="state.isPending"
           class="task-delete-button footer-button button"
           (click)="deleteTask()"
         >

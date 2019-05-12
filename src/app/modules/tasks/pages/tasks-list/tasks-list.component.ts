@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, tap } from 'rxjs/operators';
 
@@ -11,7 +11,8 @@ import { ITask } from 'src/app/core/models/task.model';
 @Component({
   selector: 'app-tasks-list',
   templateUrl: './tasks-list.component.html',
-  styleUrls: ['../shared/styles/tasks-page.scss', './tasks-list.component.scss']
+  styleUrls: ['../shared/styles/tasks-page.scss', './tasks-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TasksListComponent implements OnInit {
 

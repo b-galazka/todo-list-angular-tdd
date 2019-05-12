@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import {
@@ -13,15 +13,16 @@ import { ITaskCreationData } from 'src/app/core/models/task.model';
 @Component({
   selector: 'app-edit-task',
   templateUrl: './edit-task.component.html',
-  styleUrls: ['../shared/styles/tasks-page.scss', './edit-task.component.scss']
+  styleUrls: ['../shared/styles/tasks-page.scss', './edit-task.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EditTaskComponent extends AbstractTaskFormPageComponent implements OnInit {
 
   public readonly RequestStatus = RequestStatus;
 
   public constructor(
-    private readonly appTitleService: AppTitleService,
     public readonly tasksService: TasksService,
+    private readonly appTitleService: AppTitleService,
     private readonly route: ActivatedRoute,
     router: Router
   ) {
@@ -41,7 +42,7 @@ export class EditTaskComponent extends AbstractTaskFormPageComponent implements 
 
   public updateTask(taskData: ITaskCreationData): void {
 
-    this.isPending = true;
+    this.isPending$.next(true);
 
     this.tasksService.patchTask(taskData, this.tasksService.state.currentTask.id).subscribe(
       this.handleRequestSuccess,

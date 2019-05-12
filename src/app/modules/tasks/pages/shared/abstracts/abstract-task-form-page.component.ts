@@ -4,13 +4,17 @@ import { ViewChild, HostListener } from '@angular/core';
 import { ITask } from 'src/app/core/models/task.model';
 import { ICanBeDeactivated } from 'src/app/core/models/can-be-deactivated.model';
 import { TaskFormComponent } from '../../../components/task-form/task-form.component';
+import { AbstractTasksPageComponent } from './abstract-tasks-page.component';
 
-export abstract class AbstractTaskFormPageComponent implements ICanBeDeactivated {
+export abstract class AbstractTaskFormPageComponent
+  extends AbstractTasksPageComponent
+  implements ICanBeDeactivated {
 
-  public isPending = false;
   private _taskFormComponentRef: TaskFormComponent;
 
-  public constructor(private readonly router: Router) { }
+  public constructor(private readonly router: Router) {
+    super();
+  }
 
   @ViewChild(TaskFormComponent)
   public set taskFormComponentRef(componentRef: TaskFormComponent) {
@@ -28,6 +32,6 @@ export abstract class AbstractTaskFormPageComponent implements ICanBeDeactivated
   }
 
   protected readonly handleRequestFailure = (): void => {
-    this.isPending = false;
+    this.isPending$.next(false);
   }
 }

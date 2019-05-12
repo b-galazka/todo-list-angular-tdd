@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AppTitleService } from 'src/app/core/services/app-title.service';
@@ -12,7 +12,8 @@ import {
 @Component({
   selector: 'app-new-task',
   templateUrl: './new-task.component.html',
-  styleUrls: ['../shared/styles/tasks-page.scss', './new-task.component.scss']
+  styleUrls: ['../shared/styles/tasks-page.scss', './new-task.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NewTaskComponent extends AbstractTaskFormPageComponent implements OnInit {
 
@@ -30,7 +31,7 @@ export class NewTaskComponent extends AbstractTaskFormPageComponent implements O
 
   public createTask(taskData: ITaskCreationData): void {
 
-    this.isPending = true;
+    this.isPending$.next(true);
 
     this.tasksService.createTask(taskData).subscribe(
       this.handleRequestSuccess,

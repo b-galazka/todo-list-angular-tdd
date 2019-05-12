@@ -1,29 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { TasksService } from 'src/app/core/services/tasks.service';
 import { AppTitleService } from 'src/app/core/services/app-title.service';
 import { RequestStatus } from 'src/app/core/models/server-request.model';
 import { TaskStatus } from 'src/app/core/models/task.model';
+import { AbstractTasksPageComponent } from '../shared/abstracts/abstract-tasks-page.component';
 
 @Component({
   selector: 'app-task-details',
   templateUrl: './task-details.component.html',
-  styleUrls: ['../shared/styles/tasks-page.scss', './task-details.component.scss']
+  styleUrls: ['../shared/styles/tasks-page.scss', './task-details.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TaskDetailsComponent implements OnInit {
+export class TaskDetailsComponent extends AbstractTasksPageComponent implements OnInit {
 
   public readonly RequestStatus = RequestStatus;
   public readonly TaskStatus = TaskStatus;
 
-  public isPending = false;
-
   public constructor(
-    private readonly route: ActivatedRoute,
     public readonly tasksService: TasksService,
+    private readonly route: ActivatedRoute,
     private readonly appTitleService: AppTitleService,
     private readonly router: Router
-  ) {}
+  ) {
+    super();
+  }
 
   public ngOnInit(): void {
 
@@ -42,7 +44,7 @@ export class TaskDetailsComponent implements OnInit {
       return;
     }
 
-    this.isPending = true;
+    this.isPending$.next(true);
 
     this.tasksService.deleteTask(this.tasksService.state.currentTask.id).subscribe(() => {
       this.router.navigate(['/tasks/1']);

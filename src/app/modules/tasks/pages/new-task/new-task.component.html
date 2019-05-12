@@ -1,5 +1,7 @@
-<header class="row justify-content-center header">
-  <a routerLink="/tasks/1" class="tasks-list-link link col-auto">Show all tasks</a>
-</header>
+<ng-container *ngIf="{ isPending: isPending$ | async } as state">
+  <header class="row justify-content-center header">
+    <a routerLink="/tasks/1" class="tasks-list-link link col-auto">Show all tasks</a>
+  </header>
 
-<app-task-form (submitted)="createTask($event)" [pending]="isPending"></app-task-form>
+  <app-task-form (submitted)="createTask($event)" [pending]="state.isPending"></app-task-form>
+</ng-container>

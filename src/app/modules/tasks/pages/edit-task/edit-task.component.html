@@ -1,5 +1,8 @@
-<ng-container *ngIf="(tasksService.state$ | async) as state" [ngSwitch]="state.currentTaskFetchingStatus">
-  <div *ngIf="state.currentTaskFetchingStatus !== RequestStatus.Success" class="row justify-content-center">
+<ng-container
+  *ngIf="{ tasksState: tasksService.state$ | async, isPending: isPending$ | async  } as state"
+  [ngSwitch]="state.tasksState.currentTaskFetchingStatus"
+>
+  <div *ngIf="state.tasksState.currentTaskFetchingStatus !== RequestStatus.Success" class="row justify-content-center">
     <div class="col-auto">
       <div *ngSwitchCase="RequestStatus.Pending" class="loader"></div>
       <p *ngSwitchCase="RequestStatus.NotFound" class="not-found-msg">Task has not been found</p>
@@ -9,14 +12,14 @@
 
   <ng-container *ngSwitchCase="RequestStatus.Success">
     <header class="row justify-content-center header">
-      <a [routerLink]="['/tasks/details', state.currentTask.id]" class="task-details-link link col-auto">
-        Show details of "{{ state.currentTask.name }}"
+      <a [routerLink]="['/tasks/details', state.tasksState.currentTask.id]" class="task-details-link link col-auto">
+        Show details of "{{ state.tasksState.currentTask.name }}"
       </a>
     </header>
 
     <app-task-form
-      [existingTask]="state.currentTask"
-      [pending]="isPending"
+      [existingTask]="state.tasksState.currentTask"
+      [pending]="state.isPending"
       (submitted)="updateTask($event)"
     ></app-task-form>
   </ng-container>
