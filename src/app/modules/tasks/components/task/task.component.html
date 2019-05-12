@@ -11,7 +11,7 @@
     <p class="col-12 task-status">
       <span>Status: </span>
 
-      <span [ngSwitch]="task.status">
+      <span [ngSwitch]="task.status" data-test-id="task-status">
         <ng-container *ngSwitchCase="TaskStatus.New">new</ng-container>
         <ng-container *ngSwitchCase="TaskStatus.InProgress">in progress</ng-container>
         <ng-container *ngSwitchCase="TaskStatus.Finished">finished</ng-container>
@@ -20,11 +20,14 @@
   </div>
 
   <div class="row no-gutters justify-content-between">
-    <a [routerLink]="['/tasks/details', task.id]" class="task-details-link button">Show details</a>
+    <a [routerLink]="['/tasks/details', task.id]" class="button" data-test-id="task-details-link">
+      Show details
+    </a>
 
     <button
       *ngIf="task.status !== TaskStatus.Finished"
-      class="task-status-button button"
+      class="button"
+      data-test-id="task-status-button"
       [ngSwitch]="task.status"
       [disabled]="isPending"
       (click)="changeTaskStatus()"

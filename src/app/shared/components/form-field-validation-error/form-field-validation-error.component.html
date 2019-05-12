@@ -1,7 +1,7 @@
 <p *ngIf="errors && errorType" class="validation-error" [ngSwitch]="errorType">
-  <span *ngSwitchCase="'required'" class="required-error">Required</span>
+  <span *ngSwitchCase="'required'" data-test-id="required-error">Required</span>
 
-  <span *ngSwitchCase="'maxlength'" class="max-length-error">
+  <span *ngSwitchCase="'maxlength'" data-test-id="max-length-error">
     Maximum length: {{ errorDetails.requiredLength }} characters
   </span>
 </p>

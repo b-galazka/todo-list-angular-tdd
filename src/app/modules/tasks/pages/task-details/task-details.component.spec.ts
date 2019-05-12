@@ -117,7 +117,7 @@ describe('TaskDetailsComponent', () => {
   it('should navigate to tasks list on tasks list link click', fakeAsync(() => {
 
     const linkElem: HTMLAnchorElement = fixture.debugElement
-      .query(By.css('.tasks-list-link'))
+      .query(By.css('[data-test-id="tasks-list-link"]'))
       .nativeElement;
 
     linkElem.click();
@@ -150,14 +150,14 @@ describe('TaskDetailsComponent', () => {
 
     fixture.detectChanges();
 
-    const notFoundMsgElem = fixture.debugElement.query(By.css('.not-found-msg'));
+    const notFoundMsgElem = fixture.debugElement.query(By.css('[data-test-id="not-found-msg"]'));
 
     expect(notFoundMsgElem).toBeTruthy();
   });
 
   it('should not display "not found" message if task has been found', () => {
 
-    const notFoundMsgElem = fixture.debugElement.query(By.css('.not-found-msg'));
+    const notFoundMsgElem = fixture.debugElement.query(By.css('[data-test-id="not-found-msg"]'));
 
     expect(notFoundMsgElem).toBeFalsy();
   });
@@ -168,22 +168,20 @@ describe('TaskDetailsComponent', () => {
 
     fixture.detectChanges();
 
-    const fetchingErrorElem = fixture.debugElement.query(By.css('.fetching-error'));
+    const fetchingErrorElem = fixture.debugElement.query(By.css('[data-test-id="fetching-error"]'));
 
     expect(fetchingErrorElem).toBeTruthy();
   });
 
   it('should not display fetching error if task has been fetched', () => {
-
-    const fetchingErrorElem = fixture.debugElement.query(By.css('.fetching-error'));
-
+    const fetchingErrorElem = fixture.debugElement.query(By.css('[data-test-id="fetching-error"]'));
     expect(fetchingErrorElem).toBeFalsy();
   });
 
   it('should display task name', () => {
 
     const taskNameElem: HTMLHeadingElement = fixture.debugElement
-      .query(By.css('.task-name'))
+      .query(By.css('[data-test-id="task-name"]'))
       .nativeElement;
 
     expect(taskNameElem.textContent).toBe(taskMock.name);
@@ -201,7 +199,7 @@ describe('TaskDetailsComponent', () => {
   it('should display task creation date', () => {
 
     const taskCreationDateElem: HTMLParagraphElement = fixture.debugElement
-      .query(By.css('.task-creation-date'))
+      .query(By.css('[data-test-id="task-creation-date"]'))
       .nativeElement;
 
     const taskCreationDate = new Date(taskMock.createdAt);
@@ -214,7 +212,7 @@ describe('TaskDetailsComponent', () => {
   it('should display tast last update date', () => {
 
     const taskLastUpdateDateElem: HTMLParagraphElement = fixture.debugElement
-      .query(By.css('.task-update-date'))
+      .query(By.css('[data-test-id="task-update-date"]'))
       .nativeElement;
 
     const taskLastUpdateDate = new Date(taskMock.updatedAt);
@@ -237,7 +235,7 @@ describe('TaskDetailsComponent', () => {
 
     it('should display task status as "new"', () => {
       const taskStatusElem: HTMLParagraphElement = fixture.debugElement
-        .query(By.css('.task-status span:last-child'))
+        .query(By.css('[data-test-id="task-status"]'))
         .nativeElement;
 
       expect(taskStatusElem.textContent.trim()).toBe('new');
@@ -258,7 +256,7 @@ describe('TaskDetailsComponent', () => {
     it('should display task status as "in progress"', () => {
 
       const taskStatusElem: HTMLParagraphElement = fixture.debugElement
-        .query(By.css('.task-status span:last-child'))
+        .query(By.css('[data-test-id="task-status"]'))
         .nativeElement;
 
       expect(taskStatusElem.textContent.trim()).toBe('in progress');
@@ -278,7 +276,7 @@ describe('TaskDetailsComponent', () => {
 
     it('should display task status as "finished"', () => {
       const taskStatusElem: HTMLParagraphElement = fixture.debugElement
-        .query(By.css('.task-status span:last-child'))
+        .query(By.css('[data-test-id="task-status"]'))
         .nativeElement;
 
       expect(taskStatusElem.textContent.trim()).toBe('finished');
@@ -288,7 +286,7 @@ describe('TaskDetailsComponent', () => {
   it('should navigate to tasks edit form on tasks edit button click', fakeAsync(() => {
 
     const linkElem: HTMLAnchorElement = fixture.debugElement
-      .query(By.css('.task-edit-button'))
+      .query(By.css('[data-test-id="task-edit-button"]'))
       .nativeElement;
 
     linkElem.click();
@@ -313,7 +311,9 @@ describe('TaskDetailsComponent', () => {
       fixture.detectChanges();
 
       router = TestBed.get(Router);
-      deleteTaskBtnElem = fixture.debugElement.query(By.css('.task-delete-button')).nativeElement;
+      deleteTaskBtnElem = fixture.debugElement
+        .query(By.css('[data-test-id="task-delete-button"]'))
+        .nativeElement;
 
       windowConfirmSpy = spyOn(window, 'confirm').and.returnValue(true);
     });
@@ -324,7 +324,7 @@ describe('TaskDetailsComponent', () => {
       fixture.detectChanges();
 
       deleteTaskBtnElem = fixture.debugElement
-        .query(By.css('.task-delete-button'))
+        .query(By.css('[data-test-id="task-delete-button"]'))
         .nativeElement;
 
       expect(deleteTaskBtnElem.disabled).toBe(true);
@@ -336,7 +336,7 @@ describe('TaskDetailsComponent', () => {
       fixture.detectChanges();
 
       const editTaskBtnElem: HTMLButtonElement = fixture.debugElement
-        .query(By.css('.task-edit-button'))
+        .query(By.css('[data-test-id="task-edit-button"]'))
         .nativeElement;
 
       expect(editTaskBtnElem.disabled).toBe(true);

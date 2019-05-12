@@ -151,7 +151,7 @@ describe('TaskFormComponent', () => {
 
     it('should render button to add new task', () => {
 
-      const buttonTextElem = debugElement.query(By.css('.submit-button .new-task-button-text'));
+      const buttonTextElem = debugElement.query(By.css('[data-test-id="new-task-button-text"]'));
 
       expect(buttonTextElem).toBeTruthy();
     });
@@ -181,9 +181,7 @@ describe('TaskFormComponent', () => {
     });
 
     it('should render button to update existing task', () => {
-
-      const buttonTextElem = debugElement.query(By.css('.submit-button .update-task-button-text'));
-
+      const buttonTextElem = debugElement.query(By.css('[data-test-id="update-task-button-text"]'));
       expect(buttonTextElem).toBeTruthy();
     });
   });

@@ -135,7 +135,7 @@ describe('TasksListComponent', () => {
 
     fixture.detectChanges();
 
-    const errorElem = fixture.debugElement.query(By.css('.fetching-error'));
+    const errorElem = fixture.debugElement.query(By.css('[data-test-id="fetching-error"]'));
 
     expect(errorElem).toBeTruthy();
   });
@@ -143,7 +143,7 @@ describe('TasksListComponent', () => {
   it('should navigate to new task form on new task link click', fakeAsync(() => {
 
     const linkElem: HTMLAnchorElement = fixture.debugElement
-      .query(By.css('.new-task-link'))
+      .query(By.css('[data-test-id="new-task-link"]'))
       .nativeElement;
 
     linkElem.click();
@@ -162,7 +162,7 @@ describe('TasksListComponent', () => {
     fixture.detectChanges();
 
     const linkElem: HTMLAnchorElement = fixture.debugElement
-      .query(By.css('.prev-page-link'))
+      .query(By.css('[data-test-id="prev-page-link"]'))
       .nativeElement;
 
     linkElem.click();
@@ -180,7 +180,7 @@ describe('TasksListComponent', () => {
 
     fixture.detectChanges();
 
-    const linkElem = fixture.debugElement.query(By.css('.prev-page-link'));
+    const linkElem = fixture.debugElement.query(By.css('[data-test-id="prev-page-link"]'));
 
     expect(linkElem).toBeFalsy();
   });
@@ -195,7 +195,7 @@ describe('TasksListComponent', () => {
     fixture.detectChanges();
 
     const linkElem: HTMLAnchorElement = fixture.debugElement
-      .query(By.css('.next-page-link'))
+      .query(By.css('[data-test-id="next-page-link"]'))
       .nativeElement;
 
     linkElem.click();
@@ -213,7 +213,7 @@ describe('TasksListComponent', () => {
 
     fixture.detectChanges();
 
-    const linkElem = fixture.debugElement.query(By.css('.next-page-link'));
+    const linkElem = fixture.debugElement.query(By.css('[data-test-id="next-page-link"]'));
 
     expect(linkElem).toBeFalsy();
   });
@@ -279,7 +279,7 @@ describe('TasksListComponent', () => {
 
     fixture.detectChanges();
 
-    const msgElem = fixture.debugElement.query(By.css('.no-data-msg'));
+    const msgElem = fixture.debugElement.query(By.css('[data-test-id="no-data-msg"]'));
 
     expect(msgElem).toBeTruthy();
   });
@@ -290,7 +290,7 @@ describe('TasksListComponent', () => {
 
     fixture.detectChanges();
 
-    const msgElem = fixture.debugElement.query(By.css('.no-data-msg'));
+    const msgElem = fixture.debugElement.query(By.css('[data-test-id="no-data-msg"]'));
 
     expect(msgElem).toBeFalsy();
   });
@@ -302,7 +302,7 @@ describe('TasksListComponent', () => {
     fixture.detectChanges();
 
     const tasksWrapper: HTMLDivElement = fixture.debugElement
-      .query(By.css('.tasks-wrapper'))
+      .query(By.css('[data-test-id="tasks-wrapper"]'))
       .nativeElement;
 
     expect(tasksWrapper.classList.contains('justify-content-center')).toBe(true);
@@ -319,7 +319,7 @@ describe('TasksListComponent', () => {
     fixture.detectChanges();
 
     const paginationWrapper: HTMLDivElement = fixture.debugElement
-      .query(By.css('.pagination'))
+      .query(By.css('[data-test-id="pagination"]'))
       .nativeElement;
 
     expect(paginationWrapper.classList.contains('justify-content-between')).toBe(true);
@@ -336,7 +336,7 @@ describe('TasksListComponent', () => {
     fixture.detectChanges();
 
     const paginationWrapper: HTMLDivElement = fixture.debugElement
-      .query(By.css('.pagination'))
+      .query(By.css('[data-test-id="pagination"]'))
       .nativeElement;
 
     expect(paginationWrapper.classList.contains('justify-content-end')).toBe(true);

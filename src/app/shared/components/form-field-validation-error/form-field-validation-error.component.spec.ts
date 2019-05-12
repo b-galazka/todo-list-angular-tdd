@@ -35,7 +35,7 @@ describe('FormFieldValidationErrorComponent', () => {
     component.errors = { required: true };
     fixture.detectChanges();
 
-    const requiredErrorElem = fixture.debugElement.query(By.css('.required-error'));
+    const requiredErrorElem = fixture.debugElement.query(By.css('[data-test-id="required-error"]'));
 
     expect(requiredErrorElem).toBeTruthy();
   });
@@ -46,7 +46,9 @@ describe('FormFieldValidationErrorComponent', () => {
     component.errors = { maxlength: { actualLength: 121, requiredLength: 120 } };
     fixture.detectChanges();
 
-    const maxLengthErrorElem = fixture.debugElement.query(By.css('.max-length-error'));
+    const maxLengthErrorElem = fixture.debugElement.query(
+      By.css('[data-test-id="max-length-error"]')
+    );
 
     expect(maxLengthErrorElem).toBeTruthy();
   });
@@ -57,9 +59,9 @@ describe('FormFieldValidationErrorComponent', () => {
     component.errors = { maxlength: { actualLength: 121, requiredLength: 120 }, required: true };
     fixture.detectChanges();
 
-    const errorsElems = fixture.debugElement.queryAll(By.css('.validation-error span'));
+    const errorElem = fixture.debugElement.query(By.css('.validation-error'));
 
-    expect(errorsElems.length).toBe(1);
+    expect(errorElem.children.length).toBe(1);
   });
 
   it('should not render error if it does not exist', () => {

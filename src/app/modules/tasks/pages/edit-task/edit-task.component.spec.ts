@@ -136,14 +136,14 @@ describe('EditTaskComponent', () => {
 
     fixture.detectChanges();
 
-    const notFoundMsgElem = debugElement.query(By.css('.not-found-msg'));
+    const notFoundMsgElem = debugElement.query(By.css('[data-test-id="not-found-msg"]'));
 
     expect(notFoundMsgElem).toBeTruthy();
   });
 
   it('should not display "not found" message if task has been found', () => {
 
-    const notFoundMsgElem = debugElement.query(By.css('.not-found-msg'));
+    const notFoundMsgElem = debugElement.query(By.css('[data-test-id="not-found-msg"]'));
 
     expect(notFoundMsgElem).toBeFalsy();
   });
@@ -154,14 +154,14 @@ describe('EditTaskComponent', () => {
 
     fixture.detectChanges();
 
-    const fetchingErrorElem = debugElement.query(By.css('.fetching-error'));
+    const fetchingErrorElem = debugElement.query(By.css('[data-test-id="fetching-error"]'));
 
     expect(fetchingErrorElem).toBeTruthy();
   });
 
   it('should not display fetching error if task has been fetched', () => {
 
-    const fetchingErrorElem = debugElement.query(By.css('.fetching-error'));
+    const fetchingErrorElem = debugElement.query(By.css('[data-test-id="fetching-error"]'));
 
     expect(fetchingErrorElem).toBeFalsy();
   });
@@ -169,7 +169,7 @@ describe('EditTaskComponent', () => {
   it('should navigate to task details on task details link click', fakeAsync(() => {
 
     const linkElem: HTMLAnchorElement = fixture.debugElement
-      .query(By.css('.task-details-link'))
+      .query(By.css('[data-test-id="task-details-link"]'))
       .nativeElement;
 
     linkElem.click();

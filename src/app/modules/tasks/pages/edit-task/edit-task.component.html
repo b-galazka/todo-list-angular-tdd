@@ -2,17 +2,30 @@
   *ngIf="{ tasksState: tasksService.state$ | async, isPending: isPending$ | async  } as state"
   [ngSwitch]="state.tasksState.currentTaskFetchingStatus"
 >
-  <div *ngIf="state.tasksState.currentTaskFetchingStatus !== RequestStatus.Success" class="row justify-content-center">
+  <div
+    *ngIf="state.tasksState.currentTaskFetchingStatus !== RequestStatus.Success"
+    class="row justify-content-center"
+  >
     <div class="col-auto">
       <div *ngSwitchCase="RequestStatus.Pending" class="loader"></div>
-      <p *ngSwitchCase="RequestStatus.NotFound" class="not-found-msg">Task has not been found</p>
-      <p *ngSwitchCase="RequestStatus.Error" class="fetching-error error-message">Something went wrong</p>
+
+      <p *ngSwitchCase="RequestStatus.NotFound" data-test-id="not-found-msg">
+        Task has not been found
+      </p>
+
+      <p *ngSwitchCase="RequestStatus.Error" data-test-id="fetching-error" class="error-message">
+        Something went wrong
+      </p>
     </div>
   </div>
 
   <ng-container *ngSwitchCase="RequestStatus.Success">
     <header class="row justify-content-center header">
-      <a [routerLink]="['/tasks/details', state.tasksState.currentTask.id]" class="task-details-link link col-auto">
+      <a
+        [routerLink]="['/tasks/details', state.tasksState.currentTask.id]"
+        class="link col-auto"
+        data-test-id="task-details-link"
+      >
         Show details of "{{ state.tasksState.currentTask.name }}"
       </a>
     </header>

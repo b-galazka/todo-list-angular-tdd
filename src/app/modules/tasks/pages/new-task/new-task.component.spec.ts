@@ -77,7 +77,7 @@ describe('NewTaskComponent', () => {
   it('should navigate to tasks list on tasks list link click', fakeAsync(() => {
 
     const linkElem: HTMLAnchorElement = fixture.debugElement
-      .query(By.css('.tasks-list-link'))
+      .query(By.css('[data-test-id="tasks-list-link"]'))
       .nativeElement;
 
     linkElem.click();

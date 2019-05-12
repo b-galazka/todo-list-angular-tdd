@@ -49,7 +49,9 @@ describe('NotFoundComponent', () => {
 
   it('should navigate to homepage on button click', fakeAsync(() => {
 
-    const button: HTMLElement = debugElem.query(By.css('.homepage-button')).nativeElement;
+    const button: HTMLElement = debugElem
+      .query(By.css('[data-test-id="homepage-button"]'))
+      .nativeElement;
 
     button.click();
     tick();

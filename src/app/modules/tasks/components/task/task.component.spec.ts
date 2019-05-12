@@ -78,7 +78,7 @@ describe('TaskComponent', () => {
 
     it('should display task status as "new"', () => {
       const taskStatusElem: HTMLParagraphElement = fixture.debugElement
-        .query(By.css('.task-status span:last-child'))
+        .query(By.css('[data-test-id="task-status"]'))
         .nativeElement;
 
       expect(taskStatusElem.textContent.trim()).toBe('new');
@@ -86,7 +86,7 @@ describe('TaskComponent', () => {
 
     it('should display "mark as started" button if task is new', () => {
       const taskStatusBtnElem: HTMLButtonElement = fixture.debugElement
-        .query(By.css('.task-status-button'))
+        .query(By.css('[data-test-id="task-status-button"]'))
         .nativeElement;
 
       expect(taskStatusBtnElem.textContent.trim().toLowerCase()).toBe('mark as started');
@@ -95,13 +95,13 @@ describe('TaskComponent', () => {
     it('should disable task status button on its click', () => {
 
       let taskStatusBtnElem: HTMLButtonElement = fixture.debugElement
-        .query(By.css('.task-status-button'))
+        .query(By.css('[data-test-id="task-status-button"]'))
         .nativeElement;
 
       taskStatusBtnElem.click();
 
       taskStatusBtnElem = fixture.debugElement
-        .query(By.css('.task-status-button'))
+        .query(By.css('[data-test-id="task-status-button"]'))
         .nativeElement;
 
       fixture.detectChanges();
@@ -116,7 +116,7 @@ describe('TaskComponent', () => {
       const patchTaskSpy = spyOn(tasksService, 'patchTask').and.returnValue(observable);
 
       const taskStatusBtnElem: HTMLButtonElement = fixture.debugElement
-        .query(By.css('.task-status-button'))
+        .query(By.css('[data-test-id="task-status-button"]'))
         .nativeElement;
 
       taskStatusBtnElem.click();
@@ -136,7 +136,7 @@ describe('TaskComponent', () => {
 
     it('should display task status as "in progress"', () => {
       const taskStatusElem: HTMLParagraphElement = fixture.debugElement
-        .query(By.css('.task-status span:last-child'))
+        .query(By.css('[data-test-id="task-status"]'))
         .nativeElement;
 
       expect(taskStatusElem.textContent.trim()).toBe('in progress');
@@ -144,7 +144,7 @@ describe('TaskComponent', () => {
 
     it('should display "mark as finished" button', () => {
       const taskStatusBtnElem: HTMLButtonElement = fixture.debugElement
-        .query(By.css('.task-status-button'))
+        .query(By.css('[data-test-id="task-status-button"]'))
         .nativeElement;
 
       expect(taskStatusBtnElem.textContent.trim().toLowerCase()).toBe('mark as finished');
@@ -157,7 +157,7 @@ describe('TaskComponent', () => {
       const patchTaskSpy = spyOn(tasksService, 'patchTask').and.returnValue(observable);
 
       const taskStatusBtnElem: HTMLButtonElement = fixture.debugElement
-        .query(By.css('.task-status-button'))
+        .query(By.css('[data-test-id="task-status-button"]'))
         .nativeElement;
 
       taskStatusBtnElem.click();
@@ -177,7 +177,7 @@ describe('TaskComponent', () => {
 
     it('should display task status as "finished"', () => {
       const taskStatusElem: HTMLParagraphElement = fixture.debugElement
-        .query(By.css('.task-status span:last-child'))
+        .query(By.css('[data-test-id="task-status"]'))
         .nativeElement;
 
       expect(taskStatusElem.textContent.trim()).toBe('finished');
@@ -192,7 +192,9 @@ describe('TaskComponent', () => {
     });
 
     it('should not display task status button if task is finished', () => {
-      const taskStatusBtn = fixture.debugElement.query(By.css('.task-status-button'));
+      const taskStatusBtn = fixture.debugElement.query(
+        By.css('[data-test-id="task-status-button"]')
+      );
 
       expect(taskStatusBtn).toBeFalsy();
     });
@@ -201,7 +203,7 @@ describe('TaskComponent', () => {
   it('should navigate to task details on task details link click', fakeAsync(() => {
 
     const taskDetailsLinkElem: HTMLAnchorElement = fixture.debugElement
-      .query(By.css('.task-details-link'))
+      .query(By.css('[data-test-id="task-details-link"]'))
       .nativeElement;
 
     taskDetailsLinkElem.click();
@@ -219,14 +221,14 @@ describe('TaskComponent', () => {
     fixture.detectChanges();
 
     let taskStatusBtnElem: HTMLButtonElement = fixture.debugElement
-      .query(By.css('.task-status-button'))
+      .query(By.css('[data-test-id="task-status-button"]'))
       .nativeElement;
 
     taskStatusBtnElem.click();
     tick();
 
     taskStatusBtnElem = fixture.debugElement
-      .query(By.css('.task-status-button'))
+      .query(By.css('[data-test-id="task-status-button"]'))
       .nativeElement;
 
     fixture.detectChanges();

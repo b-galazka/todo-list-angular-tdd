@@ -1,18 +1,21 @@
 <ng-container *ngIf="(tasksService.state$ | async) as state" [ngSwitch]="state.tasksFetchingStatus">
   <header class="row justify-content-center header">
-    <a routerLink="/tasks/new" class="new-task-link link col-auto">Create new task</a>
+    <a routerLink="/tasks/new" class="link col-auto" data-test-id="new-task-link">Create new task</a>
   </header>
 
   <div *ngIf="state.tasksFetchingStatus !== RequestStatus.Success" class="row justify-content-center">
     <div class="col-auto">
       <div *ngSwitchCase="RequestStatus.Pending" class="loader"></div>
-      <div *ngSwitchCase="RequestStatus.Error" class="fetching-error error-message">Something went wrong.</div>
+
+      <div *ngSwitchCase="RequestStatus.Error" class="error-message" data-test-id="fetching-error">
+        Something went wrong.
+      </div>
     </div>
   </div>
 
   <ng-container *ngSwitchCase="RequestStatus.Success">
-    <div class="row tasks-wrapper" [class.justify-content-center]="state.tasks.length === 0">
-      <p *ngIf="state.tasks.length === 0" class="col-auto no-data-msg">No tasks found.</p>
+    <div class="row" [class.justify-content-center]="state.tasks.length === 0" data-test-id="tasks-wrapper">
+      <p *ngIf="state.tasks.length === 0" class="col-auto" data-test-id="no-data-msg">No tasks found.</p>
 
       <div *ngFor="let task of state.tasks; trackBy: trackTasks" class="col-lg-6">
         <app-task class="task" [task]="task"></app-task>
@@ -20,17 +23,26 @@
     </div>
 
     <div
-      class="row pagination"
+      class="row"
       [class.justify-content-between]="state.tasksPagination.prevPage && state.tasksPagination.nextPage"
       [class.justify-content-end]="!state.tasksPagination.prevPage && state.tasksPagination.nextPage"
+      data-test-id="pagination"
     >
-      <a *ngIf="state.tasksPagination.prevPage" [routerLink]="['/tasks', state.tasksPagination.prevPage]"
-        class="prev-page-link link col-auto">
+      <a
+        *ngIf="state.tasksPagination.prevPage"
+        [routerLink]="['/tasks', state.tasksPagination.prevPage]"
+        class="link col-auto"
+        data-test-id="prev-page-link"
+      >
         Previous
       </a>
 
-      <a *ngIf="state.tasksPagination.nextPage" [routerLink]="['/tasks', state.tasksPagination.nextPage]"
-        class="next-page-link link col-auto">
+      <a
+        *ngIf="state.tasksPagination.nextPage"
+        [routerLink]="['/tasks', state.tasksPagination.nextPage]"
+        class="link col-auto"
+        data-test-id="next-page-link"
+      >
         Next
       </a>
     </div>

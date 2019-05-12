@@ -94,7 +94,7 @@ describe('TextareaComponent', () => {
   it('should render empty label by default', () => {
 
     const labelElem: HTMLLabelElement = fixture.debugElement
-      .query(By.css('.label')).nativeElement;
+      .query(By.css('[data-test-id="label"]')).nativeElement;
 
     expect(labelElem.textContent).toBe('');
   });
@@ -108,7 +108,7 @@ describe('TextareaComponent', () => {
     fixture.detectChanges();
 
     const labelElem: HTMLLabelElement = fixture.debugElement
-      .query(By.css('.label')).nativeElement;
+      .query(By.css('[data-test-id="label"]')).nativeElement;
 
     expect(labelElem.textContent).toBe(label);
   });

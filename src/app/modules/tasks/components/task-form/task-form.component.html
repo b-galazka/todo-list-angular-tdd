@@ -22,8 +22,8 @@
   <div class="row justify-content-end">
     <div class="col-12 col-md-auto">
       <button class="button submit-button" [disabled]="pending || existingTask && form.pristine">
-        <span *ngIf="existingTask" class="update-task-button-text">Save changes</span>
-        <span *ngIf="!existingTask" class="new-task-button-text">Add new task</span>
+        <span *ngIf="existingTask" data-test-id="update-task-button-text">Save changes</span>
+        <span *ngIf="!existingTask" data-test-id="new-task-button-text">Add new task</span>
       </button>
     </div>
   </div>
