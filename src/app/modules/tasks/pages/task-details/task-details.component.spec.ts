@@ -35,6 +35,11 @@ describe('TaskDetailsComponent', () => {
     }
   };
 
+  function stringifyTaskDate(date: Date): string {
+    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:` +
+      `${date.getMinutes()}`;
+  }
+
   beforeEach(async(() => {
 
     const routes: Routes = [
@@ -202,9 +207,7 @@ describe('TaskDetailsComponent', () => {
     const taskCreationDate = new Date(taskMock.createdAt);
 
     expect(taskCreationDateElem.textContent.trim().toLowerCase()).toBe(
-      `created at: ${taskCreationDate.getDate()}/${taskCreationDate.getMonth() + 1}/` +
-      `${taskCreationDate.getFullYear()} ${taskCreationDate.getHours()}:` +
-      `${taskCreationDate.getMinutes()}`
+      `created at: ${stringifyTaskDate(taskCreationDate)}`
     );
   });
 
@@ -217,68 +220,72 @@ describe('TaskDetailsComponent', () => {
     const taskLastUpdateDate = new Date(taskMock.updatedAt);
 
     expect(taskLastUpdateDateElem.textContent.trim().toLowerCase()).toBe(
-      `updated at: ${taskLastUpdateDate.getDate()}/${taskLastUpdateDate.getMonth() + 1}/` +
-      `${taskLastUpdateDate.getFullYear()} ${taskLastUpdateDate.getHours()}:` +
-      `${taskLastUpdateDate.getMinutes()}`
+      `updated at: ${stringifyTaskDate(taskLastUpdateDate)}`
     );
   });
 
-  it('should display task status as "in progress" if task is in progress', () => {
+  describe('task is new', () => {
 
-    tasksService.setState({
-      currentTaskFetchingStatus: RequestStatus.Success,
-      currentTask: { ...taskMock, status: TaskStatus.InProgress }
+    beforeEach(() => {
+      tasksService.setState({
+        currentTaskFetchingStatus: RequestStatus.Success,
+        currentTask: { ...taskMock, status: TaskStatus.New }
+      });
+
+      fixture.detectChanges();
     });
 
-    fixture.detectChanges();
+    it('should display task status as "new"', () => {
+      const taskStatusElem: HTMLParagraphElement = fixture.debugElement
+        .query(By.css('.task-status span:last-child'))
+        .nativeElement;
 
-    const taskStatusElem: HTMLParagraphElement = fixture.debugElement
-      .query(By.css('.task-status span:last-child'))
-      .nativeElement;
-
-    expect(taskStatusElem.textContent.trim()).toBe('in progress');
+      expect(taskStatusElem.textContent.trim()).toBe('new');
+    });
   });
 
-  it('should display task status as "new" if task is new', () => {
+  describe('task in progress', () => {
 
-    tasksService.setState({
-      currentTaskFetchingStatus: RequestStatus.Success,
-      currentTask: { ...taskMock, status: TaskStatus.New }
+    beforeEach(() => {
+      tasksService.setState({
+        currentTaskFetchingStatus: RequestStatus.Success,
+        currentTask: { ...taskMock, status: TaskStatus.InProgress }
+      });
+
+      fixture.detectChanges();
     });
 
-    fixture.detectChanges();
+    it('should display task status as "in progress"', () => {
 
-    const taskStatusElem: HTMLParagraphElement = fixture.debugElement
-      .query(By.css('.task-status span:last-child'))
-      .nativeElement;
+      const taskStatusElem: HTMLParagraphElement = fixture.debugElement
+        .query(By.css('.task-status span:last-child'))
+        .nativeElement;
 
-    expect(taskStatusElem.textContent.trim()).toBe('new');
+      expect(taskStatusElem.textContent.trim()).toBe('in progress');
+    });
   });
 
-  it('should display task status as "finished" if task is finished', () => {
+  describe('task is finished', () => {
 
-    tasksService.setState({
-      currentTaskFetchingStatus: RequestStatus.Success,
-      currentTask: { ...taskMock, status: TaskStatus.Finished }
+    beforeEach(() => {
+      tasksService.setState({
+        currentTaskFetchingStatus: RequestStatus.Success,
+        currentTask: { ...taskMock, status: TaskStatus.Finished }
+      });
+
+      fixture.detectChanges();
     });
 
-    fixture.detectChanges();
+    it('should display task status as "finished"', () => {
+      const taskStatusElem: HTMLParagraphElement = fixture.debugElement
+        .query(By.css('.task-status span:last-child'))
+        .nativeElement;
 
-    const taskStatusElem: HTMLParagraphElement = fixture.debugElement
-      .query(By.css('.task-status span:last-child'))
-      .nativeElement;
-
-    expect(taskStatusElem.textContent.trim()).toBe('finished');
+      expect(taskStatusElem.textContent.trim()).toBe('finished');
+    });
   });
 
   it('should navigate to tasks edit form on tasks edit button click', fakeAsync(() => {
-
-    tasksService.setState({
-      currentTaskFetchingStatus: RequestStatus.Success,
-      currentTask: { ...taskMock, status: TaskStatus.Finished }
-    });
-
-    fixture.detectChanges();
 
     const linkElem: HTMLAnchorElement = fixture.debugElement
       .query(By.css('.task-edit-button'))
