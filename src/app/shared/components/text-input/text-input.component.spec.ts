@@ -1,18 +1,7 @@
 import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
-
-import {
-  FormGroup,
-  FormControl,
-  ReactiveFormsModule,
-  Validators,
-  FormsModule,
-} from '@angular/forms';
-
-import {
-  FormFieldValidationErrorComponent
-} from '../form-field-validation-error/form-field-validation-error.component';
+import { FormGroup, FormControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { TextInputComponent } from './text-input.component';
 
@@ -40,8 +29,7 @@ describe('TextInputComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         TextInputComponent,
-        TextInputWrapperComponent,
-        FormFieldValidationErrorComponent
+        TextInputWrapperComponent
       ],
       imports: [ReactiveFormsModule, FormsModule]
     })
@@ -103,44 +91,6 @@ describe('TextInputComponent', () => {
       .query(By.css('.field')).nativeElement;
 
     expect(inputElem.placeholder).toBe(placeholder);
-  });
-
-  it('should redner empty label by default', () => {
-
-    const labelElem: HTMLLabelElement = fixture.debugElement
-      .query(By.css('[data-test-id="label"]')).nativeElement;
-
-    expect(labelElem.textContent).toBe('');
-  });
-
-  it('should render provided label', () => {
-
-    const label = 'some text';
-
-    component.label = label;
-
-    fixture.detectChanges();
-
-    const labelElem: HTMLLabelElement = fixture.debugElement
-      .query(By.css('[data-test-id="label"]')).nativeElement;
-
-    expect(labelElem.textContent).toBe(label);
-  });
-
-  it('should render validation errors', () => {
-
-    formControl.setValidators(Validators.required);
-    formControl.setValue('');
-    formControl.updateValueAndValidity();
-    formControl.markAsTouched();
-
-    fixture.detectChanges();
-
-    const validationErrorComponent: FormFieldValidationErrorComponent = fixture.debugElement.query(
-      By.css('app-form-field-validation-error')
-    ).componentInstance;
-
-    expect(validationErrorComponent.errors).toBe(formControl.errors);
   });
 
   it('should set input value of form control value', fakeAsync(() => {

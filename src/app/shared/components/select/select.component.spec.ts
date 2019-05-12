@@ -1,20 +1,9 @@
 import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
-
-import {
-  FormGroup,
-  FormControl,
-  ReactiveFormsModule,
-  Validators,
-  FormsModule
-} from '@angular/forms';
+import { FormGroup, FormControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { SelectComponent } from './select.component';
-
-import {
-  FormFieldValidationErrorComponent
-} from '../form-field-validation-error/form-field-validation-error.component';
 
 @Component({
   selector: 'app-select-wrapper-component',
@@ -46,7 +35,7 @@ describe('SelectComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [SelectComponent, SelectWrapperComponent, FormFieldValidationErrorComponent],
+      declarations: [SelectComponent, SelectWrapperComponent],
       imports: [ReactiveFormsModule, FormsModule]
     })
     .compileComponents();
@@ -63,44 +52,6 @@ describe('SelectComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should render empty label by default', () => {
-
-    const labelElem: HTMLInputElement = fixture.debugElement
-      .query(By.css('[data-test-id="label"]')).nativeElement;
-
-    expect(labelElem.textContent).toBe('');
-  });
-
-  it('should render provided label', () => {
-
-    const label = 'some text';
-
-    component.label = label;
-
-    fixture.detectChanges();
-
-    const labelElem: HTMLLabelElement = fixture.debugElement
-      .query(By.css('[data-test-id="label"]')).nativeElement;
-
-    expect(labelElem.textContent).toBe(label);
-  });
-
-  it('should render validation errors', () => {
-
-    formControl.setValidators(Validators.required);
-    formControl.setValue('');
-    formControl.updateValueAndValidity();
-    formControl.markAsTouched();
-
-    fixture.detectChanges();
-
-    const validationErrorComponent: FormFieldValidationErrorComponent = fixture.debugElement.query(
-      By.css('app-form-field-validation-error')
-    ).componentInstance;
-
-    expect(validationErrorComponent.errors).toBe(formControl.errors);
   });
 
   it('should render ng-content as possible options', () => {
