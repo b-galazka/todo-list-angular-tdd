@@ -143,8 +143,8 @@ describe('TaskFormComponent', () => {
   describe('Creation mode', () => {
     it('should initialize form with initial values', () => {
       expect(component.form.value).toEqual({
-        name: '',
-        description: '',
+        name: null,
+        description: null,
         status: TaskStatus.New
       });
     });

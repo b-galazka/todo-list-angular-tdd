@@ -33,14 +33,23 @@ export class TaskFormComponent implements OnInit {
   }
 
   private initForm(): void {
+    this.buildForm();
+
+    if (this.existingTask) {
+      this.setFormValueToExistingTask();
+    }
+  }
+
+  private buildForm(): void {
     this.form = this.formBuilder.group({
-      name: [
-        this.existingTask ? this.existingTask.name : '',
-        [Validators.required, Validators.maxLength(120)]
-      ],
-      description: [this.existingTask ? this.existingTask.description : '', Validators.required],
-      status: [this.existingTask ? this.existingTask.status : TaskStatus.New, Validators.required]
+      name: [null, [Validators.required, Validators.maxLength(120)]],
+      description: [null, Validators.required],
+      status: [TaskStatus.New, Validators.required]
     });
+  }
+
+  private setFormValueToExistingTask(): void {
+    this.form.patchValue(this.existingTask, { emitEvent: false });
   }
 
   public submitForm(): void {
