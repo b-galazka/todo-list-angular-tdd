@@ -9,7 +9,7 @@ import { TasksListComponent } from './pages/tasks-list/tasks-list.component';
 import { EditTaskComponent } from './pages/edit-task/edit-task.component';
 import { NewTaskComponent } from './pages/new-task/new-task.component';
 import { TaskDetailsComponent } from './pages/task-details/task-details.component';
-import { UnsavedChangesGuard } from './guards/unsaved-changes.guard';
+import { UnsavedChangesGuard } from '../../core/guards/unsaved-changes.guard';
 
 const routes: Routes = [
 
