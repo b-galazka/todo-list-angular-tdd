@@ -9,7 +9,7 @@ import { NgControl } from '@angular/forms';
 export class FormFieldComponent {
 
   @Input() public label = '';
-  @ContentChild(NgControl) public ngControl: NgControl;
+  @ContentChild(NgControl, { static: true }) public ngControl: NgControl;
 
   public get errorType(): string {
     return Object.keys(this.ngControl.errors)[0];

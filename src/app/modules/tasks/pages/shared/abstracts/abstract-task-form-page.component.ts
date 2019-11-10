@@ -10,24 +10,21 @@ export abstract class AbstractTaskFormPageComponent
   extends AbstractTasksPageComponent
   implements ICanBeDeactivated {
 
-  private _taskFormComponentRef: TaskFormComponent;
+  @ViewChild(TaskFormComponent, { static: false }) public taskFormComponentRef: TaskFormComponent;
+
+  public isPending = false;
 
   public constructor(private readonly router: Router) {
     super();
   }
 
-  @ViewChild(TaskFormComponent)
-  public set taskFormComponentRef(componentRef: TaskFormComponent) {
-    this._taskFormComponentRef = componentRef;
-  }
-
   @HostListener('window:beforeunload')
   public canBeDeactivated(): boolean {
-    return this._taskFormComponentRef.form.pristine || confirm('Are you sure you want to leave?');
+    return this.taskFormComponentRef.form.pristine || confirm('Are you sure you want to leave?');
   }
 
   protected readonly handleRequestSuccess = (task: ITask): void => {
-    this._taskFormComponentRef.form.markAsPristine();
+    this.taskFormComponentRef.form.markAsPristine();
     this.router.navigate(['/tasks/details', task.id]);
   }
 
