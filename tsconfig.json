@@ -15,6 +15,7 @@
       "node_modules/@types"
     ],
     "noImplicitAny": true,
+    "noUnusedLocals": true,
     "lib": [
       "es2018",
       "dom"

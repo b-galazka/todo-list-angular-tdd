@@ -93,7 +93,6 @@
       true,
       "allow-fast-null-checks"
     ],
-    "no-unused-variable": true,
     "no-var-keyword": true,
     "prefer-object-spread": true,
     "switch-default": true,
@@ -101,8 +100,6 @@
       true,
       "allow-null-check"
     ],
-    "typeof-compare": true,
-    "unnecessary-constructor": true,
     "no-duplicate-imports": true,
     "prefer-const": [
       true,

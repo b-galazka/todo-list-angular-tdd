@@ -141,8 +141,8 @@ describe('TasksService', () => {
 
     it('should update request status to "error" on fetching failure', () => {
 
-      tasksService.getTasks(1).subscribe(null, () => {
-        expect(tasksService.state.tasksFetchingStatus).toBe(RequestStatus.Error);
+      tasksService.getTasks(1).subscribe({
+        error: () => expect(tasksService.state.tasksFetchingStatus).toBe(RequestStatus.Error)
       });
 
       const req = httpClientMock.expectOne({
@@ -155,9 +155,11 @@ describe('TasksService', () => {
 
     it('should emit error with http error reponse on fetching failure', (done) => {
 
-      tasksService.getTasks(1).subscribe(null, (error: HttpErrorResponse) => {
-        expect(error instanceof HttpErrorResponse).toBe(true);
-        done();
+      tasksService.getTasks(1).subscribe({
+        error: (error: HttpErrorResponse) => {
+          expect(error instanceof HttpErrorResponse).toBe(true);
+          done();
+        }
       });
 
       const req = httpClientMock.expectOne({
@@ -313,8 +315,8 @@ describe('TasksService', () => {
 
     it('should update request status to "error" on fetching failure', () => {
 
-      tasksService.getTask(taskId).subscribe(null, () => {
-        expect(tasksService.state.currentTaskFetchingStatus).toBe(RequestStatus.Error);
+      tasksService.getTask(taskId).subscribe({
+        error: () => expect(tasksService.state.currentTaskFetchingStatus).toBe(RequestStatus.Error)
       });
 
       const req = httpClientMock.expectOne({
@@ -412,8 +414,10 @@ describe('TasksService', () => {
 
     it('should update request status to "not found" it task has not been found', () => {
 
-      tasksService.getTask(taskId).subscribe(null, () => {
-        expect(tasksService.state.currentTaskFetchingStatus).toBe(RequestStatus.NotFound);
+      tasksService.getTask(taskId).subscribe({
+        error: () => {
+          expect(tasksService.state.currentTaskFetchingStatus).toBe(RequestStatus.NotFound);
+        }
       });
 
       const req = httpClientMock.expectOne({
