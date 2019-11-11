@@ -1,14 +1,17 @@
 version: 2.1
 
+defaults: &defaults
+  docker:
+    - image: circleci/node:12.13-browsers
+
+  working_directory: ~/project
+
 orbs:
   aws-s3: circleci/aws-s3@1.0.11
 
 jobs:
   install_dependencies:
-    docker:
-      - image: circleci/node:12.13-browsers
-
-    working_directory: ~/project
+    <<: *defaults
 
     steps:
       - checkout
@@ -27,13 +30,16 @@ jobs:
 
       - persist_to_workspace:
           root: .
-          paths: ./
+          paths:
+            - node_modules
+            - src
+            - angular.json
+            - tsconfig.json
+            - tslint.json
+            - package.json
 
   lint:
-    docker:
-      - image: circleci/node:12.13-browsers
-
-    working_directory: ~/project
+    <<: *defaults
 
     steps:
       - attach_workspace:
@@ -42,10 +48,7 @@ jobs:
       - run: npm run lint
 
   test:
-    docker:
-      - image: circleci/node:12.13-browsers
-
-    working_directory: ~/project
+    <<: *defaults
 
     steps:
       - attach_workspace:
@@ -54,10 +57,7 @@ jobs:
       - run: npm test
 
   build:
-    docker:
-      - image: circleci/node:12.13-browsers
-
-    working_directory: ~/project
+    <<: *defaults
 
     steps:
       - attach_workspace:
@@ -70,10 +70,7 @@ jobs:
           paths: ./dist
 
   deploy:
-    docker:
-      - image: circleci/node:12.13-browsers
-
-    working_directory: ~/project
+    <<: *defaults
 
     steps:
       - attach_workspace:
