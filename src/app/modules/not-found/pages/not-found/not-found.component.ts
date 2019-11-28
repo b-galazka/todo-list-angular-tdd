@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { AppTitleService } from 'src/app/core/services/app-title.service';
 
 @Component({
@@ -8,7 +8,6 @@ import { AppTitleService } from 'src/app/core/services/app-title.service';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NotFoundComponent implements OnInit {
-
   public constructor(private readonly appTitleService: AppTitleService) {}
 
   public ngOnInit(): void {

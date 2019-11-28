@@ -11,7 +11,8 @@
   }
 }
 
-.task-name, .task-desc {
+.task-name,
+.task-desc {
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;

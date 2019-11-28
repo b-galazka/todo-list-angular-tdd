@@ -1,12 +1,12 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, tap } from 'rxjs/operators';
 
-import { TasksService } from 'src/app/core/services/tasks.service';
-import { ITasksParams } from './tasks-list.model';
-import { AppTitleService } from 'src/app/core/services/app-title.service';
 import { ITask } from 'src/app/core/models/task.model';
+import { AppTitleService } from 'src/app/core/services/app-title.service';
+import { TasksService } from 'src/app/core/services/tasks.service';
 import { AbstractTasksPageComponent } from '../shared/abstracts/abstract-tasks-page.component';
+import { ITasksParams } from './tasks-list.model';
 
 @Component({
   selector: 'app-tasks-list',
@@ -15,7 +15,6 @@ import { AbstractTasksPageComponent } from '../shared/abstracts/abstract-tasks-p
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TasksListComponent extends AbstractTasksPageComponent implements OnInit {
-
   public constructor(
     public readonly tasksService: TasksService,
     private readonly route: ActivatedRoute,
@@ -27,20 +26,21 @@ export class TasksListComponent extends AbstractTasksPageComponent implements On
 
   public ngOnInit(): void {
     this.route.params
-      .pipe(filter(this.validPageNumberGuard), tap(this.setPageTitle))
-      .subscribe(this.fetchTasks);
+      .pipe(
+        filter((params: ITasksParams) => this.validPageNumberGuard(params)),
+        tap((params: ITasksParams) => this.setPageTitle(params))
+      )
+      .subscribe((params: ITasksParams) => this.fetchTasks(params));
   }
 
-  private readonly fetchTasks = ({ page }: ITasksParams): void => {
-
+  private fetchTasks({ page }: ITasksParams): void {
     this.tasksService
       .getTasks(+page)
       .pipe(filter(tasks => tasks.length === 0 && +page > 1))
-      .subscribe(this.redirectToFirstPage);
+      .subscribe(() => this.redirectToFirstPage());
   }
 
-  private readonly validPageNumberGuard = ({ page }: ITasksParams): boolean => {
-
+  private validPageNumberGuard({ page }: ITasksParams): boolean {
     const isPageNumberValid = Number.isInteger(+page) && +page >= 1;
 
     if (!isPageNumberValid) {
@@ -50,11 +50,11 @@ export class TasksListComponent extends AbstractTasksPageComponent implements On
     return isPageNumberValid;
   }
 
-  private readonly setPageTitle = ({ page }: ITasksParams): void => {
+  private setPageTitle({ page }: ITasksParams): void {
     this.appTitleService.setPageTitle(`page ${page}`);
   }
 
-  private readonly redirectToFirstPage = (): void => {
+  private redirectToFirstPage(): void {
     this.router.navigate(['/tasks/1']);
   }
 

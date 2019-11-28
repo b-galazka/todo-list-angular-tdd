@@ -1,5 +1,5 @@
-import { ITask } from './task.model';
 import { RequestStatus } from './server-request.model';
+import { ITask } from './task.model';
 
 export interface IPaginationState {
   prevPage: number;

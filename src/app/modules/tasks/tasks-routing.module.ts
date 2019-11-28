@@ -1,18 +1,15 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
-import {
-  ContentLayoutComponent
-} from 'src/app/shared/layouts/content-layout/content-layout.component';
+import { ContentLayoutComponent } from 'src/app/shared/layouts/content-layout/content-layout.component';
 
-import { TasksListComponent } from './pages/tasks-list/tasks-list.component';
+import { UnsavedChangesGuard } from '../../core/guards/unsaved-changes.guard';
 import { EditTaskComponent } from './pages/edit-task/edit-task.component';
 import { NewTaskComponent } from './pages/new-task/new-task.component';
 import { TaskDetailsComponent } from './pages/task-details/task-details.component';
-import { UnsavedChangesGuard } from '../../core/guards/unsaved-changes.guard';
+import { TasksListComponent } from './pages/tasks-list/tasks-list.component';
 
 const routes: Routes = [
-
   {
     path: 'tasks',
     component: ContentLayoutComponent,
@@ -30,4 +27,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class TasksRoutingModule { }
+export class TasksRoutingModule {}

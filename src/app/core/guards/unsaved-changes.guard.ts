@@ -6,7 +6,6 @@ import { ICanBeDeactivated } from 'src/app/core/models/can-be-deactivated.model'
   providedIn: 'root'
 })
 export class UnsavedChangesGuard implements CanDeactivate<ICanBeDeactivated> {
-
   public canDeactivate(component: ICanBeDeactivated): boolean {
     return component.canBeDeactivated();
   }

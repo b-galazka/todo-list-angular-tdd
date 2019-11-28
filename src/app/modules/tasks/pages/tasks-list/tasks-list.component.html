@@ -1,9 +1,14 @@
-<ng-container *ngIf="(tasksService.state$ | async) as state" [ngSwitch]="state.tasksFetchingStatus">
+<ng-container *ngIf="tasksService.state$ | async as state" [ngSwitch]="state.tasksFetchingStatus">
   <header class="row justify-content-center header">
-    <a routerLink="/tasks/new" class="link col-auto" data-test-id="new-task-link">Create new task</a>
+    <a routerLink="/tasks/new" class="link col-auto" data-test-id="new-task-link"
+      >Create new task</a
+    >
   </header>
 
-  <div *ngIf="state.tasksFetchingStatus !== RequestStatus.Success" class="row justify-content-center">
+  <div
+    *ngIf="state.tasksFetchingStatus !== RequestStatus.Success"
+    class="row justify-content-center"
+  >
     <div class="col-auto">
       <div *ngSwitchCase="RequestStatus.Pending" class="loader"></div>
 
@@ -14,8 +19,14 @@
   </div>
 
   <ng-container *ngSwitchCase="RequestStatus.Success">
-    <div class="row" [class.justify-content-center]="state.tasks.length === 0" data-test-id="tasks-wrapper">
-      <p *ngIf="state.tasks.length === 0" class="col-auto" data-test-id="no-data-msg">No tasks found.</p>
+    <div
+      class="row"
+      [class.justify-content-center]="state.tasks.length === 0"
+      data-test-id="tasks-wrapper"
+    >
+      <p *ngIf="state.tasks.length === 0" class="col-auto" data-test-id="no-data-msg">
+        No tasks found.
+      </p>
 
       <div *ngFor="let task of state.tasks; trackBy: trackTasks" class="col-lg-6">
         <app-task class="task" [task]="task"></app-task>
@@ -24,8 +35,12 @@
 
     <div
       class="row"
-      [class.justify-content-between]="state.tasksPagination.prevPage && state.tasksPagination.nextPage"
-      [class.justify-content-end]="!state.tasksPagination.prevPage && state.tasksPagination.nextPage"
+      [class.justify-content-between]="
+        state.tasksPagination.prevPage && state.tasksPagination.nextPage
+      "
+      [class.justify-content-end]="
+        !state.tasksPagination.prevPage && state.tasksPagination.nextPage
+      "
       data-test-id="pagination"
     >
       <a

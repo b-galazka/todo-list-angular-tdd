@@ -1,10 +1,9 @@
 import { BehaviorSubject, of } from 'rxjs';
+import { IDataService } from 'src/app/core/models/data.service.model';
 import { RequestStatus } from 'src/app/core/models/server-request.model';
 import { ITasksState } from 'src/app/core/models/tasks-state.model';
-import { IDataService } from 'src/app/core/models/data.service.model';
 
 export class TasksServiceMock implements IDataService<ITasksState> {
-
   private readonly _state = new BehaviorSubject<ITasksState>({
     tasks: [],
     tasksPagination: { nextPage: null, prevPage: null },

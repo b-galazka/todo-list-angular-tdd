@@ -1,13 +1,13 @@
-import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { DebugElement } from '@angular/core';
-import { By } from '@angular/platform-browser';
 import { Location } from '@angular/common';
-import { RouterTestingModule } from '@angular/router/testing';
+import { DebugElement } from '@angular/core';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { Routes } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
-import { NotFoundComponent } from './not-found.component';
 import { AppTitleService } from 'src/app/core/services/app-title.service';
 import { AppTitleServiceMock } from 'src/mocks/services/app-title.service.mock';
+import { NotFoundComponent } from './not-found.component';
 
 describe('NotFoundComponent', () => {
   let component: NotFoundComponent;
@@ -17,23 +17,16 @@ describe('NotFoundComponent', () => {
   let appTitleService: AppTitleService;
 
   beforeEach(async(() => {
-
-    const routes: Routes = [
-      { path: '**', component: NotFoundComponent }
-    ];
+    const routes: Routes = [{ path: '**', component: NotFoundComponent }];
 
     TestBed.configureTestingModule({
       declarations: [NotFoundComponent],
       imports: [RouterTestingModule.withRoutes(routes)],
-      providers: [
-        { provide: AppTitleService, useClass: AppTitleServiceMock }
-      ]
-    })
-    .compileComponents();
+      providers: [{ provide: AppTitleService, useClass: AppTitleServiceMock }]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
-
     location = TestBed.get(Location);
     appTitleService = TestBed.get(AppTitleService);
     fixture = TestBed.createComponent(NotFoundComponent);
@@ -48,9 +41,7 @@ describe('NotFoundComponent', () => {
   });
 
   it('should navigate to homepage on button click', fakeAsync(() => {
-
-    const button: HTMLElement = debugElem
-      .query(By.css('[data-test-id="homepage-button"]'))
+    const button: HTMLElement = debugElem.query(By.css('[data-test-id="homepage-button"]'))
       .nativeElement;
 
     button.click();
@@ -60,9 +51,7 @@ describe('NotFoundComponent', () => {
   }));
 
   describe('#ngOnInit', () => {
-
     it('should update page title', () => {
-
       const spy = spyOn(appTitleService, 'setPageTitle');
 
       component.ngOnInit();

@@ -1,23 +1,20 @@
-import { TestBed } from '@angular/core/testing';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HttpErrorResponse } from '@angular/common/http';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
 import { Observable } from 'rxjs';
 
-import { TasksService } from './tasks.service';
-import { taskMock } from 'src/mocks/data/task.mock';
 import { environment } from 'src/environments/environment';
-import { IServerResponse } from '../models/server-response.model';
-import { ITask, TaskStatus, ITaskCreationData } from '../models/task.model';
+import { taskMock } from 'src/mocks/data/task.mock';
 import { RequestStatus } from '../models/server-request.model';
-
+import { IServerResponse } from '../models/server-response.model';
+import { ITask, ITaskCreationData, TaskStatus } from '../models/task.model';
+import { TasksService } from './tasks.service';
 
 describe('TasksService', () => {
-
   let tasksService: TasksService;
   let httpClientMock: HttpTestingController;
 
   beforeEach(() => {
-
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule]
     });
@@ -31,27 +28,23 @@ describe('TasksService', () => {
   });
 
   describe('#getTasks', () => {
-
     let res: IServerResponse<Array<ITask>>;
 
     beforeEach(() => {
-
       res = {
         data: new Array(15).fill(taskMock),
-        pagination: { }
+        pagination: {}
       };
     });
 
     it('should return an observable', () => {
-
       const value = tasksService.getTasks(1);
 
       expect(value instanceof Observable).toBe(true);
     });
 
     it('should fetch 15 tasks', () => {
-
-      tasksService.getTasks(1).subscribe((tasks) => {
+      tasksService.getTasks(1).subscribe(tasks => {
         expect(tasks).toEqual(res.data);
       });
 
@@ -64,8 +57,7 @@ describe('TasksService', () => {
     });
 
     it('should fetch 15 tasks skipping 30', () => {
-
-      tasksService.getTasks(3).subscribe((tasks) => {
+      tasksService.getTasks(3).subscribe(tasks => {
         expect(tasks).toEqual(res.data);
       });
 
@@ -78,7 +70,6 @@ describe('TasksService', () => {
     });
 
     it('should update request status to "pending" on fetching start', () => {
-
       tasksService.getTasks(1).subscribe();
 
       expect(tasksService.state.tasksFetchingStatus).toBe(RequestStatus.Pending);
@@ -92,7 +83,6 @@ describe('TasksService', () => {
     });
 
     it('should update state on fetching success', () => {
-
       tasksService.getTasks(1).subscribe(() => {
         expect(tasksService.state.tasks).toEqual(res.data);
         expect(tasksService.state.tasksFetchingStatus).toBe(RequestStatus.Success);
@@ -108,7 +98,6 @@ describe('TasksService', () => {
     });
 
     it('should set number of prev page', () => {
-
       tasksService.getTasks(5).subscribe(() => {
         expect(tasksService.state.tasksPagination).toEqual({ prevPage: 4, nextPage: null });
       });
@@ -124,7 +113,6 @@ describe('TasksService', () => {
     });
 
     it('should set number of the next page', () => {
-
       tasksService.getTasks(5).subscribe(() => {
         expect(tasksService.state.tasksPagination).toEqual({ prevPage: null, nextPage: 6 });
       });
@@ -140,7 +128,6 @@ describe('TasksService', () => {
     });
 
     it('should update request status to "error" on fetching failure', () => {
-
       tasksService.getTasks(1).subscribe({
         error: () => expect(tasksService.state.tasksFetchingStatus).toBe(RequestStatus.Error)
       });
@@ -153,8 +140,7 @@ describe('TasksService', () => {
       req.error(new ErrorEvent('unknown error'));
     });
 
-    it('should emit error with http error reponse on fetching failure', (done) => {
-
+    it('should emit error with http error reponse on fetching failure', done => {
       tasksService.getTasks(1).subscribe({
         error: (error: HttpErrorResponse) => {
           expect(error instanceof HttpErrorResponse).toBe(true);
@@ -172,7 +158,6 @@ describe('TasksService', () => {
   });
 
   describe('#patchTask', () => {
-
     let patchRes: IServerResponse<ITask>;
 
     beforeEach(() => {
@@ -180,20 +165,18 @@ describe('TasksService', () => {
     });
 
     it('should return an observable', () => {
-
       const value = tasksService.patchTask({}, 1);
 
       expect(value instanceof Observable).toBe(true);
     });
 
     it('should patch specific task', () => {
-
       const patchData: Partial<ITask> = { name: 'sample name' };
       const taskId = 1;
 
       patchRes.data = { ...patchRes.data, ...patchData };
 
-      tasksService.patchTask(patchData, taskId).subscribe((task) => {
+      tasksService.patchTask(patchData, taskId).subscribe(task => {
         expect(task).toEqual(patchRes.data);
       });
 
@@ -208,7 +191,6 @@ describe('TasksService', () => {
     });
 
     it('should patch fetched task on tasks list', () => {
-
       const fetchingResponse: IServerResponse<Array<ITask>> = {
         data: new Array(15).fill(taskMock).map((task: ITask, index) => ({ ...task, id: index })),
         pagination: {}
@@ -227,7 +209,6 @@ describe('TasksService', () => {
       patchRes.data = { ...patchRes.data, ...patchData, id: taskId };
 
       tasksService.patchTask(patchData, taskId).subscribe(() => {
-
         const { data } = fetchingResponse;
 
         const expectedState: Array<ITask> = [
@@ -243,7 +224,6 @@ describe('TasksService', () => {
     });
 
     it('should patch fetched current task', () => {
-
       const fetchingResponse: IServerResponse<ITask> = { data: taskMock };
 
       tasksService.getTask(taskMock.id).subscribe();
@@ -266,28 +246,24 @@ describe('TasksService', () => {
   });
 
   describe('#getTask', () => {
-
     const taskId = 8;
 
     let res: IServerResponse<ITask>;
 
     beforeAll(() => {
-
       res = {
         data: { ...taskMock, id: taskId }
       };
     });
 
     it('should return an observable', () => {
-
       const value = tasksService.getTask(1);
 
       expect(value instanceof Observable).toBe(true);
     });
 
     it('should fetch specific task', () => {
-
-      tasksService.getTask(taskId).subscribe((task) => {
+      tasksService.getTask(taskId).subscribe(task => {
         expect(task).toEqual(res.data);
       });
 
@@ -300,7 +276,6 @@ describe('TasksService', () => {
     });
 
     it('should update request status to "pending" on fetching start', () => {
-
       tasksService.getTask(taskId).subscribe();
 
       expect(tasksService.state.currentTaskFetchingStatus).toBe(RequestStatus.Pending);
@@ -314,7 +289,6 @@ describe('TasksService', () => {
     });
 
     it('should update request status to "error" on fetching failure', () => {
-
       tasksService.getTask(taskId).subscribe({
         error: () => expect(tasksService.state.currentTaskFetchingStatus).toBe(RequestStatus.Error)
       });
@@ -328,7 +302,6 @@ describe('TasksService', () => {
     });
 
     it('should update request status to "success" on fetching success', () => {
-
       tasksService.getTask(taskId).subscribe(() => {
         expect(tasksService.state.currentTaskFetchingStatus).toBe(RequestStatus.Success);
       });
@@ -342,7 +315,6 @@ describe('TasksService', () => {
     });
 
     it('should update state to fetched task on fetching success', () => {
-
       tasksService.getTask(taskId).subscribe(() => {
         expect(tasksService.state.currentTask).toBe(res.data);
       });
@@ -356,7 +328,6 @@ describe('TasksService', () => {
     });
 
     it('should return cached task from tasks list', () => {
-
       const fetchingResponse: IServerResponse<Array<ITask>> = {
         data: new Array(15).fill(taskMock).map((task: ITask, index) => ({ ...task, id: index })),
         pagination: {}
@@ -365,25 +336,23 @@ describe('TasksService', () => {
       tasksService.getTasks(1).subscribe();
       httpClientMock.expectOne({ method: 'GET' }).flush(fetchingResponse);
 
-      tasksService.getTask(taskId).subscribe((task) => {
+      tasksService.getTask(taskId).subscribe(task => {
         expect(task).toBe(fetchingResponse.data[8]);
       });
     });
 
     it('should return current cached task', () => {
-
       const fetchingResponse: IServerResponse<ITask> = { data: taskMock };
 
       tasksService.getTask(taskMock.id).subscribe();
       httpClientMock.expectOne({ method: 'GET' }).flush(fetchingResponse);
 
-      tasksService.getTask(taskMock.id).subscribe((task) => {
+      tasksService.getTask(taskMock.id).subscribe(task => {
         expect(task).toBe(taskMock);
       });
     });
 
     it('should update state to cached task', () => {
-
       const fetchingResponse: IServerResponse<Array<ITask>> = {
         data: new Array(15).fill(taskMock).map((task: ITask, index) => ({ ...task, id: index })),
         pagination: {}
@@ -398,7 +367,6 @@ describe('TasksService', () => {
     });
 
     it('should update fetching status to "success" when returning cached task', () => {
-
       const fetchingResponse: IServerResponse<Array<ITask>> = {
         data: new Array(15).fill(taskMock).map((task: ITask, index) => ({ ...task, id: index })),
         pagination: {}
@@ -413,7 +381,6 @@ describe('TasksService', () => {
     });
 
     it('should update request status to "not found" it task has not been found', () => {
-
       tasksService.getTask(taskId).subscribe({
         error: () => {
           expect(tasksService.state.currentTaskFetchingStatus).toBe(RequestStatus.NotFound);
@@ -430,17 +397,14 @@ describe('TasksService', () => {
   });
 
   describe('#deleteTask', () => {
-
     it('should return an observable', () => {
-
       const value = tasksService.deleteTask(1);
 
       expect(value instanceof Observable).toBe(true);
     });
 
     it('should delete specific task', () => {
-
-      tasksService.deleteTask(taskMock.id).subscribe((task) => {
+      tasksService.deleteTask(taskMock.id).subscribe(task => {
         expect(task).toEqual(taskMock);
       });
 
@@ -453,7 +417,6 @@ describe('TasksService', () => {
     });
 
     it('should delete fetched task from the list', () => {
-
       const fetchingResponse: IServerResponse<Array<ITask>> = {
         data: new Array(15).fill(taskMock).map((task: ITask, index) => ({ ...task, id: index })),
         pagination: {}
@@ -465,7 +428,6 @@ describe('TasksService', () => {
       const taskId = 9;
 
       tasksService.deleteTask(taskId).subscribe(() => {
-
         const { data } = fetchingResponse;
         const expectedState: Array<ITask> = [...data.slice(0, taskId), ...data.slice(taskId + 1)];
 
@@ -476,7 +438,6 @@ describe('TasksService', () => {
     });
 
     it('should delete fetched current task', () => {
-
       const fetchingResponse: IServerResponse<ITask> = { data: taskMock };
 
       tasksService.getTask(taskMock.id).subscribe();
@@ -491,26 +452,22 @@ describe('TasksService', () => {
   });
 
   describe('#createTask', () => {
-
     let newTask: ITaskCreationData;
     let res: IServerResponse<ITask>;
 
     beforeEach(() => {
-
       newTask = { name: 'name', description: 'description', status: TaskStatus.New };
       res = { data: { ...taskMock, ...newTask } };
     });
 
     it('should return an observable', () => {
-
       const value = tasksService.createTask(newTask);
 
       expect(value instanceof Observable).toBe(true);
     });
 
     it('should create task', () => {
-
-      tasksService.createTask(newTask).subscribe((task) => {
+      tasksService.createTask(newTask).subscribe(task => {
         expect(task).toEqual(res.data);
       });
 
@@ -525,8 +482,7 @@ describe('TasksService', () => {
     });
 
     it('should put created task to state', () => {
-
-      tasksService.createTask(newTask).subscribe((task) => {
+      tasksService.createTask(newTask).subscribe(task => {
         expect(tasksService.state.tasks).toEqual([task]);
       });
 
@@ -541,7 +497,6 @@ describe('TasksService', () => {
     });
 
     it('should put created task to state at the begining of tasks list', () => {
-
       const fetchingResponse: IServerResponse<Array<ITask>> = {
         data: new Array(15).fill(taskMock).map((task: ITask, index) => ({ ...task, id: index })),
         pagination: {}
@@ -550,8 +505,7 @@ describe('TasksService', () => {
       tasksService.getTasks(1).subscribe();
       httpClientMock.expectOne({ method: 'GET' }).flush(fetchingResponse);
 
-      tasksService.createTask(newTask).subscribe((task) => {
-
+      tasksService.createTask(newTask).subscribe(task => {
         const expectedState: Array<ITask> = [task, ...fetchingResponse.data];
 
         expect(tasksService.state.tasks).toEqual(expectedState);
@@ -562,7 +516,6 @@ describe('TasksService', () => {
   });
 
   afterEach(() => {
-
     httpClientMock.verify();
   });
 });

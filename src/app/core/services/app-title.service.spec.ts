@@ -4,12 +4,10 @@ import { Title } from '@angular/platform-browser';
 import { AppTitleService } from './app-title.service';
 
 describe('AppTitleService', () => {
-
   let appTitleService: AppTitleService;
   let titleService: Title;
 
   beforeEach(() => {
-
     document.title = 'Base app title';
 
     TestBed.configureTestingModule({
@@ -25,9 +23,7 @@ describe('AppTitleService', () => {
   });
 
   describe('#setPageTitle', () => {
-
     it('should set page title', () => {
-
       const spy = spyOn(titleService, 'setTitle');
 
       appTitleService.setPageTitle('page title');

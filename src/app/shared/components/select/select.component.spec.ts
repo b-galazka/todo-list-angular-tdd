@@ -1,7 +1,7 @@
-import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { Component } from '@angular/core';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { FormGroup, FormControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 import { SelectComponent } from './select.component';
 
@@ -37,15 +37,14 @@ describe('SelectComponent', () => {
     TestBed.configureTestingModule({
       declarations: [SelectComponent, SelectWrapperComponent],
       imports: [ReactiveFormsModule, FormsModule]
-    })
-    .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SelectWrapperComponent);
     component = fixture.debugElement.query(By.css('app-select')).componentInstance;
     wrapperComponent = fixture.componentInstance;
-    formControl = <FormControl> wrapperComponent.form.get('status');
+    formControl = <FormControl>wrapperComponent.form.get('status');
 
     fixture.detectChanges();
   });
@@ -55,14 +54,13 @@ describe('SelectComponent', () => {
   });
 
   it('should render ng-content as possible options', () => {
-
-    const optionsElems: Array<HTMLOptionElement> = fixture.debugElement.queryAll(By.css('option'))
+    const optionsElems: Array<HTMLOptionElement> = fixture.debugElement
+      .queryAll(By.css('option'))
       .map(optionElem => optionElem.nativeElement);
 
     expect(optionsElems.length).toBe(wrapperComponent.options.length);
 
     optionsElems.forEach((optionElem, index) => {
-
       const option = wrapperComponent.options[index];
 
       expect(optionElem.value).toBe(option.value);
@@ -71,7 +69,6 @@ describe('SelectComponent', () => {
   });
 
   it('should set select value of form control value', fakeAsync(() => {
-
     const selectValue = wrapperComponent.options[1].value;
 
     formControl.setValue(selectValue);
@@ -80,18 +77,17 @@ describe('SelectComponent', () => {
     fixture.detectChanges();
     tick();
 
-    const selectElem: HTMLSelectElement = fixture.debugElement
-      .query(By.css('.field')).nativeElement;
+    const selectElem: HTMLSelectElement = fixture.debugElement.query(By.css('.field'))
+      .nativeElement;
 
     expect(selectElem.value).toBe(selectValue);
   }));
 
   it('should update control value on value change', fakeAsync(() => {
-
     const selectedValue = wrapperComponent.options[1].value;
 
-    const selectElem: HTMLSelectElement = fixture.debugElement
-      .query(By.css('.field')).nativeElement;
+    const selectElem: HTMLSelectElement = fixture.debugElement.query(By.css('.field'))
+      .nativeElement;
 
     selectElem.value = selectedValue;
     selectElem.dispatchEvent(new Event('change'));
@@ -103,7 +99,6 @@ describe('SelectComponent', () => {
   }));
 
   it('should call #handleTouch() on select blur', () => {
-
     const spy = spyOn(component, 'handleTouch');
     const selectElem = fixture.debugElement.query(By.css('.field'));
 

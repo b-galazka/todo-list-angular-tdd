@@ -8,8 +8,12 @@
     "build:prod": "ng build --prod",
     "test": "ng test --watch=false",
     "test:watch": "ng test",
-    "lint": "ng lint --project=todo-list-tdd",
-    "e2e": "ng e2e"
+    "lint": "ng lint",
+    "lint:fix": "ng lint --fix",
+    "e2e": "ng e2e",
+    "prettier": "prettier src/**/*.* e2e/**/*.ts",
+    "prettier:check": "npm run prettier -- --check",
+    "prettier:fix": "npm run prettier -- --write"
   },
   "private": true,
   "dependencies": {
@@ -45,6 +49,7 @@
     "karma-jasmine": "~1.1.2",
     "karma-jasmine-html-reporter": "^0.2.2",
     "node-sass": "^4.13.0",
+    "prettier": "^1.19.1",
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.11.0",

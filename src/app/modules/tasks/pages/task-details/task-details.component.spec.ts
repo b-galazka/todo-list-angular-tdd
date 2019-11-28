@@ -1,18 +1,18 @@
-import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { By } from '@angular/platform-browser';
 import { Location } from '@angular/common';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
-import { TaskDetailsComponent } from './task-details.component';
-import { Routes, ActivatedRoute, Router } from '@angular/router';
-import { TasksService } from 'src/app/core/services/tasks.service';
-import { TasksServiceMock } from 'src/mocks/services/tasks.service.mock';
-import { AppTitleService } from 'src/app/core/services/app-title.service';
-import { AppTitleServiceMock } from 'src/mocks/services/app-title.service.mock';
-import { taskMock } from 'src/mocks/data/task.mock';
+import { ActivatedRoute, Router, Routes } from '@angular/router';
 import { RequestStatus } from 'src/app/core/models/server-request.model';
+import { AppTitleService } from 'src/app/core/services/app-title.service';
+import { TasksService } from 'src/app/core/services/tasks.service';
+import { taskMock } from 'src/mocks/data/task.mock';
+import { AppTitleServiceMock } from 'src/mocks/services/app-title.service.mock';
+import { TasksServiceMock } from 'src/mocks/services/tasks.service.mock';
 import { TaskStatusComponent } from '../../components/task-status/task-status.component';
+import { TaskDetailsComponent } from './task-details.component';
 
 describe('TaskDetailsComponent', () => {
   let component: TaskDetailsComponent;
@@ -36,15 +36,14 @@ describe('TaskDetailsComponent', () => {
   };
 
   function stringifyTaskDate(date: Date): string {
-    return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:` +
-      `${date.getMinutes()}`;
+    return (
+      `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ${date.getHours()}:` +
+      `${date.getMinutes()}`
+    );
   }
 
   beforeEach(async(() => {
-
-    const routes: Routes = [
-      { path: '**', component: TaskDetailsComponent }
-    ];
+    const routes: Routes = [{ path: '**', component: TaskDetailsComponent }];
 
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes(routes)],
@@ -54,8 +53,7 @@ describe('TaskDetailsComponent', () => {
         { provide: ActivatedRoute, useValue: activatedRouteMock },
         { provide: AppTitleService, useClass: AppTitleServiceMock }
       ]
-    })
-    .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -78,7 +76,6 @@ describe('TaskDetailsComponent', () => {
   });
 
   it('should fetch sepcific task on init', () => {
-
     const observable = of();
     const subSpy = spyOn(observable, 'subscribe');
     const getTaskSpy = spyOn(tasksService, 'getTask').and.returnValue(observable);
@@ -90,7 +87,6 @@ describe('TaskDetailsComponent', () => {
   });
 
   it('should set initial page title on init', () => {
-
     const spy = spyOn(appTitleService, 'setPageTitle');
 
     component.ngOnInit();
@@ -99,26 +95,24 @@ describe('TaskDetailsComponent', () => {
   });
 
   it('should set detailed page title when task is fetched', () => {
-
     const spy = spyOn(appTitleService, 'setPageTitle');
     const taskObservable = of(taskMock);
 
-    spyOn(tasksService, 'getTask').and.callFake(
-      (taskId: number) => taskId === taskMock.id ? taskObservable : null
+    spyOn(tasksService, 'getTask').and.callFake((taskId: number) =>
+      taskId === taskMock.id ? taskObservable : null
     );
 
     component.ngOnInit();
 
-    taskObservable.subscribe((task) => {
+    taskObservable.subscribe(task => {
       expect(spy).toHaveBeenCalledWith(`details of "${taskMock.name}"`);
     });
   });
 
   it('should navigate to tasks list on tasks list link click', fakeAsync(() => {
-
-    const linkElem: HTMLAnchorElement = fixture.debugElement
-      .query(By.css('[data-test-id="tasks-list-link"]'))
-      .nativeElement;
+    const linkElem: HTMLAnchorElement = fixture.debugElement.query(
+      By.css('[data-test-id="tasks-list-link"]')
+    ).nativeElement;
 
     linkElem.click();
     tick();
@@ -127,7 +121,6 @@ describe('TaskDetailsComponent', () => {
   }));
 
   it('should display loader if task is being fetched', () => {
-
     tasksService.setState({ currentTaskFetchingStatus: RequestStatus.Pending });
 
     fixture.detectChanges();
@@ -138,14 +131,12 @@ describe('TaskDetailsComponent', () => {
   });
 
   it('should not display loader if task is not being fetched', () => {
-
     const loaderElem = fixture.debugElement.query(By.css('.loader'));
 
     expect(loaderElem).toBeFalsy();
   });
 
   it('should display "not found" message if task has not been found', () => {
-
     tasksService.setState({ currentTaskFetchingStatus: RequestStatus.NotFound });
 
     fixture.detectChanges();
@@ -156,14 +147,12 @@ describe('TaskDetailsComponent', () => {
   });
 
   it('should not display "not found" message if task has been found', () => {
-
     const notFoundMsgElem = fixture.debugElement.query(By.css('[data-test-id="not-found-msg"]'));
 
     expect(notFoundMsgElem).toBeFalsy();
   });
 
   it('should display fetching error if unknown error has occured', () => {
-
     tasksService.setState({ currentTaskFetchingStatus: RequestStatus.Error });
 
     fixture.detectChanges();
@@ -179,28 +168,24 @@ describe('TaskDetailsComponent', () => {
   });
 
   it('should display task name', () => {
-
-    const taskNameElem: HTMLHeadingElement = fixture.debugElement
-      .query(By.css('[data-test-id="task-name"]'))
-      .nativeElement;
+    const taskNameElem: HTMLHeadingElement = fixture.debugElement.query(
+      By.css('[data-test-id="task-name"]')
+    ).nativeElement;
 
     expect(taskNameElem.textContent).toBe(taskMock.name);
   });
 
   it('should display task description', () => {
-
-    const taskDescElem: HTMLParagraphElement = fixture.debugElement
-      .query(By.css('.task-desc'))
+    const taskDescElem: HTMLParagraphElement = fixture.debugElement.query(By.css('.task-desc'))
       .nativeElement;
 
     expect(taskDescElem.textContent).toBe(taskMock.description);
   });
 
   it('should display task creation date', () => {
-
-    const taskCreationDateElem: HTMLParagraphElement = fixture.debugElement
-      .query(By.css('[data-test-id="task-creation-date"]'))
-      .nativeElement;
+    const taskCreationDateElem: HTMLParagraphElement = fixture.debugElement.query(
+      By.css('[data-test-id="task-creation-date"]')
+    ).nativeElement;
 
     const taskCreationDate = new Date(taskMock.createdAt);
 
@@ -210,10 +195,9 @@ describe('TaskDetailsComponent', () => {
   });
 
   it('should display tast last update date', () => {
-
-    const taskLastUpdateDateElem: HTMLParagraphElement = fixture.debugElement
-      .query(By.css('[data-test-id="task-update-date"]'))
-      .nativeElement;
+    const taskLastUpdateDateElem: HTMLParagraphElement = fixture.debugElement.query(
+      By.css('[data-test-id="task-update-date"]')
+    ).nativeElement;
 
     const taskLastUpdateDate = new Date(taskMock.updatedAt);
 
@@ -223,18 +207,17 @@ describe('TaskDetailsComponent', () => {
   });
 
   it('should display task status', () => {
-    const taskStatusComponent: TaskStatusComponent = fixture.debugElement
-      .query(By.css('app-task-status'))
-      .componentInstance;
+    const taskStatusComponent: TaskStatusComponent = fixture.debugElement.query(
+      By.css('app-task-status')
+    ).componentInstance;
 
     expect(taskStatusComponent.task).toBe(taskMock);
   });
 
   it('should navigate to tasks edit form on tasks edit button click', fakeAsync(() => {
-
-    const linkElem: HTMLAnchorElement = fixture.debugElement
-      .query(By.css('[data-test-id="task-edit-button"]'))
-      .nativeElement;
+    const linkElem: HTMLAnchorElement = fixture.debugElement.query(
+      By.css('[data-test-id="task-edit-button"]')
+    ).nativeElement;
 
     linkElem.click();
     tick();
@@ -243,13 +226,11 @@ describe('TaskDetailsComponent', () => {
   }));
 
   describe('delete task button', () => {
-
     let deleteTaskBtnElem: HTMLButtonElement;
     let router: Router;
     let windowConfirmSpy: jasmine.Spy;
 
     beforeEach(() => {
-
       tasksService.setState({
         currentTaskFetchingStatus: RequestStatus.Success,
         currentTask: taskMock
@@ -258,39 +239,34 @@ describe('TaskDetailsComponent', () => {
       fixture.detectChanges();
 
       router = TestBed.get(Router);
-      deleteTaskBtnElem = fixture.debugElement
-        .query(By.css('[data-test-id="task-delete-button"]'))
+      deleteTaskBtnElem = fixture.debugElement.query(By.css('[data-test-id="task-delete-button"]'))
         .nativeElement;
 
       windowConfirmSpy = spyOn(window, 'confirm').and.returnValue(true);
     });
 
     it('should disable delete button on click', () => {
-
       deleteTaskBtnElem.click();
       fixture.detectChanges();
 
-      deleteTaskBtnElem = fixture.debugElement
-        .query(By.css('[data-test-id="task-delete-button"]'))
+      deleteTaskBtnElem = fixture.debugElement.query(By.css('[data-test-id="task-delete-button"]'))
         .nativeElement;
 
       expect(deleteTaskBtnElem.disabled).toBe(true);
     });
 
     it('should disable edit button on click', () => {
-
       deleteTaskBtnElem.click();
       fixture.detectChanges();
 
-      const editTaskBtnElem: HTMLButtonElement = fixture.debugElement
-        .query(By.css('[data-test-id="task-edit-button"]'))
-        .nativeElement;
+      const editTaskBtnElem: HTMLButtonElement = fixture.debugElement.query(
+        By.css('[data-test-id="task-edit-button"]')
+      ).nativeElement;
 
       expect(editTaskBtnElem.disabled).toBe(true);
     });
 
     it('should delete task', () => {
-
       const observable = of();
       const subSpy = spyOn(observable, 'subscribe');
       const deleteTaskSpy = spyOn(tasksService, 'deleteTask').and.returnValue(observable);
@@ -302,7 +278,6 @@ describe('TaskDetailsComponent', () => {
     });
 
     it('should navigate to tasks list on deleting success', fakeAsync(() => {
-
       const spy = spyOn(router, 'navigate');
 
       spyOn(tasksService, 'deleteTask').and.returnValue(of(taskMock));
@@ -314,7 +289,6 @@ describe('TaskDetailsComponent', () => {
     }));
 
     it('should not delete task if it has been canceled by user', () => {
-
       windowConfirmSpy.and.returnValue(false);
 
       const spy = spyOn(tasksService, 'deleteTask');

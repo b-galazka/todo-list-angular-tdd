@@ -1,14 +1,14 @@
 import {
-  Component,
   ChangeDetectionStrategy,
-  OnInit,
+  Component,
+  EventEmitter,
   Input,
-  Output,
-  EventEmitter
+  OnInit,
+  Output
 } from '@angular/core';
 
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { TaskStatus, ITask, ITaskCreationData } from 'src/app/core/models/task.model';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ITask, ITaskCreationData, TaskStatus } from 'src/app/core/models/task.model';
 
 @Component({
   selector: 'app-task-form',
@@ -17,7 +17,6 @@ import { TaskStatus, ITask, ITaskCreationData } from 'src/app/core/models/task.m
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaskFormComponent implements OnInit {
-
   public readonly TaskStatus = TaskStatus;
 
   @Input() public existingTask: ITask;
@@ -59,7 +58,7 @@ export class TaskFormComponent implements OnInit {
   }
 
   private validateForm(): boolean {
-    Object.values(this.form.controls).forEach((formControl) => {
+    Object.values(this.form.controls).forEach(formControl => {
       formControl.updateValueAndValidity();
       formControl.markAsTouched();
     });

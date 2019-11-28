@@ -1,6 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
-import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import { FormFieldComponent } from './form-field.component';
@@ -10,7 +10,7 @@ import { FormFieldComponent } from './form-field.component';
   template: `
     <ng-container [formGroup]="form">
       <app-form-field>
-        <input formControlName="name">
+        <input formControlName="name" />
       </app-form-field>
     </ng-container>
   `
@@ -31,15 +31,14 @@ describe('FormFieldComponent', () => {
     TestBed.configureTestingModule({
       declarations: [FormFieldComponent, FormFieldWrapperComponent],
       imports: [ReactiveFormsModule]
-    })
-    .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(FormFieldWrapperComponent);
     component = fixture.debugElement.query(By.css('app-form-field')).componentInstance;
     wrapperComponent = fixture.componentInstance;
-    formControl = <FormControl> wrapperComponent.form.get('name');
+    formControl = <FormControl>wrapperComponent.form.get('name');
     fixture.detectChanges();
   });
 
@@ -48,29 +47,26 @@ describe('FormFieldComponent', () => {
   });
 
   it('should redner empty label by default', () => {
-
-    const labelElem: HTMLLabelElement = fixture.debugElement
-      .query(By.css('[data-test-id="label"]')).nativeElement;
+    const labelElem: HTMLLabelElement = fixture.debugElement.query(By.css('[data-test-id="label"]'))
+      .nativeElement;
 
     expect(labelElem.textContent).toBe('');
   });
 
   it('should render provided label', () => {
-
     const label = 'some text';
 
     component.label = label;
 
     fixture.detectChanges();
 
-    const labelElem: HTMLLabelElement = fixture.debugElement
-      .query(By.css('[data-test-id="label"]')).nativeElement;
+    const labelElem: HTMLLabelElement = fixture.debugElement.query(By.css('[data-test-id="label"]'))
+      .nativeElement;
 
     expect(labelElem.textContent).toBe(label);
   });
 
   it('should render required error', () => {
-
     formControl.setValue('');
     formControl.setValidators(Validators.required);
     formControl.updateValueAndValidity();
@@ -83,7 +79,6 @@ describe('FormFieldComponent', () => {
   });
 
   it('should render max length error', () => {
-
     formControl.setValue('X'.repeat(15));
     formControl.setValidators(Validators.maxLength(10));
     formControl.updateValueAndValidity();
@@ -98,7 +93,6 @@ describe('FormFieldComponent', () => {
   });
 
   it('should not render error if it does not exist', () => {
-
     formControl.setValidators([]);
     formControl.updateValueAndValidity();
     formControl.markAsTouched();

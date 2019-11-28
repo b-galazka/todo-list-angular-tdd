@@ -1,23 +1,22 @@
-import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { By } from '@angular/platform-browser';
 import { Location } from '@angular/common';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
-import { Subject, of } from 'rxjs';
+import { of, Subject } from 'rxjs';
 
-import { TasksListComponent } from './tasks-list.component';
-import { TasksService } from 'src/app/core/services/tasks.service';
-import { TasksServiceMock } from 'src/mocks/services/tasks.service.mock';
-import { ActivatedRoute, Routes, Router } from '@angular/router';
-import { TaskComponent } from '../../components/task/task.component';
-import { ITask } from 'src/app/core/models/task.model';
-import { taskMock } from 'src/mocks/data/task.mock';
+import { ActivatedRoute, Router, Routes } from '@angular/router';
 import { RequestStatus } from 'src/app/core/models/server-request.model';
+import { ITask } from 'src/app/core/models/task.model';
 import { AppTitleService } from 'src/app/core/services/app-title.service';
+import { TasksService } from 'src/app/core/services/tasks.service';
+import { taskMock } from 'src/mocks/data/task.mock';
 import { AppTitleServiceMock } from 'src/mocks/services/app-title.service.mock';
+import { TasksServiceMock } from 'src/mocks/services/tasks.service.mock';
+import { TaskComponent } from '../../components/task/task.component';
+import { TasksListComponent } from './tasks-list.component';
 
 describe('TasksListComponent', () => {
-
   let component: TasksListComponent;
   let fixture: ComponentFixture<TasksListComponent>;
   let tasksService: TasksServiceMock;
@@ -27,10 +26,7 @@ describe('TasksListComponent', () => {
   let appTitleService: AppTitleService;
 
   beforeEach(async(() => {
-
-    const routes: Routes = [
-      { path: '**', component: TasksListComponent }
-    ];
+    const routes: Routes = [{ path: '**', component: TasksListComponent }];
 
     TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes(routes)],
@@ -41,8 +37,7 @@ describe('TasksListComponent', () => {
         { provide: AppTitleService, useClass: AppTitleServiceMock }
       ],
       schemas: [NO_ERRORS_SCHEMA]
-    })
-    .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -61,47 +56,43 @@ describe('TasksListComponent', () => {
   });
 
   it('should fetch tasks on :page param change', () => {
-
     const page = 89;
     const observable = of();
     const subSpy = spyOn(observable, 'subscribe');
     const getTasksSpy = spyOn(tasksService, 'getTasks').and.returnValue(observable);
 
-    (<Subject<any>> activatedRoute.params).next({ page });
+    (<Subject<any>>activatedRoute.params).next({ page });
 
     expect(getTasksSpy).toHaveBeenCalledWith(page);
     expect(subSpy).toHaveBeenCalled();
   });
 
   it('should set page title on :page param change', () => {
-
     const page = 89;
     const spy = spyOn(appTitleService, 'setPageTitle');
 
     spyOn(tasksService, 'getTasks').and.returnValue(of());
 
-    (<Subject<any>> activatedRoute.params).next({ page });
+    (<Subject<any>>activatedRoute.params).next({ page });
 
     expect(spy).toHaveBeenCalledWith(`page ${page}`);
   });
 
   it('should not set page title on :page param change if it is invalid', () => {
-
     const page = -1;
     const spy = spyOn(appTitleService, 'setPageTitle');
 
-    (<Subject<any>> activatedRoute.params).next({ page });
+    (<Subject<any>>activatedRoute.params).next({ page });
 
     expect(spy).not.toHaveBeenCalled();
   });
 
   it('should render all fetched tasks', () => {
-
     const tasksAmount = 10;
 
-    const tasks: Array<ITask> = new Array(tasksAmount).fill(null).map(
-      (item, index) => ({ ...taskMock, id: index })
-    );
+    const tasks: Array<ITask> = new Array(tasksAmount)
+      .fill(null)
+      .map((item, index) => ({ ...taskMock, id: index }));
 
     tasksService.setState({ tasks, tasksFetchingStatus: RequestStatus.Success });
 
@@ -113,13 +104,12 @@ describe('TasksListComponent', () => {
 
     expect(tasksComponents.length).toBe(tasksAmount);
 
-    tasksComponents.forEach(
-      (taskComponent, index) => expect(taskComponent.task).toBe(tasks[index])
+    tasksComponents.forEach((taskComponent, index) =>
+      expect(taskComponent.task).toBe(tasks[index])
     );
   });
 
   it('should render loader during tasks fetching', () => {
-
     tasksService.setState({ tasksFetchingStatus: RequestStatus.Pending });
 
     fixture.detectChanges();
@@ -130,7 +120,6 @@ describe('TasksListComponent', () => {
   });
 
   it('should render error message if tasks fetching has failed', () => {
-
     tasksService.setState({ tasksFetchingStatus: RequestStatus.Error });
 
     fixture.detectChanges();
@@ -141,10 +130,9 @@ describe('TasksListComponent', () => {
   });
 
   it('should navigate to new task form on new task link click', fakeAsync(() => {
-
-    const linkElem: HTMLAnchorElement = fixture.debugElement
-      .query(By.css('[data-test-id="new-task-link"]'))
-      .nativeElement;
+    const linkElem: HTMLAnchorElement = fixture.debugElement.query(
+      By.css('[data-test-id="new-task-link"]')
+    ).nativeElement;
 
     linkElem.click();
     tick();
@@ -153,7 +141,6 @@ describe('TasksListComponent', () => {
   }));
 
   it('should navigate to prev page on prev link click', fakeAsync(() => {
-
     tasksService.setState({
       tasksFetchingStatus: RequestStatus.Success,
       tasksPagination: { prevPage: 5, nextPage: null }
@@ -161,9 +148,9 @@ describe('TasksListComponent', () => {
 
     fixture.detectChanges();
 
-    const linkElem: HTMLAnchorElement = fixture.debugElement
-      .query(By.css('[data-test-id="prev-page-link"]'))
-      .nativeElement;
+    const linkElem: HTMLAnchorElement = fixture.debugElement.query(
+      By.css('[data-test-id="prev-page-link"]')
+    ).nativeElement;
 
     linkElem.click();
     tick();
@@ -172,7 +159,6 @@ describe('TasksListComponent', () => {
   }));
 
   it('should not show prev page link if prev page does not exist', () => {
-
     tasksService.setState({
       tasksFetchingStatus: RequestStatus.Success,
       tasksPagination: { prevPage: null, nextPage: null }
@@ -186,7 +172,6 @@ describe('TasksListComponent', () => {
   });
 
   it('should navigate to the next page on next link click', fakeAsync(() => {
-
     tasksService.setState({
       tasksFetchingStatus: RequestStatus.Success,
       tasksPagination: { prevPage: null, nextPage: 6 }
@@ -194,9 +179,9 @@ describe('TasksListComponent', () => {
 
     fixture.detectChanges();
 
-    const linkElem: HTMLAnchorElement = fixture.debugElement
-      .query(By.css('[data-test-id="next-page-link"]'))
-      .nativeElement;
+    const linkElem: HTMLAnchorElement = fixture.debugElement.query(
+      By.css('[data-test-id="next-page-link"]')
+    ).nativeElement;
 
     linkElem.click();
     tick();
@@ -205,7 +190,6 @@ describe('TasksListComponent', () => {
   }));
 
   it('should not show the next page link if next page does not exist', () => {
-
     tasksService.setState({
       tasksFetchingStatus: RequestStatus.Success,
       tasksPagination: { prevPage: null, nextPage: null }
@@ -219,62 +203,56 @@ describe('TasksListComponent', () => {
   });
 
   it('should not fetch tasks if :page is not an integer', () => {
-
     const page = 'some text';
     const observable = of();
     const subSpy = spyOn(observable, 'subscribe');
     const getTasksSpy = spyOn(tasksService, 'getTasks').and.returnValue(observable);
 
-    (<Subject<any>> activatedRoute.params).next({ page });
+    (<Subject<any>>activatedRoute.params).next({ page });
 
     expect(getTasksSpy).not.toHaveBeenCalled();
     expect(subSpy).not.toHaveBeenCalled();
   });
 
   it('should redirect to the first page if :page is not an integer', () => {
-
     const page = 'some text';
     const spy = spyOn(router, 'navigate');
 
-    (<Subject<any>> activatedRoute.params).next({ page });
+    (<Subject<any>>activatedRoute.params).next({ page });
 
     expect(spy).toHaveBeenCalledWith(['/tasks/1']);
   });
 
   it('should redirect to the first page if :page is not an positive integer', () => {
-
     const page = -1;
     const spy = spyOn(router, 'navigate');
 
-    (<Subject<any>> activatedRoute.params).next({ page });
+    (<Subject<any>>activatedRoute.params).next({ page });
 
     expect(spy).toHaveBeenCalledWith(['/tasks/1']);
   });
 
   it('should redirect to the first page if there is no tasks and :page is greater than 1', () => {
-
     const page = 5;
     const spy = spyOn(router, 'navigate');
 
     spyOn(tasksService, 'getTasks').and.returnValue(of([]));
-    (<Subject<any>> activatedRoute.params).next({ page });
+    (<Subject<any>>activatedRoute.params).next({ page });
 
     expect(spy).toHaveBeenCalledWith(['/tasks/1']);
   });
 
   it('should not redirect to the first page if there are tasks or :page is equals 1', () => {
-
     const page = 5;
     const spy = spyOn(router, 'navigate');
 
     spyOn(tasksService, 'getTasks').and.returnValue(of([taskMock]));
-    (<Subject<any>> activatedRoute.params).next({ page });
+    (<Subject<any>>activatedRoute.params).next({ page });
 
     expect(spy).not.toHaveBeenCalled();
   });
 
   it('should show message if there is no tasks', () => {
-
     tasksService.setState({ tasksFetchingStatus: RequestStatus.Success, tasks: [] });
 
     fixture.detectChanges();
@@ -285,7 +263,6 @@ describe('TasksListComponent', () => {
   });
 
   it('should not show "no tasks" message if there are tasks', () => {
-
     tasksService.setState({ tasksFetchingStatus: RequestStatus.Success, tasks: [taskMock] });
 
     fixture.detectChanges();
@@ -296,54 +273,56 @@ describe('TasksListComponent', () => {
   });
 
   it('should add "justify-content-center" class to tasks container if tasks list is empty', () => {
-
     tasksService.setState({ tasksFetchingStatus: RequestStatus.Success, tasks: [] });
 
     fixture.detectChanges();
 
-    const tasksWrapper: HTMLDivElement = fixture.debugElement
-      .query(By.css('[data-test-id="tasks-wrapper"]'))
-      .nativeElement;
+    const tasksWrapper: HTMLDivElement = fixture.debugElement.query(
+      By.css('[data-test-id="tasks-wrapper"]')
+    ).nativeElement;
 
     expect(tasksWrapper.classList.contains('justify-content-center')).toBe(true);
   });
 
-  it('should add "justify-content-between" class to pagination container ' +
-    'if there are next and prev pages', () => {
+  it(
+    'should add "justify-content-between" class to pagination container ' +
+      'if there are next and prev pages',
+    () => {
+      tasksService.setState({
+        tasksFetchingStatus: RequestStatus.Success,
+        tasksPagination: { prevPage: 5, nextPage: 7 }
+      });
 
-    tasksService.setState({
-      tasksFetchingStatus: RequestStatus.Success,
-      tasksPagination: { prevPage: 5, nextPage: 7 }
-    });
+      fixture.detectChanges();
 
-    fixture.detectChanges();
+      const paginationWrapper: HTMLDivElement = fixture.debugElement.query(
+        By.css('[data-test-id="pagination"]')
+      ).nativeElement;
 
-    const paginationWrapper: HTMLDivElement = fixture.debugElement
-      .query(By.css('[data-test-id="pagination"]'))
-      .nativeElement;
+      expect(paginationWrapper.classList.contains('justify-content-between')).toBe(true);
+    }
+  );
 
-    expect(paginationWrapper.classList.contains('justify-content-between')).toBe(true);
-  });
+  it(
+    'should add "justify-content-end" class to pagination container ' +
+      'if there is next and no prev page',
+    () => {
+      tasksService.setState({
+        tasksFetchingStatus: RequestStatus.Success,
+        tasksPagination: { prevPage: null, nextPage: 2 }
+      });
 
-  it('should add "justify-content-end" class to pagination container ' +
-    'if there is next and no prev page', () => {
+      fixture.detectChanges();
 
-    tasksService.setState({
-      tasksFetchingStatus: RequestStatus.Success,
-      tasksPagination: { prevPage: null, nextPage: 2 }
-    });
+      const paginationWrapper: HTMLDivElement = fixture.debugElement.query(
+        By.css('[data-test-id="pagination"]')
+      ).nativeElement;
 
-    fixture.detectChanges();
+      expect(paginationWrapper.classList.contains('justify-content-end')).toBe(true);
+    }
+  );
 
-    const paginationWrapper: HTMLDivElement = fixture.debugElement
-      .query(By.css('[data-test-id="pagination"]'))
-      .nativeElement;
-
-    expect(paginationWrapper.classList.contains('justify-content-end')).toBe(true);
-  });
-
-  it('should keep tasks\' components state', () => {
-
+  it("should keep tasks' components state", () => {
     tasksService.setState({ tasks: [{ ...taskMock }], tasksFetchingStatus: RequestStatus.Success });
     fixture.detectChanges();
 

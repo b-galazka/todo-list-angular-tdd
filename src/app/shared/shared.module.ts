@@ -1,14 +1,14 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
-import { TextInputComponent } from './components/text-input/text-input.component';
-import { ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { TextareaComponent } from './components/textarea/textarea.component';
-import { SelectComponent } from './components/select/select.component';
-import { ContentLayoutComponent } from './layouts/content-layout/content-layout.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormFieldComponent } from './components/form-field/form-field.component';
+import { SelectComponent } from './components/select/select.component';
+import { TextInputComponent } from './components/text-input/text-input.component';
+import { TextareaComponent } from './components/textarea/textarea.component';
+import { ContentLayoutComponent } from './layouts/content-layout/content-layout.component';
 
 @NgModule({
   declarations: [
@@ -18,13 +18,7 @@ import { FormFieldComponent } from './components/form-field/form-field.component
     SelectComponent,
     FormFieldComponent
   ],
-  imports: [
-    CommonModule,
-    RouterModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    FormsModule
-  ],
+  imports: [CommonModule, RouterModule, HttpClientModule, ReactiveFormsModule, FormsModule],
   exports: [
     ReactiveFormsModule,
     TextInputComponent,
@@ -34,4 +28,4 @@ import { FormFieldComponent } from './components/form-field/form-field.component
     FormFieldComponent
   ]
 })
-export class SharedModule { }
+export class SharedModule {}

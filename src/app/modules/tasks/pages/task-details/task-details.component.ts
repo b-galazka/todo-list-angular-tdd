@@ -1,8 +1,8 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { TasksService } from 'src/app/core/services/tasks.service';
 import { AppTitleService } from 'src/app/core/services/app-title.service';
+import { TasksService } from 'src/app/core/services/tasks.service';
 import { AbstractTasksPageComponent } from '../shared/abstracts/abstract-tasks-page.component';
 
 @Component({
@@ -12,7 +12,6 @@ import { AbstractTasksPageComponent } from '../shared/abstracts/abstract-tasks-p
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaskDetailsComponent extends AbstractTasksPageComponent implements OnInit {
-
   public constructor(
     public readonly tasksService: TasksService,
     private readonly route: ActivatedRoute,
@@ -23,18 +22,16 @@ export class TaskDetailsComponent extends AbstractTasksPageComponent implements 
   }
 
   public ngOnInit(): void {
-
     const taskId = this.route.snapshot.paramMap.get('taskId');
 
     this.appTitleService.setPageTitle('task details');
 
-    this.tasksService.getTask(+taskId).subscribe((task) => {
+    this.tasksService.getTask(+taskId).subscribe(task => {
       this.appTitleService.setPageTitle(`details of "${task.name}"`);
     });
   }
 
   public deleteTask(): void {
-
     if (!confirm('Are you sure you want to delete this task?')) {
       return;
     }

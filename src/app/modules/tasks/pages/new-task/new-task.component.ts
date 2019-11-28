@@ -1,13 +1,11 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AppTitleService } from 'src/app/core/services/app-title.service';
 import { ITaskCreationData } from 'src/app/core/models/task.model';
+import { AppTitleService } from 'src/app/core/services/app-title.service';
 import { TasksService } from 'src/app/core/services/tasks.service';
 
-import {
-  AbstractTaskFormPageComponent
-} from '../shared/abstracts/abstract-task-form-page.component';
+import { AbstractTaskFormPageComponent } from '../shared/abstracts/abstract-task-form-page.component';
 
 @Component({
   selector: 'app-new-task',
@@ -16,7 +14,6 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NewTaskComponent extends AbstractTaskFormPageComponent implements OnInit {
-
   public constructor(
     private readonly appTitleService: AppTitleService,
     private readonly tasksService: TasksService,
@@ -30,12 +27,11 @@ export class NewTaskComponent extends AbstractTaskFormPageComponent implements O
   }
 
   public createTask(taskData: ITaskCreationData): void {
-
     this.isPending$.next(true);
 
     this.tasksService.createTask(taskData).subscribe(
-      this.handleRequestSuccess,
-      this.handleRequestFailure
+      task => this.handleRequestSuccess(task),
+      () => this.handleRequestFailure()
     );
   }
 }

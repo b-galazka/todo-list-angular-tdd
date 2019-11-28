@@ -1,23 +1,23 @@
-import { async, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { Location } from '@angular/common';
+import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
 import { Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { By } from '@angular/platform-browser';
-import { Location } from '@angular/common';
 import { of, throwError } from 'rxjs';
-import { ReactiveFormsModule, FormsModule, FormGroup } from '@angular/forms';
-import { NO_ERRORS_SCHEMA, DebugElement } from '@angular/core';
 
-import { NewTaskComponent } from './new-task.component';
-import { TaskFormComponent } from '../../components/task-form/task-form.component';
+import { ITaskCreationData } from 'src/app/core/models/task.model';
+import { AppTitleService } from 'src/app/core/services/app-title.service';
+import { TasksService } from 'src/app/core/services/tasks.service';
+import { SelectComponent } from 'src/app/shared/components/select/select.component';
 import { TextInputComponent } from 'src/app/shared/components/text-input/text-input.component';
 import { TextareaComponent } from 'src/app/shared/components/textarea/textarea.component';
-import { SelectComponent } from 'src/app/shared/components/select/select.component';
-import { AppTitleService } from 'src/app/core/services/app-title.service';
-import { AppTitleServiceMock } from 'src/mocks/services/app-title.service.mock';
-import { TasksService } from 'src/app/core/services/tasks.service';
-import { TasksServiceMock } from 'src/mocks/services/tasks.service.mock';
-import { ITaskCreationData } from 'src/app/core/models/task.model';
 import { taskMock } from 'src/mocks/data/task.mock';
+import { AppTitleServiceMock } from 'src/mocks/services/app-title.service.mock';
+import { TasksServiceMock } from 'src/mocks/services/tasks.service.mock';
+import { TaskFormComponent } from '../../components/task-form/task-form.component';
+import { NewTaskComponent } from './new-task.component';
 
 describe('NewTaskComponent', () => {
   let component: NewTaskComponent;
@@ -28,10 +28,7 @@ describe('NewTaskComponent', () => {
   let debugElement: DebugElement;
 
   beforeEach(async(() => {
-
-    const routes: Routes = [
-      { path: '**', component: NewTaskComponent }
-    ];
+    const routes: Routes = [{ path: '**', component: NewTaskComponent }];
 
     TestBed.configureTestingModule({
       declarations: [
@@ -47,8 +44,7 @@ describe('NewTaskComponent', () => {
         { provide: TasksService, useClass: TasksServiceMock }
       ],
       schemas: [NO_ERRORS_SCHEMA]
-    })
-    .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -66,7 +62,6 @@ describe('NewTaskComponent', () => {
   });
 
   it('should set page title on init', () => {
-
     const spy = spyOn(appTitleService, 'setPageTitle');
 
     component.ngOnInit();
@@ -75,10 +70,9 @@ describe('NewTaskComponent', () => {
   });
 
   it('should navigate to tasks list on tasks list link click', fakeAsync(() => {
-
-    const linkElem: HTMLAnchorElement = fixture.debugElement
-      .query(By.css('[data-test-id="tasks-list-link"]'))
-      .nativeElement;
+    const linkElem: HTMLAnchorElement = fixture.debugElement.query(
+      By.css('[data-test-id="tasks-list-link"]')
+    ).nativeElement;
 
     linkElem.click();
     tick();
@@ -87,7 +81,6 @@ describe('NewTaskComponent', () => {
   }));
 
   it('should create task on form submit', () => {
-
     const observable = of(taskMock);
     const spy = spyOn(tasksService, 'createTask').and.returnValue(observable);
     const subSpy = spyOn(observable, 'subscribe');
@@ -101,7 +94,6 @@ describe('NewTaskComponent', () => {
   });
 
   it('should mark form as pending when creating new task', () => {
-
     const taskFormComponentElem = debugElement.query(By.css('app-task-form'));
     const taskFormComponent: TaskFormComponent = taskFormComponentElem.componentInstance;
 
@@ -112,7 +104,6 @@ describe('NewTaskComponent', () => {
   });
 
   it('should redirect to created task details', fakeAsync(() => {
-
     const taskFormComponentElem = debugElement.query(By.css('app-task-form'));
 
     spyOn(tasksService, 'createTask').and.returnValue(of(taskMock));
@@ -124,7 +115,6 @@ describe('NewTaskComponent', () => {
   }));
 
   it('should mark form as pristine on task creation success', fakeAsync(() => {
-
     const taskFormComponentElem = debugElement.query(By.css('app-task-form'));
     const form: FormGroup = taskFormComponentElem.componentInstance.form;
     const spy = spyOn(form, 'markAsPristine');
@@ -137,7 +127,6 @@ describe('NewTaskComponent', () => {
   }));
 
   it('should unmark task form as pending on request failure', () => {
-
     const taskFormComponentElem = debugElement.query(By.css('app-task-form'));
     const taskFormComponent: TaskFormComponent = taskFormComponentElem.componentInstance;
 
@@ -148,7 +137,6 @@ describe('NewTaskComponent', () => {
   });
 
   describe('#canBeDeactivated', () => {
-
     let windowConfirmSpy: jasmine.Spy;
 
     beforeEach(() => {
@@ -156,9 +144,8 @@ describe('NewTaskComponent', () => {
     });
 
     it('should return true if form is pristine', () => {
-
-      const taskFormComponent: TaskFormComponent = debugElement
-        .query(By.css('app-task-form')).componentInstance;
+      const taskFormComponent: TaskFormComponent = debugElement.query(By.css('app-task-form'))
+        .componentInstance;
 
       taskFormComponent.form.markAsPristine();
 
@@ -166,9 +153,8 @@ describe('NewTaskComponent', () => {
     });
 
     it('should return true if form is dirty and users confirmes', () => {
-
-      const taskFormComponent: TaskFormComponent = debugElement
-        .query(By.css('app-task-form')).componentInstance;
+      const taskFormComponent: TaskFormComponent = debugElement.query(By.css('app-task-form'))
+        .componentInstance;
 
       taskFormComponent.form.markAsDirty();
 
@@ -176,9 +162,8 @@ describe('NewTaskComponent', () => {
     });
 
     it('should return false if form is dirty and users declines', () => {
-
-      const taskFormComponent: TaskFormComponent = debugElement
-        .query(By.css('app-task-form')).componentInstance;
+      const taskFormComponent: TaskFormComponent = debugElement.query(By.css('app-task-form'))
+        .componentInstance;
 
       taskFormComponent.form.markAsDirty();
       windowConfirmSpy.and.returnValue(false);
@@ -187,7 +172,6 @@ describe('NewTaskComponent', () => {
     });
 
     it('should be called on window:beforeunload', () => {
-
       const spy = spyOn(component, 'canBeDeactivated');
 
       window.dispatchEvent(new Event('beforeunload'));

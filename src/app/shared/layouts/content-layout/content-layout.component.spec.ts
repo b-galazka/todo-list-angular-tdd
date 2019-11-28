@@ -11,8 +11,7 @@ describe('ContentLayoutComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ContentLayoutComponent],
       imports: [RouterTestingModule]
-    })
-    .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {

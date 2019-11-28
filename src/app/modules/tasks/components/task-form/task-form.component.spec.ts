@@ -2,21 +2,20 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import {
-  FormGroup,
-  ReactiveFormsModule,
-  FormsModule,
   FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
   Validators
 } from '@angular/forms';
 
-import { TaskFormComponent } from './task-form.component';
-import { TaskStatus } from 'src/app/core/models/task.model';
-import { taskMock } from 'src/mocks/data/task.mock';
 import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
+import { TaskStatus } from 'src/app/core/models/task.model';
+import { SelectComponent } from 'src/app/shared/components/select/select.component';
 import { TextInputComponent } from 'src/app/shared/components/text-input/text-input.component';
 import { TextareaComponent } from 'src/app/shared/components/textarea/textarea.component';
-import { SelectComponent } from 'src/app/shared/components/select/select.component';
-
+import { taskMock } from 'src/mocks/data/task.mock';
+import { TaskFormComponent } from './task-form.component';
 
 describe('TaskFormComponent', () => {
   let component: TaskFormComponent;
@@ -35,14 +34,13 @@ describe('TaskFormComponent', () => {
       declarations: [TaskFormComponent, TextInputComponent, TextareaComponent, SelectComponent],
       imports: [ReactiveFormsModule, FormsModule],
       schemas: [NO_ERRORS_SCHEMA]
-    })
-    .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {
     initValues();
     fixture.detectChanges();
-    formControls = <Array<FormControl>> Object.values(component.form.controls);
+    formControls = <Array<FormControl>>Object.values(component.form.controls);
   });
 
   it('should create', () => {
@@ -54,13 +52,12 @@ describe('TaskFormComponent', () => {
   });
 
   it('should submit form on button click', () => {
-
     component.form.setValue({ name: 'X', description: 'X', status: 'new' });
 
     const spy = spyOn(component.submitted, 'emit');
 
-    const buttonElem: HTMLButtonElement = debugElement
-      .query(By.css('.submit-button')).nativeElement;
+    const buttonElem: HTMLButtonElement = debugElement.query(By.css('.submit-button'))
+      .nativeElement;
 
     buttonElem.click();
 
@@ -69,11 +66,10 @@ describe('TaskFormComponent', () => {
   });
 
   it('should mark each field as touched on submit', () => {
-
     const spies = formControls.map(control => spyOn(control, 'markAsTouched'));
 
-    const buttonElem: HTMLButtonElement = debugElement
-      .query(By.css('.submit-button')).nativeElement;
+    const buttonElem: HTMLButtonElement = debugElement.query(By.css('.submit-button'))
+      .nativeElement;
 
     buttonElem.click();
 
@@ -81,11 +77,10 @@ describe('TaskFormComponent', () => {
   });
 
   it('should validate each field on submit', () => {
-
     const spies = formControls.map(control => spyOn(control, 'updateValueAndValidity'));
 
-    const buttonElem: HTMLButtonElement = debugElement
-      .query(By.css('.submit-button')).nativeElement;
+    const buttonElem: HTMLButtonElement = debugElement.query(By.css('.submit-button'))
+      .nativeElement;
 
     buttonElem.click();
 
@@ -93,7 +88,6 @@ describe('TaskFormComponent', () => {
   });
 
   it('should set each field as required', () => {
-
     component.form.reset();
     formControls.forEach(control => control.updateValueAndValidity());
 
@@ -101,7 +95,6 @@ describe('TaskFormComponent', () => {
   });
 
   it('should set max length validator to 120 characters for name field', () => {
-
     const nameFormControl = component.form.get('name');
 
     nameFormControl.setValue('X'.repeat(121));
@@ -114,11 +107,10 @@ describe('TaskFormComponent', () => {
   });
 
   it('should not submit form on button click if form is invalid', () => {
-
     const spy = spyOn(component.submitted, 'emit');
 
-    const buttonElem: HTMLButtonElement = debugElement
-      .query(By.css('.submit-button')).nativeElement;
+    const buttonElem: HTMLButtonElement = debugElement.query(By.css('.submit-button'))
+      .nativeElement;
 
     component.form.reset();
     component.form.get('name').setValidators(Validators.required);
@@ -129,13 +121,12 @@ describe('TaskFormComponent', () => {
   });
 
   it('should disable submit button if form is pending', () => {
-
     initValues();
     component.pending = true;
     fixture.detectChanges();
 
-    const buttonElem: HTMLButtonElement = debugElement
-      .query(By.css('.submit-button')).nativeElement;
+    const buttonElem: HTMLButtonElement = debugElement.query(By.css('.submit-button'))
+      .nativeElement;
 
     expect(buttonElem.disabled).toBe(true);
   });
@@ -150,7 +141,6 @@ describe('TaskFormComponent', () => {
     });
 
     it('should render button to add new task', () => {
-
       const buttonTextElem = debugElement.query(By.css('[data-test-id="new-task-button-text"]'));
 
       expect(buttonTextElem).toBeTruthy();
@@ -173,9 +163,8 @@ describe('TaskFormComponent', () => {
     });
 
     it('should disable submit button if form is pristine', () => {
-
-      const buttonElem: HTMLButtonElement = debugElement
-        .query(By.css('.submit-button')).nativeElement;
+      const buttonElem: HTMLButtonElement = debugElement.query(By.css('.submit-button'))
+        .nativeElement;
 
       expect(buttonElem.disabled).toBe(true);
     });

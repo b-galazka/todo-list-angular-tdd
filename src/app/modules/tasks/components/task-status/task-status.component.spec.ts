@@ -1,10 +1,10 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { TaskStatusComponent } from './task-status.component';
-import { taskMock } from 'src/mocks/data/task.mock';
 import { TaskStatus } from 'src/app/core/models/task.model';
+import { taskMock } from 'src/mocks/data/task.mock';
+import { TaskStatusComponent } from './task-status.component';
 
 describe('TaskStatusComponent', () => {
   let component: TaskStatusComponent;
@@ -21,8 +21,7 @@ describe('TaskStatusComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [TaskStatusComponent]
-    })
-    .compileComponents();
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -35,7 +34,6 @@ describe('TaskStatusComponent', () => {
   });
 
   it('should render task status for new task', () => {
-
     initValues();
     component.task = { ...taskMock, status: TaskStatus.New };
     fixture.detectChanges();
@@ -46,7 +44,6 @@ describe('TaskStatusComponent', () => {
   });
 
   it('should render task status for task which is in progress', () => {
-
     initValues();
     component.task = { ...taskMock, status: TaskStatus.InProgress };
     fixture.detectChanges();
@@ -57,7 +54,6 @@ describe('TaskStatusComponent', () => {
   });
 
   it('should render task status for finished task', () => {
-
     initValues();
     component.task = { ...taskMock, status: TaskStatus.Finished };
     fixture.detectChanges();

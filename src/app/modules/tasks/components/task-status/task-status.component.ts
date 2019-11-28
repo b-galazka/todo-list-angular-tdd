@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ITask, TaskStatus } from 'src/app/core/models/task.model';
 
 @Component({
@@ -8,7 +8,6 @@ import { ITask, TaskStatus } from 'src/app/core/models/task.model';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaskStatusComponent {
-
   public readonly TaskStatus = TaskStatus;
 
   @Input() public task: ITask;
