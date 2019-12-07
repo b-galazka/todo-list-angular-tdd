@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { WINDOW } from 'src/app/core/injection-tokens/window.token';
 import { AppTitleService } from 'src/app/core/services/app-title.service';
 import { TasksService } from 'src/app/modules/tasks/services/tasks.service';
 import { ITaskCreationData } from '../../interfaces/task-creation-data.interface';
@@ -17,9 +18,10 @@ export class EditTaskComponent extends AbstractTaskFormPageComponent implements 
     public readonly tasksService: TasksService,
     private readonly appTitleService: AppTitleService,
     private readonly route: ActivatedRoute,
+    @Inject(WINDOW) window: Window,
     router: Router
   ) {
-    super(router);
+    super(router, window);
   }
 
   public ngOnInit(): void {

@@ -12,13 +12,16 @@ export abstract class AbstractTaskFormPageComponent extends AbstractTasksPageCom
 
   public isPending = false;
 
-  public constructor(private readonly router: Router) {
+  public constructor(private readonly router: Router, private readonly window: Window) {
     super();
   }
 
   @HostListener('window:beforeunload')
   public canBeDeactivated(): boolean {
-    return this.taskFormComponentRef.form.pristine || confirm('Are you sure you want to leave?');
+    return (
+      this.taskFormComponentRef.form.pristine ||
+      this.window.confirm('Are you sure you want to leave?')
+    );
   }
 
   protected handleRequestSuccess(task: ITask): void {

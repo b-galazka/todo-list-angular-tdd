@@ -5,6 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
 import { ActivatedRoute, Router, Routes } from '@angular/router';
+import { WINDOW } from 'src/app/core/injection-tokens/window.token';
 import { AppTitleService } from 'src/app/core/services/app-title.service';
 import { TasksService } from 'src/app/modules/tasks/services/tasks.service';
 import { RequestStatus } from 'src/app/shared/enums/request-status.enum';
@@ -51,7 +52,8 @@ describe('TaskDetailsComponent', () => {
       providers: [
         { provide: TasksService, useClass: TasksServiceMock },
         { provide: ActivatedRoute, useValue: activatedRouteMock },
-        { provide: AppTitleService, useClass: AppTitleServiceMock }
+        { provide: AppTitleService, useClass: AppTitleServiceMock },
+        { provide: WINDOW, useValue: window }
       ]
     }).compileComponents();
   }));

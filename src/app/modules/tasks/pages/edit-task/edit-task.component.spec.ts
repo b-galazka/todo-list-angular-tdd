@@ -7,6 +7,7 @@ import { ActivatedRoute, Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, throwError } from 'rxjs';
 
+import { WINDOW } from 'src/app/core/injection-tokens/window.token';
 import { AppTitleService } from 'src/app/core/services/app-title.service';
 import { TasksService } from 'src/app/modules/tasks/services/tasks.service';
 import { SelectComponent } from 'src/app/shared/components/select/select.component';
@@ -27,6 +28,7 @@ describe('EditTaskComponent', () => {
   let appTitleService: AppTitleServiceMock;
   let tasksService: TasksServiceMock;
   let location: Location;
+  let windowRef: Window;
 
   const params: Record<string, any> = {
     taskId: taskMock.id
@@ -57,7 +59,8 @@ describe('EditTaskComponent', () => {
       providers: [
         { provide: AppTitleService, useClass: AppTitleServiceMock },
         { provide: ActivatedRoute, useValue: activatedRouteMock },
-        { provide: TasksService, useClass: TasksServiceMock }
+        { provide: TasksService, useClass: TasksServiceMock },
+        { provide: WINDOW, useValue: window }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
@@ -70,6 +73,7 @@ describe('EditTaskComponent', () => {
     appTitleService = TestBed.get(AppTitleService);
     tasksService = TestBed.get(TasksService);
     location = TestBed.get(Location);
+    windowRef = TestBed.get(WINDOW);
 
     tasksService.setState({
       currentTaskFetchingStatus: RequestStatus.Success,
@@ -266,7 +270,7 @@ describe('EditTaskComponent', () => {
     it('should be called on window:beforeunload', () => {
       const spy = spyOn(component, 'canBeDeactivated');
 
-      window.dispatchEvent(new Event('beforeunload'));
+      windowRef.dispatchEvent(new Event('beforeunload'));
 
       expect(spy).toHaveBeenCalled();
     });

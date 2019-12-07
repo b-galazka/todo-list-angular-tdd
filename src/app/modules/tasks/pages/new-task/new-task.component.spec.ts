@@ -7,6 +7,7 @@ import { Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, throwError } from 'rxjs';
 
+import { WINDOW } from 'src/app/core/injection-tokens/window.token';
 import { AppTitleService } from 'src/app/core/services/app-title.service';
 import { TasksService } from 'src/app/modules/tasks/services/tasks.service';
 import { SelectComponent } from 'src/app/shared/components/select/select.component';
@@ -26,6 +27,7 @@ describe('NewTaskComponent', () => {
   let location: Location;
   let tasksService: TasksServiceMock;
   let debugElement: DebugElement;
+  let windowRef: Window;
 
   beforeEach(async(() => {
     const routes: Routes = [{ path: '**', component: NewTaskComponent }];
@@ -41,7 +43,8 @@ describe('NewTaskComponent', () => {
       imports: [ReactiveFormsModule, FormsModule, RouterTestingModule.withRoutes(routes)],
       providers: [
         { provide: AppTitleService, useClass: AppTitleServiceMock },
-        { provide: TasksService, useClass: TasksServiceMock }
+        { provide: TasksService, useClass: TasksServiceMock },
+        { provide: WINDOW, useValue: window }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
@@ -54,6 +57,8 @@ describe('NewTaskComponent', () => {
     appTitleService = TestBed.get(AppTitleService);
     location = TestBed.get(Location);
     tasksService = TestBed.get(TasksService);
+    windowRef = TestBed.get(WINDOW);
+
     fixture.detectChanges();
   });
 
@@ -174,7 +179,7 @@ describe('NewTaskComponent', () => {
     it('should be called on window:beforeunload', () => {
       const spy = spyOn(component, 'canBeDeactivated');
 
-      window.dispatchEvent(new Event('beforeunload'));
+      windowRef.dispatchEvent(new Event('beforeunload'));
 
       expect(spy).toHaveBeenCalled();
     });

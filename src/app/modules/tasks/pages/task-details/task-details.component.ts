@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { WINDOW } from 'src/app/core/injection-tokens/window.token';
 import { AppTitleService } from 'src/app/core/services/app-title.service';
 import { TasksService } from 'src/app/modules/tasks/services/tasks.service';
 import { AbstractTasksPageComponent } from '../shared/abstracts/abstract-tasks-page.component';
@@ -14,6 +15,7 @@ import { AbstractTasksPageComponent } from '../shared/abstracts/abstract-tasks-p
 export class TaskDetailsComponent extends AbstractTasksPageComponent implements OnInit {
   public constructor(
     public readonly tasksService: TasksService,
+    @Inject(WINDOW) private readonly window: Window,
     private readonly route: ActivatedRoute,
     private readonly appTitleService: AppTitleService,
     private readonly router: Router
@@ -32,7 +34,7 @@ export class TaskDetailsComponent extends AbstractTasksPageComponent implements 
   }
 
   public deleteTask(): void {
-    if (!confirm('Are you sure you want to delete this task?')) {
+    if (!this.window.confirm('Are you sure you want to delete this task?')) {
       return;
     }
 
