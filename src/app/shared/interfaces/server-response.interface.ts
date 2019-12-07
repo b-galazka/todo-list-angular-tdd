@@ -1,12 +1,4 @@
-export interface IPaginationParams {
-  offset: number;
-  limit: number;
-}
-
-export interface IPagination {
-  prev?: IPaginationParams;
-  next?: IPaginationParams;
-}
+import { IPagination } from './pagination.interface';
 
 export interface IServerResponse<T> {
   data: T;
