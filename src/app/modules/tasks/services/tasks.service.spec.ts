@@ -3,24 +3,30 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 import { Observable } from 'rxjs';
 
-import { environment } from 'src/environments/environment';
+import { CONFIG } from 'src/app/core/injection-tokens/config.token';
+import { config } from 'src/config';
 import { taskMock } from 'src/mocks/data/task.mock';
-import { RequestStatus } from '../models/server-request.model';
-import { IServerResponse } from '../models/server-response.model';
-import { ITask, ITaskCreationData, TaskStatus } from '../models/task.model';
+import { RequestStatus } from '../../../shared/enums/request-status.enum';
+import { IServerResponse } from '../../../shared/interfaces/server-response.interface';
+import { TaskStatus } from '../enums/task-status.enum';
+import { ITaskCreationData } from '../interfaces/task-creation-data.interface';
+import { ITask } from '../interfaces/task.interface';
 import { TasksService } from './tasks.service';
 
 describe('TasksService', () => {
   let tasksService: TasksService;
   let httpClientMock: HttpTestingController;
+  let appConfig: typeof config;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule]
+      imports: [HttpClientTestingModule],
+      providers: [TasksService, { provide: CONFIG, useValue: config }]
     });
 
     tasksService = TestBed.get(TasksService);
     httpClientMock = TestBed.get(HttpTestingController);
+    appConfig = TestBed.get(CONFIG);
   });
 
   it('should be created', () => {
@@ -32,7 +38,7 @@ describe('TasksService', () => {
 
     beforeEach(() => {
       res = {
-        data: new Array(15).fill(taskMock),
+        data: new Array(appConfig.recordsPerPage).fill(taskMock),
         pagination: {}
       };
     });
@@ -43,27 +49,27 @@ describe('TasksService', () => {
       expect(value instanceof Observable).toBe(true);
     });
 
-    it('should fetch 15 tasks', () => {
+    it('should fetch proper number of tasks', () => {
       tasksService.getTasks(1).subscribe(tasks => {
         expect(tasks).toEqual(res.data);
       });
 
       const req = httpClientMock.expectOne({
         method: 'GET',
-        url: `${environment.apiUrl}/tasks?offset=0&limit=15`
+        url: `${appConfig.env.apiUrl}/tasks?offset=0&limit=${appConfig.recordsPerPage}`
       });
 
       req.flush(res);
     });
 
-    it('should fetch 15 tasks skipping 30', () => {
+    it('should fetch proper number of tasks skipping proper number of tasks', () => {
       tasksService.getTasks(3).subscribe(tasks => {
         expect(tasks).toEqual(res.data);
       });
 
       const req = httpClientMock.expectOne({
         method: 'GET',
-        url: `${environment.apiUrl}/tasks?offset=30&limit=15`
+        url: `${appConfig.env.apiUrl}/tasks?offset=30&limit=${appConfig.recordsPerPage}`
       });
 
       req.flush(res);
@@ -76,7 +82,7 @@ describe('TasksService', () => {
 
       const req = httpClientMock.expectOne({
         method: 'GET',
-        url: `${environment.apiUrl}/tasks?offset=0&limit=15`
+        url: `${appConfig.env.apiUrl}/tasks?offset=0&limit=${appConfig.recordsPerPage}`
       });
 
       req.flush(res);
@@ -91,7 +97,7 @@ describe('TasksService', () => {
 
       const req = httpClientMock.expectOne({
         method: 'GET',
-        url: `${environment.apiUrl}/tasks?offset=0&limit=15`
+        url: `${appConfig.env.apiUrl}/tasks?offset=0&limit=${appConfig.recordsPerPage}`
       });
 
       req.flush(res);
@@ -104,10 +110,10 @@ describe('TasksService', () => {
 
       const req = httpClientMock.expectOne({
         method: 'GET',
-        url: `${environment.apiUrl}/tasks?offset=60&limit=15`
+        url: `${appConfig.env.apiUrl}/tasks?offset=60&limit=${appConfig.recordsPerPage}`
       });
 
-      res.pagination.prev = { offset: 45, limit: 15 };
+      res.pagination.prev = { offset: 45, limit: appConfig.recordsPerPage };
 
       req.flush(res);
     });
@@ -119,10 +125,10 @@ describe('TasksService', () => {
 
       const req = httpClientMock.expectOne({
         method: 'GET',
-        url: `${environment.apiUrl}/tasks?offset=60&limit=15`
+        url: `${appConfig.env.apiUrl}/tasks?offset=60&limit=${appConfig.recordsPerPage}`
       });
 
-      res.pagination.next = { offset: 75, limit: 15 };
+      res.pagination.next = { offset: 75, limit: appConfig.recordsPerPage };
 
       req.flush(res);
     });
@@ -134,7 +140,7 @@ describe('TasksService', () => {
 
       const req = httpClientMock.expectOne({
         method: 'GET',
-        url: `${environment.apiUrl}/tasks?offset=0&limit=15`
+        url: `${appConfig.env.apiUrl}/tasks?offset=0&limit=${appConfig.recordsPerPage}`
       });
 
       req.error(new ErrorEvent('unknown error'));
@@ -150,7 +156,7 @@ describe('TasksService', () => {
 
       const req = httpClientMock.expectOne({
         method: 'GET',
-        url: `${environment.apiUrl}/tasks?offset=0&limit=15`
+        url: `${appConfig.env.apiUrl}/tasks?offset=0&limit=${appConfig.recordsPerPage}`
       });
 
       req.error(new ErrorEvent('unknown error'));
@@ -182,7 +188,7 @@ describe('TasksService', () => {
 
       const req = httpClientMock.expectOne({
         method: 'PATCH',
-        url: `${environment.apiUrl}/tasks/${taskId}`
+        url: `${appConfig.env.apiUrl}/tasks/${taskId}`
       });
 
       expect(req.request.body).toEqual({ task: patchData });
@@ -192,7 +198,9 @@ describe('TasksService', () => {
 
     it('should patch fetched task on tasks list', () => {
       const fetchingResponse: IServerResponse<Array<ITask>> = {
-        data: new Array(15).fill(taskMock).map((task: ITask, index) => ({ ...task, id: index })),
+        data: new Array(appConfig.recordsPerPage)
+          .fill(taskMock)
+          .map((task: ITask, index) => ({ ...task, id: index })),
         pagination: {}
       };
 
@@ -269,7 +277,7 @@ describe('TasksService', () => {
 
       const req = httpClientMock.expectOne({
         method: 'GET',
-        url: `${environment.apiUrl}/tasks/${taskId}`
+        url: `${appConfig.env.apiUrl}/tasks/${taskId}`
       });
 
       req.flush(res);
@@ -282,7 +290,7 @@ describe('TasksService', () => {
 
       const req = httpClientMock.expectOne({
         method: 'GET',
-        url: `${environment.apiUrl}/tasks/${taskId}`
+        url: `${appConfig.env.apiUrl}/tasks/${taskId}`
       });
 
       req.flush(res);
@@ -295,7 +303,7 @@ describe('TasksService', () => {
 
       const req = httpClientMock.expectOne({
         method: 'GET',
-        url: `${environment.apiUrl}/tasks/${taskId}`
+        url: `${appConfig.env.apiUrl}/tasks/${taskId}`
       });
 
       req.error(new ErrorEvent('unknown error'));
@@ -308,7 +316,7 @@ describe('TasksService', () => {
 
       const req = httpClientMock.expectOne({
         method: 'GET',
-        url: `${environment.apiUrl}/tasks/${taskId}`
+        url: `${appConfig.env.apiUrl}/tasks/${taskId}`
       });
 
       req.flush(res);
@@ -321,7 +329,7 @@ describe('TasksService', () => {
 
       const req = httpClientMock.expectOne({
         method: 'GET',
-        url: `${environment.apiUrl}/tasks/${taskId}`
+        url: `${appConfig.env.apiUrl}/tasks/${taskId}`
       });
 
       req.flush(res);
@@ -329,7 +337,9 @@ describe('TasksService', () => {
 
     it('should return cached task from tasks list', () => {
       const fetchingResponse: IServerResponse<Array<ITask>> = {
-        data: new Array(15).fill(taskMock).map((task: ITask, index) => ({ ...task, id: index })),
+        data: new Array(appConfig.recordsPerPage)
+          .fill(taskMock)
+          .map((task: ITask, index) => ({ ...task, id: index })),
         pagination: {}
       };
 
@@ -354,7 +364,9 @@ describe('TasksService', () => {
 
     it('should update state to cached task', () => {
       const fetchingResponse: IServerResponse<Array<ITask>> = {
-        data: new Array(15).fill(taskMock).map((task: ITask, index) => ({ ...task, id: index })),
+        data: new Array(appConfig.recordsPerPage)
+          .fill(taskMock)
+          .map((task: ITask, index) => ({ ...task, id: index })),
         pagination: {}
       };
 
@@ -368,7 +380,9 @@ describe('TasksService', () => {
 
     it('should update fetching status to "success" when returning cached task', () => {
       const fetchingResponse: IServerResponse<Array<ITask>> = {
-        data: new Array(15).fill(taskMock).map((task: ITask, index) => ({ ...task, id: index })),
+        data: new Array(appConfig.recordsPerPage)
+          .fill(taskMock)
+          .map((task: ITask, index) => ({ ...task, id: index })),
         pagination: {}
       };
 
@@ -389,7 +403,7 @@ describe('TasksService', () => {
 
       const req = httpClientMock.expectOne({
         method: 'GET',
-        url: `${environment.apiUrl}/tasks/${taskId}`
+        url: `${appConfig.env.apiUrl}/tasks/${taskId}`
       });
 
       req.error(new ErrorEvent('404 not found'), { status: 404 });
@@ -410,7 +424,7 @@ describe('TasksService', () => {
 
       const req = httpClientMock.expectOne({
         method: 'DELETE',
-        url: `${environment.apiUrl}/tasks/${taskMock.id}`
+        url: `${appConfig.env.apiUrl}/tasks/${taskMock.id}`
       });
 
       req.flush({ data: taskMock });
@@ -418,7 +432,9 @@ describe('TasksService', () => {
 
     it('should delete fetched task from the list', () => {
       const fetchingResponse: IServerResponse<Array<ITask>> = {
-        data: new Array(15).fill(taskMock).map((task: ITask, index) => ({ ...task, id: index })),
+        data: new Array(appConfig.recordsPerPage)
+          .fill(taskMock)
+          .map((task: ITask, index) => ({ ...task, id: index })),
         pagination: {}
       };
 
@@ -473,7 +489,7 @@ describe('TasksService', () => {
 
       const req = httpClientMock.expectOne({
         method: 'POST',
-        url: `${environment.apiUrl}/tasks`
+        url: `${appConfig.env.apiUrl}/tasks`
       });
 
       expect(req.request.body).toEqual({ task: newTask });
@@ -488,7 +504,7 @@ describe('TasksService', () => {
 
       const req = httpClientMock.expectOne({
         method: 'POST',
-        url: `${environment.apiUrl}/tasks`
+        url: `${appConfig.env.apiUrl}/tasks`
       });
 
       expect(req.request.body).toEqual({ task: newTask });
@@ -498,7 +514,9 @@ describe('TasksService', () => {
 
     it('should put created task to state at the begining of tasks list', () => {
       const fetchingResponse: IServerResponse<Array<ITask>> = {
-        data: new Array(15).fill(taskMock).map((task: ITask, index) => ({ ...task, id: index })),
+        data: new Array(appConfig.recordsPerPage)
+          .fill(taskMock)
+          .map((task: ITask, index) => ({ ...task, id: index })),
         pagination: {}
       };
 

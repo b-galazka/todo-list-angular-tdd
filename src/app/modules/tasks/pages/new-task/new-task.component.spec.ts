@@ -7,9 +7,8 @@ import { Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, throwError } from 'rxjs';
 
-import { ITaskCreationData } from 'src/app/core/models/task.model';
 import { AppTitleService } from 'src/app/core/services/app-title.service';
-import { TasksService } from 'src/app/core/services/tasks.service';
+import { TasksService } from 'src/app/modules/tasks/services/tasks.service';
 import { SelectComponent } from 'src/app/shared/components/select/select.component';
 import { TextInputComponent } from 'src/app/shared/components/text-input/text-input.component';
 import { TextareaComponent } from 'src/app/shared/components/textarea/textarea.component';
@@ -17,6 +16,7 @@ import { taskMock } from 'src/mocks/data/task.mock';
 import { AppTitleServiceMock } from 'src/mocks/services/app-title.service.mock';
 import { TasksServiceMock } from 'src/mocks/services/tasks.service.mock';
 import { TaskFormComponent } from '../../components/task-form/task-form.component';
+import { ITaskCreationData } from '../../interfaces/task-creation-data.interface';
 import { NewTaskComponent } from './new-task.component';
 
 describe('NewTaskComponent', () => {

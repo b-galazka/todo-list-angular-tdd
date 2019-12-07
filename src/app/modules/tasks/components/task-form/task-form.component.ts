@@ -8,7 +8,9 @@ import {
 } from '@angular/core';
 
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ITask, ITaskCreationData, TaskStatus } from 'src/app/core/models/task.model';
+import { TaskStatus } from '../../enums/task-status.enum';
+import { ITaskCreationData } from '../../interfaces/task-creation-data.interface';
+import { ITask } from '../../interfaces/task.interface';
 
 @Component({
   selector: 'app-task-form',

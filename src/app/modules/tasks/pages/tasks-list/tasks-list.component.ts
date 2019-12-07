@@ -2,9 +2,9 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { filter, tap } from 'rxjs/operators';
 
-import { ITask } from 'src/app/core/models/task.model';
 import { AppTitleService } from 'src/app/core/services/app-title.service';
-import { TasksService } from 'src/app/core/services/tasks.service';
+import { TasksService } from 'src/app/modules/tasks/services/tasks.service';
+import { ITask } from '../../interfaces/task.interface';
 import { AbstractTasksPageComponent } from '../shared/abstracts/abstract-tasks-page.component';
 import { ITasksParams } from './tasks-list.model';
 

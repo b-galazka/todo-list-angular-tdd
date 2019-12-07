@@ -1,4 +1,5 @@
-import { ITask, TaskStatus } from 'src/app/core/models/task.model';
+import { TaskStatus } from 'src/app/modules/tasks/enums/task-status.enum';
+import { ITask } from 'src/app/modules/tasks/interfaces/task.interface';
 
 export const taskMock: ITask = {
   name: 'task name',

@@ -1,7 +1,7 @@
 import { BehaviorSubject, of } from 'rxjs';
-import { IDataService } from 'src/app/core/models/data.service.model';
-import { RequestStatus } from 'src/app/core/models/server-request.model';
-import { ITasksState } from 'src/app/core/models/tasks-state.model';
+import { ITasksState } from 'src/app/modules/tasks/interfaces/tasks-state.interface';
+import { RequestStatus } from 'src/app/shared/enums/request-status.enum';
+import { IDataService } from 'src/app/shared/interfaces/data.service.interface';
 
 export class TasksServiceMock implements IDataService<ITasksState> {
   private readonly _state = new BehaviorSubject<ITasksState>({

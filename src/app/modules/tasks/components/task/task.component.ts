@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { ITask, TaskStatus } from 'src/app/core/models/task.model';
-import { TasksService } from 'src/app/core/services/tasks.service';
+import { TasksService } from 'src/app/modules/tasks/services/tasks.service';
+import { TaskStatus } from '../../enums/task-status.enum';
+import { ITask } from '../../interfaces/task.interface';
 
 @Component({
   selector: 'app-task',

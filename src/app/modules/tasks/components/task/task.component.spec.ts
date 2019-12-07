@@ -5,10 +5,10 @@ import { Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 
-import { TaskStatus } from 'src/app/core/models/task.model';
-import { TasksService } from 'src/app/core/services/tasks.service';
+import { TasksService } from 'src/app/modules/tasks/services/tasks.service';
 import { taskMock } from 'src/mocks/data/task.mock';
 import { TasksServiceMock } from 'src/mocks/services/tasks.service.mock';
+import { TaskStatus } from '../../enums/task-status.enum';
 import { TaskStatusComponent } from '../task-status/task-status.component';
 import { TaskComponent } from './task.component';
 

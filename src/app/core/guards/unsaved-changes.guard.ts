@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanDeactivate } from '@angular/router';
-import { ICanBeDeactivated } from 'src/app/core/models/can-be-deactivated.model';
+import { ICanBeDeactivated } from 'src/app/shared/interfaces/can-be-deactivated.interface';
 
 @Injectable({
   providedIn: 'root'

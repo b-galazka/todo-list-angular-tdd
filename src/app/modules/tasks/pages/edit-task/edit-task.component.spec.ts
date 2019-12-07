@@ -7,17 +7,17 @@ import { ActivatedRoute, Routes } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of, throwError } from 'rxjs';
 
-import { RequestStatus } from 'src/app/core/models/server-request.model';
-import { ITaskCreationData } from 'src/app/core/models/task.model';
 import { AppTitleService } from 'src/app/core/services/app-title.service';
-import { TasksService } from 'src/app/core/services/tasks.service';
+import { TasksService } from 'src/app/modules/tasks/services/tasks.service';
 import { SelectComponent } from 'src/app/shared/components/select/select.component';
 import { TextInputComponent } from 'src/app/shared/components/text-input/text-input.component';
 import { TextareaComponent } from 'src/app/shared/components/textarea/textarea.component';
+import { RequestStatus } from 'src/app/shared/enums/request-status.enum';
 import { taskMock } from 'src/mocks/data/task.mock';
 import { AppTitleServiceMock } from 'src/mocks/services/app-title.service.mock';
 import { TasksServiceMock } from 'src/mocks/services/tasks.service.mock';
 import { TaskFormComponent } from '../../components/task-form/task-form.component';
+import { ITaskUpdateData } from '../../interfaces/task-update-data.interface';
 import { EditTaskComponent } from './edit-task.component';
 
 describe('EditTaskComponent', () => {
@@ -176,7 +176,7 @@ describe('EditTaskComponent', () => {
     const observable = of(taskMock);
     const spy = spyOn(tasksService, 'patchTask').and.returnValue(observable);
     const subSpy = spyOn(observable, 'subscribe');
-    const taskData: ITaskCreationData = { name: 'task name', description: 'task desc' };
+    const taskData: ITaskUpdateData = { name: 'task name', description: 'task desc' };
     const taskFormComponentElem = debugElement.query(By.css('app-task-form'));
 
     taskFormComponentElem.triggerEventHandler('submitted', taskData);

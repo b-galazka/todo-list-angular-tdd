@@ -9,6 +9,7 @@ import { EditTaskComponent } from './pages/edit-task/edit-task.component';
 import { NewTaskComponent } from './pages/new-task/new-task.component';
 import { TaskDetailsComponent } from './pages/task-details/task-details.component';
 import { TasksListComponent } from './pages/tasks-list/tasks-list.component';
+import { TasksService } from './services/tasks.service';
 import { TasksRoutingModule } from './tasks-routing.module';
 
 @NgModule({
@@ -21,6 +22,7 @@ import { TasksRoutingModule } from './tasks-routing.module';
     TaskFormComponent,
     TaskStatusComponent
   ],
-  imports: [CommonModule, TasksRoutingModule, SharedModule]
+  imports: [CommonModule, TasksRoutingModule, SharedModule],
+  providers: [TasksService]
 })
 export class TasksModule {}

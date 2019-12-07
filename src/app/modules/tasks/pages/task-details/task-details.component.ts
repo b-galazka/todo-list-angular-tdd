@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AppTitleService } from 'src/app/core/services/app-title.service';
-import { TasksService } from 'src/app/core/services/tasks.service';
+import { TasksService } from 'src/app/modules/tasks/services/tasks.service';
 import { AbstractTasksPageComponent } from '../shared/abstracts/abstract-tasks-page.component';
 
 @Component({

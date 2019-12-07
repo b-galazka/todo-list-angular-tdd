@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { ICanBeDeactivated } from 'src/app/core/models/can-be-deactivated.model';
+import { ICanBeDeactivated } from 'src/app/shared/interfaces/can-be-deactivated.interface';
 import { UnsavedChangesGuard } from './unsaved-changes.guard';
 
 describe('UnsavedChangesGuard', () => {

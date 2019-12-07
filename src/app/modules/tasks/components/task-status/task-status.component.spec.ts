@@ -2,8 +2,8 @@ import { DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { TaskStatus } from 'src/app/core/models/task.model';
 import { taskMock } from 'src/mocks/data/task.mock';
+import { TaskStatus } from '../../enums/task-status.enum';
 import { TaskStatusComponent } from './task-status.component';
 
 describe('TaskStatusComponent', () => {

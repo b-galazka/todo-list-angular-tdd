@@ -1,5 +1,5 @@
 import { BehaviorSubject } from 'rxjs';
-import { RequestStatus } from 'src/app/core/models/server-request.model';
+import { RequestStatus } from 'src/app/shared/enums/request-status.enum';
 
 export abstract class AbstractTasksPageComponent {
   public readonly RequestStatus = RequestStatus;

@@ -1,21 +1,24 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
-import { environment } from 'src/environments/environment';
-import { IDataService } from '../models/data.service.model';
-import { RequestStatus } from '../models/server-request.model';
-import { IPaginationParams, IServerResponse } from '../models/server-response.model';
-import { ITask, ITaskCreationData, ITaskUpdateData } from '../models/task.model';
-import { IPaginationState, ITasksState } from '../models/tasks-state.model';
+import { CONFIG } from 'src/app/core/injection-tokens/config.token';
+import { IPaginationState } from 'src/app/shared/interfaces/pagination-state.interface';
+import { config } from 'src/config';
+import { RequestStatus } from '../../../shared/enums/request-status.enum';
+import { IDataService } from '../../../shared/interfaces/data.service.interface';
+import {
+  IPaginationParams,
+  IServerResponse
+} from '../../../shared/interfaces/server-response.interface';
+import { ITaskCreationData } from '../interfaces/task-creation-data.interface';
+import { ITaskUpdateData } from '../interfaces/task-update-data.interface';
+import { ITask } from '../interfaces/task.interface';
+import { ITasksState } from '../interfaces/tasks-state.interface';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class TasksService implements IDataService<ITasksState> {
-  private static readonly RECORDS_PER_PAGE = 15;
-
   private readonly _state = new BehaviorSubject<ITasksState>({
     tasks: [],
     tasksPagination: { nextPage: null, prevPage: null },
@@ -30,24 +33,27 @@ export class TasksService implements IDataService<ITasksState> {
     return this._state.value;
   }
 
-  public constructor(private readonly httpClient: HttpClient) {}
+  public constructor(
+    @Inject(CONFIG) private readonly appConfig: typeof config,
+    private readonly httpClient: HttpClient
+  ) {}
 
   private static mapServerReponseToData<T>(response: IServerResponse<T>): T {
     return response.data;
   }
 
-  private static getPageNumber(paginationParams: IPaginationParams): number {
+  private getPageNumber(paginationParams: IPaginationParams): number {
     if (!paginationParams) {
       return null;
     }
 
-    return (paginationParams.offset + paginationParams.limit) / TasksService.RECORDS_PER_PAGE;
+    return (paginationParams.offset + paginationParams.limit) / this.appConfig.recordsPerPage;
   }
 
   public getTasks(page: number): Observable<Array<ITask>> {
     const paramsObj = {
-      offset: String((page - 1) * TasksService.RECORDS_PER_PAGE),
-      limit: String(TasksService.RECORDS_PER_PAGE)
+      offset: String((page - 1) * this.appConfig.recordsPerPage),
+      limit: String(this.appConfig.recordsPerPage)
     };
 
     const params = new HttpParams({ fromObject: paramsObj });
@@ -55,7 +61,7 @@ export class TasksService implements IDataService<ITasksState> {
     this.setState({ tasksFetchingStatus: RequestStatus.Pending });
 
     return this.httpClient
-      .get<IServerResponse<Array<ITask>>>(`${environment.apiUrl}/tasks`, { params })
+      .get<IServerResponse<Array<ITask>>>(`${this.appConfig.env.apiUrl}/tasks`, { params })
       .pipe(
         tap(res => this.putFetchedTasksToState(res)),
         map(res => TasksService.mapServerReponseToData(res)),
@@ -65,8 +71,8 @@ export class TasksService implements IDataService<ITasksState> {
 
   private putFetchedTasksToState(res: IServerResponse<Array<ITask>>): void {
     const tasksPagination: IPaginationState = {
-      nextPage: TasksService.getPageNumber(res.pagination.next),
-      prevPage: TasksService.getPageNumber(res.pagination.prev)
+      nextPage: this.getPageNumber(res.pagination.next),
+      prevPage: this.getPageNumber(res.pagination.prev)
     };
 
     this.setState({
@@ -84,7 +90,7 @@ export class TasksService implements IDataService<ITasksState> {
 
   public patchTask(data: ITaskUpdateData, taskId: number): Observable<ITask> {
     return this.httpClient
-      .patch<IServerResponse<ITask>>(`${environment.apiUrl}/tasks/${taskId}`, { task: data })
+      .patch<IServerResponse<ITask>>(`${this.appConfig.env.apiUrl}/tasks/${taskId}`, { task: data })
       .pipe(
         map(res => TasksService.mapServerReponseToData(res)),
         tap(tasks => this.patchFetchedTask(tasks))
@@ -117,7 +123,7 @@ export class TasksService implements IDataService<ITasksState> {
     this.setState({ currentTaskFetchingStatus: RequestStatus.Pending });
 
     return this.httpClient
-      .get<IServerResponse<ITask>>(`${environment.apiUrl}/tasks/${taskId}`)
+      .get<IServerResponse<ITask>>(`${this.appConfig.env.apiUrl}/tasks/${taskId}`)
       .pipe(
         map(res => TasksService.mapServerReponseToData(res)),
         tap(task => this.handleTaskFetchingSuccess(task)),
@@ -139,7 +145,7 @@ export class TasksService implements IDataService<ITasksState> {
 
   public deleteTask(taskId: number): Observable<ITask> {
     return this.httpClient
-      .delete<IServerResponse<ITask>>(`${environment.apiUrl}/tasks/${taskId}`)
+      .delete<IServerResponse<ITask>>(`${this.appConfig.env.apiUrl}/tasks/${taskId}`)
       .pipe(
         map(res => TasksService.mapServerReponseToData(res)),
         tap(task => this.deleteFetchedTask(task))
@@ -159,7 +165,7 @@ export class TasksService implements IDataService<ITasksState> {
 
   public createTask(data: ITaskCreationData): Observable<ITask> {
     return this.httpClient
-      .post<IServerResponse<ITask>>(`${environment.apiUrl}/tasks`, { task: data })
+      .post<IServerResponse<ITask>>(`${this.appConfig.env.apiUrl}/tasks`, { task: data })
       .pipe(
         map(res => TasksService.mapServerReponseToData(res)),
         tap(task => this.putCreatedTaskToState(task))

@@ -6,14 +6,14 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { of, Subject } from 'rxjs';
 
 import { ActivatedRoute, Router, Routes } from '@angular/router';
-import { RequestStatus } from 'src/app/core/models/server-request.model';
-import { ITask } from 'src/app/core/models/task.model';
 import { AppTitleService } from 'src/app/core/services/app-title.service';
-import { TasksService } from 'src/app/core/services/tasks.service';
+import { TasksService } from 'src/app/modules/tasks/services/tasks.service';
+import { RequestStatus } from 'src/app/shared/enums/request-status.enum';
 import { taskMock } from 'src/mocks/data/task.mock';
 import { AppTitleServiceMock } from 'src/mocks/services/app-title.service.mock';
 import { TasksServiceMock } from 'src/mocks/services/tasks.service.mock';
 import { TaskComponent } from '../../components/task/task.component';
+import { ITask } from '../../interfaces/task.interface';
 import { TasksListComponent } from './tasks-list.component';
 
 describe('TasksListComponent', () => {
