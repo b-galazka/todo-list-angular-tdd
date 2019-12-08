@@ -6,6 +6,6 @@ export interface ITasksState {
   tasks: Array<ITask>;
   tasksPagination: IPaginationState;
   tasksFetchingStatus: RequestStatus;
-  currentTask: ITask;
+  currentTask: ITask | null;
   currentTaskFetchingStatus: RequestStatus;
 }

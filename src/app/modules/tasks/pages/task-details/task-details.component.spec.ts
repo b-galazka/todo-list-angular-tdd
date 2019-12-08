@@ -100,7 +100,7 @@ describe('TaskDetailsComponent', () => {
     const spy = spyOn(appTitleService, 'setPageTitle');
     const taskObservable = of(taskMock);
 
-    spyOn(tasksService, 'getTask').and.callFake((taskId: number) =>
+    spyOn(tasksService, 'getTask').and.callFake((taskId: string) =>
       taskId === taskMock.id ? taskObservable : null
     );
 
@@ -191,7 +191,7 @@ describe('TaskDetailsComponent', () => {
 
     const taskCreationDate = new Date(taskMock.createdAt);
 
-    expect(taskCreationDateElem.textContent.trim().toLowerCase()).toBe(
+    expect(taskCreationDateElem.textContent!.trim().toLowerCase()).toBe(
       `created at: ${stringifyTaskDate(taskCreationDate)}`
     );
   });
@@ -203,7 +203,7 @@ describe('TaskDetailsComponent', () => {
 
     const taskLastUpdateDate = new Date(taskMock.updatedAt);
 
-    expect(taskLastUpdateDateElem.textContent.trim().toLowerCase()).toBe(
+    expect(taskLastUpdateDateElem.textContent!.trim().toLowerCase()).toBe(
       `updated at: ${stringifyTaskDate(taskLastUpdateDate)}`
     );
   });

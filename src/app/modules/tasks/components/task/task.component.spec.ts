@@ -71,7 +71,7 @@ describe('TaskComponent', () => {
         By.css('[data-test-id="task-status-button"]')
       ).nativeElement;
 
-      expect(taskStatusBtnElem.textContent.trim().toLowerCase()).toBe('mark as started');
+      expect(taskStatusBtnElem.textContent!.trim().toLowerCase()).toBe('mark as started');
     });
 
     it('should disable task status button on its click', () => {
@@ -117,7 +117,7 @@ describe('TaskComponent', () => {
         By.css('[data-test-id="task-status-button"]')
       ).nativeElement;
 
-      expect(taskStatusBtnElem.textContent.trim().toLowerCase()).toBe('mark as finished');
+      expect(taskStatusBtnElem.textContent!.trim().toLowerCase()).toBe('mark as finished');
     });
 
     it('should update task status to "finished" on task status button click', () => {

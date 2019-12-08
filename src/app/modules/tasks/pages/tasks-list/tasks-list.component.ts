@@ -58,7 +58,7 @@ export class TasksListComponent extends AbstractTasksPageComponent implements On
     this.router.navigate(['/tasks/1']);
   }
 
-  public trackTasks(task: ITask): number {
+  public trackTasks(task: ITask): string {
     return task.id;
   }
 }

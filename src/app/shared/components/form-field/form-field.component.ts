@@ -10,11 +10,11 @@ export class FormFieldComponent {
   @Input() public label = '';
   @ContentChild(NgControl, { static: true }) public ngControl: NgControl;
 
-  public get errorType(): string {
-    return Object.keys(this.ngControl.errors)[0];
+  public get errorType(): string | null {
+    return this.ngControl.errors ? Object.keys(this.ngControl.errors)[0] : null;
   }
 
   public get errorDetails(): any {
-    return this.ngControl.errors[this.errorType];
+    return this.errorType && this.ngControl.errors![this.errorType];
   }
 }

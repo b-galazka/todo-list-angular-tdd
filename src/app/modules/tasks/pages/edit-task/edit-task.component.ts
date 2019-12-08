@@ -29,7 +29,7 @@ export class EditTaskComponent extends AbstractTaskFormPageComponent implements 
 
     this.appTitleService.setPageTitle('edit task');
 
-    this.tasksService.getTask(+taskId).subscribe(task => {
+    this.tasksService.getTask(taskId!).subscribe(task => {
       this.appTitleService.setPageTitle(`edit "${task.name}" task`);
     });
   }
@@ -37,7 +37,7 @@ export class EditTaskComponent extends AbstractTaskFormPageComponent implements 
   public updateTask(taskData: ITaskCreationData): void {
     this.isPending$.next(true);
 
-    this.tasksService.patchTask(taskData, this.tasksService.state.currentTask.id).subscribe(
+    this.tasksService.patchTask(taskData, this.tasksService.state.currentTask!.id).subscribe(
       task => this.handleRequestSuccess(task),
       () => this.handleRequestFailure()
     );

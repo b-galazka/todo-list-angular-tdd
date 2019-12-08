@@ -1,7 +1,7 @@
 import { TaskStatus } from '../enums/task-status.enum';
 
 export interface ITask {
-  id: number;
+  id: string;
   createdAt: string;
   updatedAt: string;
   name: string;

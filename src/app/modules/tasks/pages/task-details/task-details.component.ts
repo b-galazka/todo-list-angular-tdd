@@ -28,7 +28,7 @@ export class TaskDetailsComponent extends AbstractTasksPageComponent implements 
 
     this.appTitleService.setPageTitle('task details');
 
-    this.tasksService.getTask(+taskId).subscribe(task => {
+    this.tasksService.getTask(taskId!).subscribe(task => {
       this.appTitleService.setPageTitle(`details of "${task.name}"`);
     });
   }
@@ -40,7 +40,7 @@ export class TaskDetailsComponent extends AbstractTasksPageComponent implements 
 
     this.isPending$.next(true);
 
-    this.tasksService.deleteTask(this.tasksService.state.currentTask.id).subscribe(() => {
+    this.tasksService.deleteTask(this.tasksService.state.currentTask!.id).subscribe(() => {
       this.router.navigate(['/tasks/1']);
     });
   }

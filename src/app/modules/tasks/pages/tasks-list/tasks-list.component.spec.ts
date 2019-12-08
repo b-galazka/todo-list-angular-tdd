@@ -92,7 +92,7 @@ describe('TasksListComponent', () => {
 
     const tasks: Array<ITask> = new Array(tasksAmount)
       .fill(null)
-      .map((item, index) => ({ ...taskMock, id: index }));
+      .map((item, index) => ({ ...taskMock, id: taskMock.id + index }));
 
     tasksService.setState({ tasks, tasksFetchingStatus: RequestStatus.Success });
 

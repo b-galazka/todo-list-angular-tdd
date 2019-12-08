@@ -94,7 +94,7 @@ describe('TaskFormComponent', () => {
   });
 
   it('should set max length validator to 120 characters for name field', () => {
-    const nameFormControl = component.form.get('name');
+    const nameFormControl = component.form.get('name')!;
 
     nameFormControl.setValue('X'.repeat(121));
     nameFormControl.updateValueAndValidity();
@@ -112,7 +112,7 @@ describe('TaskFormComponent', () => {
       .nativeElement;
 
     component.form.reset();
-    component.form.get('name').setValidators(Validators.required);
+    component.form.get('name')!.setValidators(Validators.required);
 
     buttonElem.click();
 

@@ -1,4 +1,4 @@
 export interface IPaginationState {
-  prevPage: number;
-  nextPage: number;
+  prevPage: number | null;
+  nextPage: number | null;
 }

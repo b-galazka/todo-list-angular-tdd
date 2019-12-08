@@ -99,7 +99,7 @@ describe('EditTaskComponent', () => {
     const spy = spyOn(appTitleService, 'setPageTitle');
     const taskObservable = of(taskMock);
 
-    spyOn(tasksService, 'getTask').and.callFake((taskId: number) =>
+    spyOn(tasksService, 'getTask').and.callFake((taskId: string) =>
       taskId === taskMock.id ? taskObservable : null
     );
 
